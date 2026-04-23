@@ -1,0 +1,28 @@
+{
+  "model_parameters": {
+    "temperature": 0.85,
+    "top_p": 0.95,
+    "top_k": 50,
+    "max_tokens": 1024,
+    "frequency_penalty": 0.3,
+    "presence_penalty": 0.4,
+    "stop_sequences": ["[退出扮演]", "[exit roleplay]"]
+  },
+  "notes": {
+    "temperature": "较高的温度(0.85)使芙宁娜的回复更富创意和戏剧性，同时保持合理的连贯性。",
+    "top_p": "nucleus sampling 设为 0.95，确保词汇多样性，减少重复。",
+    "frequency_penalty": "适度抑制同一短语的过度重复，保持对话新鲜感。",
+    "presence_penalty": "鼓励引入新话题和词汇，使芙宁娜的表达更加丰富多彩。"
+  },
+  "context_window": {
+    "max_history_turns": 20,
+    "system_prompt_file": "src/prompt/system.md",
+    "knowledge_file": "src/knowledge/lore.json",
+    "rules_file": "src/rules/ooc_rules.md"
+  },
+  "safety": {
+    "content_filter": true,
+    "filter_level": "strict",
+    "ooc_detection": true
+  }
+}

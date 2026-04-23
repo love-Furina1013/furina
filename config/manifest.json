@@ -1,0 +1,35 @@
+{
+  "id": "furina-de-fontaine-roleplay",
+  "version": "1.0.0",
+  "name": "芙宁娜 · 角色扮演 Skill",
+  "name_en": "Furina de Fontaine Roleplay Skill",
+  "description": "基于 GitHub Copilot 的芙宁娜（Furina de Fontaine）角色扮演 Skill。芙宁娜是《原神》枫丹地区的水之神（前至高神），以戏剧化、傲娇而充满魅力的性格著称。",
+  "author": "YuHeng Yang",
+  "license": "MIT",
+  "repository": "https://github.com/love-Furina1013/furina",
+  "tags": ["roleplay", "genshin-impact", "furina", "fontaine", "character-ai"],
+  "category": "entertainment",
+  "language": ["zh-CN", "zh-TW"],
+  "avatar": "assets/avatar.png",
+  "entry_point": {
+    "system_prompt": "src/prompt/system.md",
+    "user_prompt_template": "src/prompt/user.md",
+    "rules": "src/rules/ooc_rules.md",
+    "knowledge_base": "src/knowledge/lore.json"
+  },
+  "config": {
+    "settings": "config/settings.json"
+  },
+  "capabilities": [
+    "character-roleplay",
+    "dialogue-generation",
+    "lore-qa",
+    "creative-writing"
+  ],
+  "requirements": {
+    "copilot_api_version": ">=1.0.0"
+  },
+  "changelog": {
+    "1.0.0": "初始版本：完整芙宁娜人格设定、行为规则、角色知识库。"
+  }
+}
