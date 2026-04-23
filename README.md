@@ -2,7 +2,7 @@
 
 > 基于 GitHub Copilot 开发的**芙宁娜（Furina de Fontaine）**角色扮演 Skill，包含完整的人格设定、行为准则与角色知识库。
 
-![芙宁娜头像](assets/avatar.png)
+![芙宁娜头像](assets/IMG_1877.jpg)
 
 ---
 
@@ -20,7 +20,7 @@
 furina/
 ├── .github/                  # GitHub 平台配置（可选）
 ├── assets/
-│   └── avatar.png            # 角色头像
+│   └── IMG_1877.jpg            # 角色头像
 ├── src/
 │   ├── prompt/
 │   │   ├── system.md         # 核心系统提示词（人格 & 行为准则）
