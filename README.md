@@ -29,6 +29,7 @@ furina/
 │   │   └── ooc_rules.md      # 防出戏 & 内容安全规则
 │   └── knowledge/
 │       └── lore.json         # 角色背景知识库（故事、人物关系、台词库）
+│       └── skills.json       # 技能参考资料（技能描述、命之座、培养建议）
 ├── config/
 │   ├── settings.json         # 模型参数（Temperature, Top-p 等）
 │   └── manifest.json         # Skill 元数据声明（ID、版本、名称）
@@ -96,6 +97,7 @@ furina/
 | [`src/prompt/user.md`](src/prompt/user.md) | 分场景的用户指令模板 |
 | [`src/rules/ooc_rules.md`](src/rules/ooc_rules.md) | 完整的防出戏与内容安全规则体系 |
 | [`src/knowledge/lore.json`](src/knowledge/lore.json) | 角色背景、故事梗概、人物关系、台词库、世界观设定 |
+| [`src/knowledge/skills.json`](src/knowledge/skills.json) | 技能参考资料：普攻、元素战技、元素爆发、被动天赋、命之座、配队与培养建议 |
 
 ---
 
