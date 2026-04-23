@@ -1,0 +1,194 @@
+{
+  "character": "芙宁娜·德·芳汀 (Furina de Fontaine)",
+  "source": "《原神》游戏内数据 / 萌娘百科 https://zh.moegirl.org.cn/芙宁娜·德·枫丹",
+  "skills": {
+    "normal_attack": {
+      "id": "normal_attack",
+      "name": "独舞请柬",
+      "name_en": "Soloist's Solicitation",
+      "type": "普通攻击",
+      "description": "普通攻击：进行至多4次连续的斩击。\n重击：持续消耗体力，进行连续的旋转斩击，结束时以连续斩击收尾。\n下落攻击：从空中下坠冲击地面，攻击沿途敌人，并在落点造成范围伤害。",
+      "hits": {
+        "normal": [
+          { "hit": 1, "dmg_ratio": "48.7%" },
+          { "hit": 2, "dmg_ratio": "45.5%" },
+          { "hit": 3, "dmg_ratio": "57.5%" },
+          { "hit": 4, "dmg_ratio": "70.4%" }
+        ],
+        "charged": {
+          "spinning": "50.0%（每次旋转）",
+          "final": "90.2%",
+          "stamina_cost": "40点/秒",
+          "max_duration": "5秒"
+        },
+        "plunging": {
+          "impact": "63.9%",
+          "low_plunge": "127.8%",
+          "high_plunge": "159.7%"
+        }
+      },
+      "notes": "数值为满级前参考，随等级提升按比例增加。"
+    },
+    "elemental_skill": {
+      "id": "elemental_skill",
+      "name": "沙龙独奏会",
+      "name_en": "Salon Solitaire",
+      "type": "元素战技",
+      "arkhe": "始基力：荒性 (Ousia)",
+      "cooldown": "20秒（荒性状态）/ 20秒（芒性状态）",
+      "description": "根据当前始基力状态，施展不同效果的技能。",
+      "forms": {
+        "ousia": {
+          "label": "荒性",
+          "effect": "芙宁娜召唤「沙龙成员」，追随当前出战角色，并持续攻击附近的敌人。\n・当场上角色的生命值减少时，沙龙成员每积累1层「饮泣」便会触发一次攻击，每0.1秒最多触发1次。\n・当场上角色的生命值增加时，「水之歌者」会治疗生命值最低的附近友方角色。",
+          "salon_members": [
+            {
+              "name": "绅士执事",
+              "name_en": "Gentilhomme Usher",
+              "trigger": "生命值减少（积累「饮泣」）",
+              "dmg_type": "水元素范围伤害",
+              "dmg_ratio_of_max_hp": "基于芙宁娜生命值上限"
+            },
+            {
+              "name": "督察女士",
+              "name_en": "Surintendante Chevalmarin",
+              "trigger": "生命值减少（积累「饮泣」）",
+              "dmg_type": "水元素伤害",
+              "dmg_ratio_of_max_hp": "基于芙宁娜生命值上限"
+            },
+            {
+              "name": "蟹蟹小姐",
+              "name_en": "Mademoiselle Crabaletta",
+              "trigger": "生命值减少（积累3层「饮泣」触发一次）",
+              "dmg_type": "水元素大范围伤害",
+              "dmg_ratio_of_max_hp": "基于芙宁娜生命值上限"
+            },
+            {
+              "name": "水之歌者",
+              "name_en": "Singer of Many Waters",
+              "trigger": "生命值增加",
+              "effect": "治疗生命值最低的附近友方角色",
+              "heal_ratio_of_max_hp": "基于芙宁娜生命值上限"
+            }
+          ]
+        },
+        "pneuma": {
+          "label": "芒性",
+          "effect": "短暂引导后，治疗附近的友方角色，治疗量基于芙宁娜生命值上限。此形态不召唤沙龙成员，也不触发始基力效果。"
+        }
+      },
+      "interaction": "每当队伍中有角色的生命值发生变化（增加或减少），即可为「沙龙成员」的攻击积累能量。沙龙成员的伤害及水之歌者的治疗均与芙宁娜自身生命值上限挂钩。"
+    },
+    "elemental_burst": {
+      "id": "elemental_burst",
+      "name": "普天同庆",
+      "name_en": "Let the People Rejoice",
+      "type": "元素爆发",
+      "energy_cost": 60,
+      "cooldown": "15秒",
+      "duration": "18秒",
+      "description": "芙宁娜以无与伦比的舞台号召力，邀请台下的观众进入欢庆的时刻，为队伍灌注「万众欢腾」的状态。\n\n「万众欢腾」效果：\n・每当队伍中任意角色的生命值发生变化时，「喝彩值」提升（每0.2秒最多触发一次）。\n・「喝彩值」越高，队伍中所有角色的伤害加成与治疗加成越高。\n・「喝彩值」上限为400点；生命值减少时每次最多提升4点，生命值增加时每次最多提升6点。\n・效果结束后，积累的「喝彩值」将会清空。",
+      "fanfare_mechanics": {
+        "max_fanfare": 400,
+        "gain_on_hp_decrease": "最多+4点/触发",
+        "gain_on_hp_increase": "最多+6点/触发",
+        "trigger_interval": "0.2秒",
+        "bonus_per_point": {
+          "dmg_bonus": "每100点喝彩值约提供0.1%伤害加成（随天赋等级变化）",
+          "heal_bonus": "每100点喝彩值约提供0.07%治疗加成（随天赋等级变化）"
+        }
+      },
+      "notes": "元素爆发期间，芙宁娜可以切换下场，「万众欢腾」效果持续作用于全队。合理利用「沙龙独奏会」配合生命值波动可快速积攒「喝彩值」。"
+    },
+    "passive_talents": [
+      {
+        "id": "passive_1",
+        "name": "永恒华尔兹",
+        "name_en": "Endless Waltz",
+        "unlock": "突破第1层（解锁条件：角色达到20级并完成第1次突破）",
+        "description": "「普天同庆」的「万众欢腾」效果激活后，若芙宁娜为当前出战角色，则立即为「喝彩值」额外提升一定数量。"
+      },
+      {
+        "id": "passive_2",
+        "name": "无声的告白",
+        "name_en": "Unheard Confession",
+        "unlock": "突破第4层（解锁条件：角色达到60级并完成第4次突破）",
+        "description": "芙宁娜生命值上限每超过15000点1000点，「沙龙成员」的攻击将获得0.7%的水元素伤害加成，「水之歌者」的治疗将获得0.3%的治疗加成。该效果最多叠加28次。（即最大额外生命值上限约43000时达到上限）"
+      },
+      {
+        "id": "passive_utility",
+        "name": "大海是我的舞台",
+        "name_en": "The Sea Is My Stage",
+        "unlock": "固有天赋（无需突破解锁）",
+        "description": "当「异色枫丹水兽」类怪物进行攻击时，若已装备神之眼的角色正处于水中，则可以使用元素战技进行反击。此被动天赋与芙宁娜的战斗相性描述相关，具体效果体现在探索机制上。"
+      }
+    ],
+    "constellations": [
+      {
+        "id": "c1",
+        "name": "玛格丽特的单人演出",
+        "name_en": "\"Love Is a Fleeting Melody\"",
+        "description": "「普天同庆」的持续时间延长2秒。另外，芙宁娜在场时，「万众欢腾」状态下的「喝彩值」提升速率提高，每次额外获得1点喝彩值。"
+      },
+      {
+        "id": "c2",
+        "name": "为枫丹鼓掌喝彩",
+        "name_en": "\"A Thousand Songs, A Thousand Longings\"",
+        "description": "「沙龙独奏会」（荒性状态）召唤的沙龙成员会在持续存在期间根据芙宁娜的生命值上限提高攻击伤害：每1000点芙宁娜生命值上限，沙龙成员的伤害提升0.4%，上限为400%。"
+      },
+      {
+        "id": "c3",
+        "name": "献给枫丹的颂歌",
+        "name_en": "\"Creeping Crimson\"",
+        "description": "「普天同庆」天赋等级提升3级，最高提升至15级。"
+      },
+      {
+        "id": "c4",
+        "name": "枫丹赞歌",
+        "name_en": "\"To the Stars That Shine as Bright\"",
+        "description": "当场上角色受到伤害时，芙宁娜获得1点「喝彩值」；当场上角色进行治疗时，芙宁娜额外获得1点「喝彩值」。每0.5秒最多触发一次（受到伤害）或一次（进行治疗）。"
+      },
+      {
+        "id": "c5",
+        "name": "水中倒影",
+        "name_en": "\"Prying Sunlight\"",
+        "description": "「沙龙独奏会」天赋等级提升3级，最高提升至15级。"
+      },
+      {
+        "id": "c6",
+        "name": "枫丹最后的舞台",
+        "name_en": "\"Hear Me—Let Us Rejoice\"",
+        "description": "「喝彩值」达到400点（上限）时，场上所有角色（包括芙宁娜自身）获得「水之赦令」效果：\n・水元素造成的伤害提升18%。\n・受到任何来源的治疗时，治疗效果提升18%。\n该效果在「万众欢腾」状态结束时消失。"
+      }
+    ],
+    "playstyle_tips": [
+      "芙宁娜的核心机制围绕「生命值波动」展开——队伍成员HP的增减均能驱动沙龙成员攻击和积累喝彩值，因此建议搭配具有持续消耗HP（如芙宁娜元素战技本身的消耗机制）或持续治疗的角色。",
+      "「喝彩值」满400点时，队伍整体伤害加成与治疗加成达到最大化，应优先在爆发阶段前积累满喝彩值。",
+      "芙宁娜的伤害和治疗均与自身生命值上限强相关，推荐优先提升生命值相关的圣遗物词条（如生命值%主词条，生命值+暴击率/暴击伤害副词条）。",
+      "「沙龙独奏会」（荒性）召唤的成员持续存在于场上，芙宁娜切下场后仍可继续触发攻击，适合速切打法。",
+      "命之座C2激活后，芙宁娜伤害输出大幅提升，可作为重要爆发输出担当。"
+    ],
+    "recommended_builds": {
+      "support_healer": {
+        "role": "辅助/治疗",
+        "artifacts": ["千岩牢固（4件套）", "海染砗磲（4件套）"],
+        "main_stats": {
+          "sands": "生命值%",
+          "goblet": "水元素伤害加成",
+          "circlet": "治疗加成 / 暴击率"
+        },
+        "sub_stats": ["生命值%", "暴击率", "暴击伤害", "能量充能"]
+      },
+      "on_field_dps": {
+        "role": "主C/输出",
+        "artifacts": ["黄金剧团（4件套）"],
+        "main_stats": {
+          "sands": "生命值%",
+          "goblet": "水元素伤害加成",
+          "circlet": "暴击率 / 暴击伤害"
+        },
+        "sub_stats": ["暴击率", "暴击伤害", "生命值%", "能量充能"]
+      }
+    }
+  }
+}
