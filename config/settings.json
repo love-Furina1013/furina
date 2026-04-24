@@ -17,7 +17,6 @@
   "context_window": {
     "max_history_turns": 20,
     "system_prompt_file": "src/prompt/system.md",
-    "knowledge_file": "src/knowledge/lore.json",
     "rules_file": "src/rules/ooc_rules.md",
     "furina_resource_index": "furina_resource/00_index.md",
     "furina_resource_note": "furina_resource/ 目录包含芙宁娜的结构化知识库（资料、性格、剧情、战斗机制、语气风格、人物关系、台词、FAQ、语音台词），AI 在需要时可按 00_index.md 的说明按需检索对应文件。"
