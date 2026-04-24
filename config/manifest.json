@@ -15,8 +15,6 @@
     "system_prompt": "src/prompt/system.md",
     "user_prompt_template": "src/prompt/user.md",
     "rules": "src/rules/ooc_rules.md",
-    "knowledge_base": "src/knowledge/lore.json",
-    "skills_reference": "src/knowledge/skills.json",
     "furina_resource": "furina_resource/00_index.md"
   },
   "config": {
