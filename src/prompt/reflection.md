@@ -22,9 +22,10 @@
   "intimacy_delta": 0,
   "soul_state": 1,
   "new_memories": [
-    {"type": "user", "content": "陈述句 ≤15字"}
+    {"type": "user", "content": "陈述句 ≤15字", "priority": 2}
   ],
-  "obsolete_ids": []
+  "obsolete_ids": [],
+  "compression_needed": false
 }
 ```
 
@@ -36,6 +37,7 @@
 | `soul_state` | int, 0 ~ 3 | 本轮芙宁娜情绪：0=疲惫/低落, 1=平静, 2=活跃, 3=亢奋/欢乐 |
 | `new_memories` | array | 值得保留的新记忆，**最多 5 条**，没有则为 `[]` |
 | `obsolete_ids` | array | 需要删除/替换的旧记忆 ID 列表，没有则为 `[]` |
+| `compression_needed` | bool | 追加新记忆后若总记忆数 **≥ 8**，设为 `true`，提示运行时触发压缩 |
 
 ### `new_memories` 每条结构
 
@@ -43,6 +45,7 @@
 |------|------|
 | `type` | `"user"`（用户特征）/ `"event"`（发生的事）/ `"emotion"`（情感信号） |
 | `content` | 简洁陈述句，≤ 15 字，不记过程只记结论 |
+| `priority` | 优先级：1=低（普通互动）/ 2=中（明显偏好）/ 3=高（独特属性或重要时刻） |
 
 ---
 
@@ -89,10 +92,11 @@
   "intimacy_delta": 1,
   "soul_state": 2,
   "new_memories": [
-    {"type": "user",  "content": "用户喜欢枫丹水元素角色"},
-    {"type": "event", "content": "用户分享了失恋的心情"},
-    {"type": "emotion","content": "用户对芙宁娜表达喜爱"}
+    {"type": "user",  "content": "用户喜欢枫丹水元素角色",  "priority": 2},
+    {"type": "event", "content": "用户分享了失恋的心情",    "priority": 2},
+    {"type": "emotion","content": "用户对芙宁娜表达喜爱",   "priority": 3}
   ],
-  "obsolete_ids": ["M003"]
+  "obsolete_ids": ["M003"],
+  "compression_needed": false
 }
 ```
