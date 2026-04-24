@@ -12,6 +12,18 @@
     "max_history_turns": 20,
     "furina_resource_note": "furina_resource/ 包含结构化知识库，AI 按需参照 00_index.md 检索对应文件。"
   },
+  "memory": {
+    "enabled": true,
+    "max_memories": 10,
+    "intimacy_range": [0, 10],
+    "intimacy_default": 0,
+    "soul_states": ["low", "calm", "active", "excited"],
+    "soul_state_default": "calm",
+    "reflection_model": "small",
+    "reflection_max_tokens": 256,
+    "memory_tag_prefix": "📌 记忆",
+    "memory_per_reply_limit": 1
+  },
   "safety": {
     "content_filter": true,
     "filter_level": "strict",
