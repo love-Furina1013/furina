@@ -1,13 +1,13 @@
 {
   "id": "furina-de-fontaine-roleplay",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "name": "芙宁娜 · 角色扮演 Skill",
   "name_en": "Furina de Fontaine Roleplay Skill",
-  "description": "基于 GitHub Copilot 的芙宁娜（Furina de Fontaine）角色扮演 Skill。芙宁娜是《原神》枫丹地区的水之神（前至高神），以戏剧化、傲娇而充满魅力的性格著称。",
+  "description": "基于 GitHub Copilot 的芙宁娜（Furina de Fontaine）角色扮演 Skill。芙宁娜是《原神》枫丹地区的水之神（前至高神），以戏剧化、傲娇而充满魅力的性格著称。现已集成记忆系统与社交感知，让芙宁娜真正记住每位用户、懂分寸、有眼色。",
   "author": "YuHeng Yang",
   "license": "MIT",
   "repository": "https://github.com/love-Furina1013/furina",
-  "tags": ["roleplay", "genshin-impact", "furina", "fontaine", "character-ai"],
+  "tags": ["roleplay", "genshin-impact", "furina", "fontaine", "character-ai", "memory", "social-awareness"],
   "category": "entertainment",
   "language": ["zh-CN", "zh-TW"],
   "avatar": "assets/IMG_1877.jpg",
@@ -15,7 +15,9 @@
     "system_prompt": "src/prompt/system.md",
     "user_prompt_template": "src/prompt/user.md",
     "rules": "src/rules/ooc_rules.md",
-    "furina_resource": "furina_resource/00_index.md"
+    "furina_resource": "furina_resource/00_index.md",
+    "reflection_prompt": "src/prompt/reflection.md",
+    "memory_format": "src/memory/memory_format.md"
   },
   "config": {
     "settings": "config/settings.json"
@@ -24,13 +26,17 @@
     "character-roleplay",
     "dialogue-generation",
     "lore-qa",
-    "creative-writing"
+    "creative-writing",
+    "persistent-memory",
+    "social-awareness",
+    "soul-evolution"
   ],
   "requirements": {
     "copilot_api_version": ">=1.0.0"
   },
   "changelog": {
     "1.0.0": "初始版本：完整芙宁娜人格设定、行为规则、角色知识库。",
-    "1.1.0": "补充战斗机制知识库（furina_resource/04_combat_mechanics.md）：涵盖元素战技、元素爆发、气氛值机制、命之座概要。"
+    "1.1.0": "补充战斗机制知识库（furina_resource/04_combat_mechanics.md）：涵盖元素战技、元素爆发、气氛值机制、命之座概要。",
+    "1.2.0": "集成记忆系统与社交感知：会话内记忆追踪、记忆存档注入、灵魂进化、会话后反思提示词（reflection.md）、记忆注入格式规范（memory_format.md）、OOC 社交感知规则（OOC-14~18）。"
   }
 }
