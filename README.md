@@ -22,6 +22,15 @@
 furina/
 ├── assets/
 │   └── IMG_1877.jpg            # 角色头像
+├── claudecode/                 # Claude Code 原生斜杠命令版本
+│   ├── commands/
+│   │   ├── furina.md           # 主命令：完整人格 + 自动记忆读取/保存
+│   │   ├── furina-save.md      # 主动保存命令：随时手动触发记忆存档
+│   │   └── furina-reflect.md   # 反思命令：从对话记录提取记忆（高级用法）
+│   ├── memory/
+│   │   ├── furina-memory.json  # 空存档模板（初始化用，复制到 ~/.claude/）
+│   │   └── template.md         # 记忆系统字段说明文档
+│   └── README.md               # Claude Code 版本安装与使用指南
 ├── furina_resource/            # 芙宁娜结构化知识库（AI 按需调用）
 │   ├── 00_index.md             # 索引与使用说明
 │   ├── 01_profile.md           # 基础资料
@@ -61,6 +70,7 @@ furina/
 - 🧠 **持久记忆系统**：亲密度追踪、灵魂状态快照、关键记忆存档，让芙宁娜真正记住每位用户
 - 🌱 **灵魂进化**：亲密度随对话自然增长，解锁更真实、更脆弱的内心面
 - 🔄 **会话后反思**：每轮对话结束后由轻量模型自动提取记忆，更新存档供下次注入
+- 🖥️ **Claude Code 原生支持**：完整移植为 Claude Code 斜杠命令，记忆全自动读写，无需手动粘贴存档
 
 ---
 
@@ -83,6 +93,32 @@ furina/
 ```
 [退出扮演]
 ```
+
+---
+
+## 🖥️ Claude Code 版本
+
+本项目已完整移植为 **Claude Code 原生斜杠命令**，支持全自动持久记忆，无需手动粘贴存档。
+
+### 安装（用户级，推荐）
+
+```bash
+mkdir -p ~/.claude/commands
+cp path/to/claudecode/commands/furina.md ~/.claude/commands/
+cp path/to/claudecode/commands/furina-save.md ~/.claude/commands/
+cp path/to/claudecode/commands/furina-reflect.md ~/.claude/commands/
+
+# 初始化空记忆文件（仅首次需要）
+cp path/to/claudecode/memory/furina-memory.json ~/.claude/furina-memory.json
+```
+
+### 使用
+
+```
+/furina 你好，芙宁娜。
+```
+
+记忆会**自动读取与保存**，无需任何额外操作。详细说明请参考 [`claudecode/README.md`](claudecode/README.md)。
 
 ---
 
@@ -191,6 +227,7 @@ furina/
 
 | 版本 | 更新内容 |
 |------|----------|
+| v1.3.0 | 新增 Claude Code 原生版本（`claudecode/` 目录）：完整移植为斜杠命令，全自动持久记忆读写（`~/.claude/furina-memory.json`），新增 `/furina`、`/furina-save`、`/furina-reflect` 三条命令；记忆格式与原版 Skill 兼容互通。 |
 | v1.2.0 | 集成记忆系统与社交感知：会话内亲密度追踪、记忆存档注入、灵魂进化、会话后反思提示词（`src/prompt/reflection.md`）、记忆注入格式规范（`src/memory/memory_format.md`）、OOC 社交感知规则（OOC-14~18）；更新 `config/settings.json` 新增 `memory` 配置区块。 |
 | v1.1.0 | 补充战斗机制知识库（`furina_resource/04_combat_mechanics.md`）：涵盖元素战技、元素爆发、气氛值机制、命之座概要；更新角色设定以准确反映卸任后凡人身份。 |
 | v1.0.0 | 初始版本：完整芙宁娜人格设定、行为规则、角色知识库。 |
