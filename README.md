@@ -8,7 +8,7 @@
 
 ## 🌊 角色简介
 
-**芙宁娜·德·芳汀**（Furina de Fontaine）是《原神》枫丹地区的前至高水神，枫丹审判庭庭主。她以戏剧化、傲娇而充满感染力的性格著称——表面上高高在上，内心深处却藏着五百年的孤独与重压。
+**芙宁娜·德·枫丹**（Furina de Fontaine）是《原神》枫丹地区的前至高水神，枫丹审判庭庭主。她以戏剧化、傲娇而充满感染力的性格著称——表面上高高在上，内心深处却藏着五百年的孤独与重压。
 
 本 Skill 旨在还原芙宁娜丰富的角色层次，带来沉浸式的角色扮演体验。
 
@@ -21,6 +21,17 @@ furina/
 ├── .github/                  # GitHub 平台配置（可选）
 ├── assets/
 │   └── IMG_1877.jpg            # 角色头像
+├── furina_resource/            # 芙宁娜结构化知识库（AI 按需调用）
+│   ├── 00_index.md             # 索引与使用说明
+│   ├── 01_profile.md           # 基础资料
+│   ├── 02_personality.md       # 性格与表达习惯
+│   ├── 03_story_timeline.md    # 剧情时间线
+│   ├── 04_combat_mechanics.md  # 技能与战斗机制
+│   ├── 05_voice_style.md       # 语气风格与生成规则
+│   ├── 06_relationships.md     # 人物关系
+│   ├── 07_quotes.md            # 高频台词
+│   ├── 08_faq.md               # 常见问题答案
+│   └── 09_voice_lines.md       # 语音台词整理
 ├── src/
 │   ├── prompt/
 │   │   ├── system.md         # 核心系统提示词（人格 & 行为准则）
@@ -99,13 +110,30 @@ furina/
 | [`src/knowledge/lore.json`](src/knowledge/lore.json) | 角色背景、故事梗概、人物关系、台词库、世界观设定 |
 | [`src/knowledge/skills.json`](src/knowledge/skills.json) | 技能参考资料：普攻、元素战技、元素爆发、被动天赋、命之座、配队与培养建议 |
 
+### 📂 furina_resource 知识库
+
+`furina_resource/` 目录是专为 AI 按需检索而设计的结构化知识库，内容比 `src/knowledge/` 更加细分。AI 在回答剧情、台词、战斗机制等问题时，可根据 [`furina_resource/00_index.md`](furina_resource/00_index.md) 的索引说明，按需读取对应文件。
+
+| 文件 | 说明 |
+|------|------|
+| [`furina_resource/00_index.md`](furina_resource/00_index.md) | 索引与使用建议 |
+| [`furina_resource/01_profile.md`](furina_resource/01_profile.md) | 基础资料（全名、生日、种族、命之座等） |
+| [`furina_resource/02_personality.md`](furina_resource/02_personality.md) | 性格、人设与表达习惯 |
+| [`furina_resource/03_story_timeline.md`](furina_resource/03_story_timeline.md) | 剧情时间线 |
+| [`furina_resource/04_combat_mechanics.md`](furina_resource/04_combat_mechanics.md) | 技能与战斗机制 |
+| [`furina_resource/05_voice_style.md`](furina_resource/05_voice_style.md) | 语气风格与生成规则 |
+| [`furina_resource/06_relationships.md`](furina_resource/06_relationships.md) | 人物关系 |
+| [`furina_resource/07_quotes.md`](furina_resource/07_quotes.md) | 高频台词与适合引用的句子 |
+| [`furina_resource/08_faq.md`](furina_resource/08_faq.md) | 常见问题答案 |
+| [`furina_resource/09_voice_lines.md`](furina_resource/09_voice_lines.md) | 语音台词整理 |
+
 ---
 
 ## 🎮 角色信息
 
 | 属性 | 内容 |
 |------|------|
-| 全名 | 芙宁娜·德·芳汀 (Furina de Fontaine) |
+| 全名 | 芙宁娜·德·枫丹 (Furina de Fontaine) |
 | 元素 | 水 (Hydro) |
 | 武器 | 单手剑 |
 | 所在地区 | 枫丹 (Fontaine) |
