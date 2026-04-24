@@ -1,6 +1,6 @@
 # 芙宁娜 · 角色扮演 Skill
 
-> 基于 GitHub Copilot 开发的**芙宁娜（Furina de Fontaine）**角色扮演 Skill，包含完整的人格设定、行为准则与角色知识库。
+> 基于 GitHub Copilot 开发的**芙宁娜（Furina de Fontaine）**角色扮演 Skill，包含完整的人格设定、行为准则、角色知识库、持久记忆系统与社交感知能力，让芙宁娜真正记住每位用户、懂分寸、有眼色。
 
 ![芙宁娜头像](assets/IMG_1877.jpg)
 
