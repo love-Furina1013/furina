@@ -173,6 +173,17 @@ furina/
 
 ---
 
+## 📖 资源来源
+
+本项目 `furina_resource/` 知识库中的角色资料（剧情、台词、人物关系等）全部引用自：
+
+> **萌娘百科 · 芙宁娜·德·枫丹**
+> [https://zh.moegirl.org.cn/芙宁娜·德·枫丹](https://zh.moegirl.org.cn/芙宁娜·德·枫丹)
+
+感谢萌娘百科及所有贡献者的整理工作。
+
+---
+
 ## 📄 许可证
 
 本项目基于 [MIT License](LICENSE) 开源。
