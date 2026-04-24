@@ -63,7 +63,7 @@ furina/
 在支持 Copilot Skill 的平台上加载本 Skill 后，直接与芙宁娜对话：
 
 ```
-你好，芙宁娜。我慕名前来枫丹审判庭，希望能得到庭主的接见。
+你好，芙宁娜。
 ```
 
 更多指令模板请参考 [`src/prompt/user.md`](src/prompt/user.md)。
