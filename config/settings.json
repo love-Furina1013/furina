@@ -8,18 +8,9 @@
     "presence_penalty": 0.4,
     "stop_sequences": ["[退出扮演]", "[exit roleplay]"]
   },
-  "notes": {
-    "temperature": "较高的温度(0.85)使芙宁娜的回复更富创意和戏剧性，同时保持合理的连贯性。",
-    "top_p": "nucleus sampling 设为 0.95，确保词汇多样性，减少重复。",
-    "frequency_penalty": "适度抑制同一短语的过度重复，保持对话新鲜感。",
-    "presence_penalty": "鼓励引入新话题和词汇，使芙宁娜的表达更加丰富多彩。"
-  },
   "context_window": {
     "max_history_turns": 20,
-    "system_prompt_file": "src/prompt/system.md",
-    "rules_file": "src/rules/ooc_rules.md",
-    "furina_resource_index": "furina_resource/00_index.md",
-    "furina_resource_note": "furina_resource/ 目录包含芙宁娜的结构化知识库（资料、性格、剧情、战斗机制、语气风格、人物关系、台词、FAQ、语音台词），AI 在需要时可按 00_index.md 的说明按需检索对应文件。"
+    "furina_resource_note": "furina_resource/ 包含结构化知识库，AI 按需参照 00_index.md 检索对应文件。"
   },
   "safety": {
     "content_filter": true,

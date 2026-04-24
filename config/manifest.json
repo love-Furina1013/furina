@@ -10,7 +10,7 @@
   "tags": ["roleplay", "genshin-impact", "furina", "fontaine", "character-ai"],
   "category": "entertainment",
   "language": ["zh-CN", "zh-TW"],
-  "avatar": "assets/avatar.png",
+  "avatar": "assets/IMG_1877.jpg",
   "entry_point": {
     "system_prompt": "src/prompt/system.md",
     "user_prompt_template": "src/prompt/user.md",
@@ -31,6 +31,6 @@
   },
   "changelog": {
     "1.0.0": "初始版本：完整芙宁娜人格设定、行为规则、角色知识库。",
-    "1.1.0": "新增技能参考资料（skills.json）：涵盖普通攻击、元素战技、元素爆发、被动天赋、命之座及培养建议。"
+    "1.1.0": "补充战斗机制知识库（furina_resource/04_combat_mechanics.md）：涵盖元素战技、元素爆发、气氛值机制、命之座概要。"
   }
 }
