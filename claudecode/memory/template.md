@@ -8,6 +8,8 @@
 - 对话开始时自动读取记忆文件
 - 当你说再见 / 要求保存 / 累计 3 条新记忆时，自动写回
 
+> 📖 完整安装步骤请参考 [`claudecode/README.md`](../README.md)。
+
 ---
 
 ## 初始化（仅首次）
@@ -29,6 +31,20 @@ cp claudecode/memory/furina-memory.json ~/.claude/furina-memory.json
 ```
 /furina-save 今天聊了很多枫丹歌剧的话题，很开心
 ```
+
+---
+
+## 反思命令（高级）
+
+若需要从长对话中精确提取记忆，使用 `/furina-reflect`：
+
+```
+/furina-reflect [M001: 旧记忆]
+
+（粘贴对话记录）
+```
+
+该命令仅输出 JSON 格式的记忆提取结果，供参考或手动合并。
 
 ---
 
@@ -54,6 +70,14 @@ cp claudecode/memory/furina-memory.json ~/.claude/furina-memory.json
 | `soul_state` | `low` / `calm` / `active` / `excited` | 上次对话结束时的情绪快照 |
 | `memories` | 数组，最多 10 条 | 关键记忆条目 |
 
+### memories 每条结构
+
+| 字段 | 说明 |
+|------|------|
+| `id` | 记忆编号，格式 `M001`、`M002`…，在旧记忆基础上递增 |
+| `type` | `"user"`（用户特征）/ `"event"`（发生的事）/ `"emotion"`（情感信号） |
+| `content` | 简洁陈述句，≤ 15 字 |
+
 ---
 
 ## 亲密度参考
@@ -65,6 +89,17 @@ cp claudecode/memory/furina-memory.json ~/.claude/furina-memory.json
 | 5–6 | 熟识感，主动呼应你的记忆 |
 | 7–8 | 信任关系，更愿分享内心 |
 | 9–10 | 深度信赖，偶尔展现脆弱 |
+
+---
+
+## 灵魂状态参考
+
+| 状态 | 含义 | 开场语气 |
+|------|------|----------|
+| `low` | 疲惫 / 低落 | 语气平缓，戏剧感削减 |
+| `calm` | 平静 | 正常傲娇基调（默认） |
+| `active` | 活跃 | 更张扬，更愿展开话题 |
+| `excited` | 亢奋 | 夸张至极，充满感染力 |
 
 ---
 
