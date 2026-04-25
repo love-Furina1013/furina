@@ -12,11 +12,12 @@
 
 项目重点不只是“让模型像芙宁娜说话”，而是让角色在长期互动中保持人设一致、知道何时收放戏剧感、能根据记忆调整亲密度和情绪状态，并在不出戏的前提下遵守内容安全与 OOC 边界。
 
-当前项目分为两条使用路径：
+当前项目分为三条使用路径：
 
 | 路径 | 适合场景 | 入口 |
 |------|----------|------|
 | Claude Code 斜杠命令 | 想在 Claude Code 中直接使用 `/furina`，并用本地 JSON 保存记忆 | `claudecode/` |
+| Codex Skill | 想让 Codex 按需读取芙宁娜设定、知识库、OOC 规则和记忆规范 | `codex/skills/furina-roleplay/` |
 | 通用 Prompt / Skill 资源 | 想把角色设定、知识库、记忆规则接入其他 AI 客户端或自定义运行时 | `src/`、`furina_resource/`、`config/` |
 
 ---
@@ -28,6 +29,7 @@
 - OOC 行为约束：包含身份坚守、内容安全、原著一致性、角色尊严与社交感知规则。
 - 记忆系统：支持亲密度、上次对话、灵魂状态、关键记忆条目与记忆压缩规则。
 - Claude Code 原生命令：提供 `/furina`、`/furina-save`、`/furina-reflect`、`/furina-compress` 四个命令文件。
+- Codex Skill 兼容：提供标准 `SKILL.md`、`references/` 和 `agents/openai.yaml`，可复制到 `~/.codex/skills` 使用。
 - 向后兼容手动存档：仍可在对话开头注入 `[记忆存档]...[/记忆存档]` 区块。
 
 ---
@@ -48,6 +50,19 @@ furina/
 │   │   ├── furina-memory.json
 │   │   └── template.md
 │   └── README.md
+├── codex/
+│   └── skills/
+│       └── furina-roleplay/
+│           ├── SKILL.md
+│           ├── agents/
+│           │   └── openai.yaml
+│           ├── assets/
+│           │   └── IMG_1877.jpg
+│           └── references/
+│               ├── furina_resource/
+│               ├── memory/
+│               ├── prompt/
+│               └── rules/
 ├── config/
 │   ├── manifest.json
 │   └── settings.json
@@ -110,6 +125,19 @@ Copy-Item .\claudecode\memory\furina-memory.json "$HOME\.claude\furina-memory.js
 ```
 
 更多步骤见 [SETUP_GUIDE.md](SETUP_GUIDE.md) 与 [claudecode/README.md](claudecode/README.md)。
+
+---
+
+## 快速开始：Codex Skill
+
+将 Skill 目录复制到 Codex 的本地技能目录：
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\.codex\skills"
+Copy-Item .\codex\skills\furina-roleplay "$HOME\.codex\skills\" -Recurse -Force
+```
+
+之后在 Codex 中提出与芙宁娜角色扮演、提示词维护、知识库问答或记忆整理相关的请求时，Codex 会根据 `SKILL.md` 按需读取 `references/` 下的设定、规则与知识库。
 
 ---
 
