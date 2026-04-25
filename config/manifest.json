@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "name": "芙宁娜 · 角色扮演 Skill",
   "name_en": "Furina de Fontaine Roleplay Skill",
-  "description": "基于 GitHub Copilot 的芙宁娜（Furina de Fontaine）角色扮演 Skill。芙宁娜是《原神》枫丹地区的水之神（前至高神），以戏剧化、傲娇而充满魅力的性格著称。现已集成记忆系统与社交感知，让芙宁娜真正记住每位用户、懂分寸、有眼色。",
+  "description": "面向 Claude Code、GitHub Copilot Skill 与自定义 AI 运行时的芙宁娜（Furina de Fontaine）角色扮演资源包，包含角色系统提示词、结构化知识库、OOC 行为规则、本地记忆机制与会话反思流程，用于构建人设稳定、语气一致、具备长期互动连续感的芙宁娜体验。",
   "author": "YuHeng Yang",
   "license": "MIT",
   "repository": "https://github.com/love-Furina1013/furina",
