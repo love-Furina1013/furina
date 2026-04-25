@@ -11,7 +11,8 @@ claudecode/
 ├── commands/
 │   ├── furina.md          # 主命令：完整芙宁娜人格 + 自动记忆读取/保存
 │   ├── furina-save.md     # 主动保存命令：随时手动触发记忆存档
-│   └── furina-reflect.md  # 反思命令：从对话记录提取记忆（高级用法）
+│   ├── furina-reflect.md  # 反思命令：从对话记录提取记忆（高级用法）
+│   └── furina-compress.md # 压缩命令：清理重复记忆并保留核心条目
 ├── memory/
 │   ├── furina-memory.json # 空存档模板（初始化用，复制到 ~/.claude/）
 │   └── template.md        # 字段说明文档
@@ -29,6 +30,7 @@ mkdir -p ~/.claude/commands
 cp path/to/claudecode/commands/furina.md ~/.claude/commands/
 cp path/to/claudecode/commands/furina-save.md ~/.claude/commands/
 cp path/to/claudecode/commands/furina-reflect.md ~/.claude/commands/
+cp path/to/claudecode/commands/furina-compress.md ~/.claude/commands/
 
 # 初始化空记忆文件（仅首次需要）
 cp path/to/claudecode/memory/furina-memory.json ~/.claude/furina-memory.json
@@ -41,6 +43,7 @@ mkdir -p .claude/commands
 cp path/to/claudecode/commands/furina.md .claude/commands/
 cp path/to/claudecode/commands/furina-save.md .claude/commands/
 cp path/to/claudecode/commands/furina-reflect.md .claude/commands/
+cp path/to/claudecode/commands/furina-compress.md .claude/commands/
 ```
 
 ---
@@ -108,6 +111,18 @@ cp path/to/claudecode/commands/furina-reflect.md .claude/commands/
 
 ---
 
+### 6. 高级：压缩记忆（`/furina-compress`）
+
+当记忆条目变多、重复或零散时，可以运行：
+
+```
+/furina-compress
+```
+
+该命令会读取 `~/.claude/furina-memory.json`，保留最重要的核心记忆，并清理重复或低价值条目。
+
+---
+
 ## 记忆文件说明
 
 记忆存储在 `~/.claude/furina-memory.json`：
@@ -145,6 +160,7 @@ cp path/to/claudecode/commands/furina-reflect.md .claude/commands/
 | **自动读取本地记忆文件** | ✅ 新增 |
 | **对话结束/用户要求时自动写回** | ✅ 新增 |
 | **`/furina-save` 随时主动保存命令** | ✅ 新增 |
+| **`/furina-compress` 记忆压缩命令** | ✅ 新增 |
 | 灵魂进化（亲密度 + 情绪状态动态调整）| ✅ |
 | 社交感知（回应时机 + 分量控制）| ✅ |
 
@@ -157,6 +173,7 @@ cp path/to/claudecode/commands/furina-reflect.md .claude/commands/
 - **主命令 `furina.md`**：融合了 `src/prompt/system.md`、`src/rules/ooc_rules.md`、`src/memory/memory_format.md` 以及 `furina_resource/` 中的关键知识库；新增自动文件读写记忆机制
 - **保存命令 `furina-save.md`**：新增，解决原版需要手动复制粘贴存档的问题
 - **反思命令 `furina-reflect.md`**：对应 `src/prompt/reflection.md`，保留为高级用法
+- **压缩命令 `furina-compress.md`**：对应 `src/memory/compression.md`，用于清理重复记忆并保留核心条目
 - **记忆格式**：与 `src/memory/memory_format.md` 兼容，存档可在两个平台间互通
 
 ---

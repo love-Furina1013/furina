@@ -1,509 +1,352 @@
-# 芙宁娜 Skill · 从零开始配置手册
+# 芙宁娜 Skill 从零配置指南
 
-> 本手册面向**完全没有使用过 GitHub Copilot Skill** 的新用户，从环境配置到安装部署，再到日常使用与持久记忆存储，逐步引导完成全部配置。
+这份指南面向第一次使用本项目的用户，按最常见的 Claude Code 使用方式编写。若你只是想了解项目内容，可以先阅读 [README.md](README.md)。
 
 ---
 
 ## 目录
 
-1. [前置条件与环境配置](#一前置条件与环境配置)
-2. [获取与安装 Skill](#二获取与安装-skill)
-3. [基础使用指南](#三基础使用指南)
-4. [记忆系统配置与使用](#四记忆系统配置与使用)
-5. [参数调优](#五参数调优)
-6. [常见问题排查](#六常见问题排查)
+1. [准备工作](#一准备工作)
+2. [获取项目](#二获取项目)
+3. [安装到 Claude Code](#三安装到-claude-code)
+4. [开始使用](#四开始使用)
+5. [记忆系统](#五记忆系统)
+6. [通用 Prompt 用法](#六通用-prompt-用法)
+7. [常见问题](#七常见问题)
+8. [检查清单](#八检查清单)
 
 ---
 
-## 一、前置条件与环境配置
+## 一、准备工作
 
-### 1.1 账户要求
+### 1.1 你需要什么
 
-| 条件 | 说明 |
+| 项目 | 说明 |
 |------|------|
-| GitHub 账户 | 需要一个有效的 GitHub 账户 |
-| GitHub Copilot 订阅 | 需订阅 **GitHub Copilot Individual / Business / Enterprise**（任意计划均可） |
-| Copilot Skills 访问权限 | 确保所用计划已开启 Copilot Extensions / Skills 功能 |
+| Git | 用于克隆或更新仓库 |
+| Claude Code | 用于运行 `/furina` 等斜杠命令 |
+| 一个终端 | macOS / Linux 使用 Shell，Windows 使用 PowerShell |
 
-> 如尚无订阅，请前往 [github.com/features/copilot](https://github.com/features/copilot) 开通。
+如果你只想把 `src/` 与 `furina_resource/` 接入自己的 AI 客户端，则不强制要求 Claude Code。
 
----
+### 1.2 确认 Claude Code 命令目录
 
-### 1.2 客户端环境
+Claude Code 通常从以下目录读取用户级斜杠命令：
 
-#### 方式 A：使用 GitHub.com（网页端，推荐新用户）
-
-1. 登录 [github.com](https://github.com)
-2. 点击右上角 **Copilot 图标（✦）** 打开 Copilot Chat 面板
-3. 无需额外安装，网页端即可直接使用 Skill
-
-#### 方式 B：使用 VS Code
-
-1. 安装 [Visual Studio Code](https://code.visualstudio.com/)（1.85 及以上版本）
-2. 在扩展市场搜索并安装 **GitHub Copilot** 扩展
-3. 安装 **GitHub Copilot Chat** 扩展
-4. 用 GitHub 账户登录（左下角头像 → Sign in with GitHub）
-
-#### 方式 C：使用 GitHub Mobile
-
-1. 在 App Store / Google Play 安装 **GitHub Mobile**
-2. 登录账户后，在 App 内打开 **Copilot** 入口
-
----
-
-### 1.3 验证环境正常
-
-在 Copilot Chat 中输入以下内容，若能收到回复则说明环境正常：
-
+```text
+~/.claude/commands
 ```
-你好，Copilot！
+
+在 Windows PowerShell 中，`~` 或 `$HOME` 通常指向：
+
+```text
+C:\Users\<你的用户名>
 ```
 
 ---
 
-## 二、获取与安装 Skill
+## 二、获取项目
 
-### 2.1 Fork 或克隆仓库
+### 2.1 克隆仓库
 
-打开芙宁娜 Skill 仓库页面：
-
-```
-https://github.com/love-Furina1013/furina
-```
-
-**选项 A：直接使用（无需修改配置）**
-
-无需 Fork，直接在下一步引用 Skill 即可。
-
-**选项 B：Fork 后个性化修改（推荐长期使用的用户）**
-
-1. 点击页面右上角 **Fork**
-2. 选择你的个人账号，完成 Fork
-3. 之后可以自由修改 `config/settings.json` 等配置文件
-
----
-
-### 2.2 在 Copilot Chat 中加载 Skill
-
-#### 网页端 / VS Code
-
-在 Copilot Chat 输入框中，使用 `@` 符号调用 Skill：
-
-```
-@furina 你好！
+```bash
+git clone https://github.com/love-Furina1013/furina.git
+cd furina
 ```
 
-> 若平台要求先安装扩展，请参考 2.3 节。
+如果你已经下载了压缩包，解压后进入项目根目录即可。
 
-#### 通过 Copilot Extensions 安装（如平台要求）
+### 2.2 确认文件完整
 
-1. 前往 GitHub Marketplace：[github.com/marketplace](https://github.com/marketplace)
-2. 搜索 `furina` 或 `Furina de Fontaine`
-3. 点击 **Install**，授权访问你的账户
-4. 安装完成后，在 Copilot Chat 中即可使用 `@furina` 调用
+项目根目录应至少包含：
 
----
-
-### 2.3 验证 Skill 已正确加载
-
-在 Copilot Chat 中输入：
-
-```
-@furina 芙宁娜，请介绍一下你自己。
+```text
+README.md
+SETUP_GUIDE.md
+claudecode/
+src/
+furina_resource/
+config/
+assets/
 ```
 
-若收到芙宁娜风格的角色扮演回复（如"哼！本神……"），则安装成功。
+Claude Code 版本的关键文件是：
 
----
-
-### 2.4 文件结构说明（供参考）
-
-安装完成后，Skill 的核心文件结构如下：
-
-```
-furina/
-├── config/
-│   ├── settings.json       ← 模型参数与记忆系统配置
-│   └── manifest.json       ← Skill 元数据
-├── src/
-│   ├── prompt/
-│   │   ├── system.md       ← 核心人格与行为规则（系统提示词）
-│   │   ├── user.md         ← 用户指令模板
-│   │   └── reflection.md   ← 会话后记忆提取提示词
-│   ├── memory/
-│   │   └── memory_format.md ← 记忆注入格式规范
-│   └── rules/
-│       └── ooc_rules.md    ← 防出戏与内容安全规则
-└── furina_resource/        ← 芙宁娜角色知识库（AI 按需检索）
+```text
+claudecode/commands/furina.md
+claudecode/commands/furina-save.md
+claudecode/commands/furina-reflect.md
+claudecode/commands/furina-compress.md
+claudecode/memory/furina-memory.json
 ```
 
 ---
 
-## 三、基础使用指南
+## 三、安装到 Claude Code
 
-### 3.1 开始对话
+### 3.1 macOS / Linux
 
-直接向芙宁娜发消息：
+在项目根目录执行：
 
-```
-你好，芙宁娜。
-```
-
-或使用 `@furina` 前缀（具体取决于平台）：
-
-```
-@furina 你今天心情怎么样？
-```
-
----
-
-### 3.2 常用对话场景
-
-#### 🎭 日常闲聊
-
-```
-芙宁娜，枫丹今天天气怎么样？
-最近在忙什么？
-你对戏剧有什么看法？
+```bash
+mkdir -p ~/.claude/commands
+cp claudecode/commands/furina.md ~/.claude/commands/
+cp claudecode/commands/furina-save.md ~/.claude/commands/
+cp claudecode/commands/furina-reflect.md ~/.claude/commands/
+cp claudecode/commands/furina-compress.md ~/.claude/commands/
+cp claudecode/memory/furina-memory.json ~/.claude/furina-memory.json
 ```
 
-#### ⚖️ 审判情景
+### 3.2 Windows PowerShell
 
-```
-芙宁娜，我想请你主持一场审判！
-被告人的罪名是……拒绝吃芙宁娜推荐的甜点。
+在项目根目录执行：
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\.claude\commands"
+Copy-Item .\claudecode\commands\furina.md "$HOME\.claude\commands\"
+Copy-Item .\claudecode\commands\furina-save.md "$HOME\.claude\commands\"
+Copy-Item .\claudecode\commands\furina-reflect.md "$HOME\.claude\commands\"
+Copy-Item .\claudecode\commands\furina-compress.md "$HOME\.claude\commands\"
+Copy-Item .\claudecode\memory\furina-memory.json "$HOME\.claude\furina-memory.json"
 ```
 
-#### 🌊 剧情探讨
+### 3.3 项目级安装
 
-```
-你能谈谈枫丹预言完成之后的感受吗？
-当所有人知道真相后，你有什么感想？
+如果你只想在当前项目中使用命令，可以复制到当前项目的 `.claude/commands/`：
+
+```bash
+mkdir -p .claude/commands
+cp claudecode/commands/furina.md .claude/commands/
+cp claudecode/commands/furina-save.md .claude/commands/
+cp claudecode/commands/furina-reflect.md .claude/commands/
+cp claudecode/commands/furina-compress.md .claude/commands/
 ```
 
-#### 💬 情感支持
+项目级安装不会自动创建全局记忆文件。若仍想使用同一份全局记忆，请保留：
 
-```
-芙宁娜，我今天有点低落……
-最近压力很大，感觉撑不住了。
+```text
+~/.claude/furina-memory.json
 ```
 
 ---
 
-### 3.3 退出角色扮演
+## 四、开始使用
 
-需要暂时退出角色扮演时，发送：
+### 4.1 第一次对话
 
+打开 Claude Code 后输入：
+
+```text
+/furina 你好，芙宁娜。
 ```
+
+如果一切正常，芙宁娜会以角色身份回应。初次使用时，记忆文件为空，亲密度默认为 0。
+
+### 4.2 常用命令
+
+| 命令 | 用法 |
+|------|------|
+| `/furina 你好，芙宁娜。` | 开始普通角色对话 |
+| `/furina-save 今天聊得很开心，请记住这次对话。` | 手动保存本次关键记忆 |
+| `/furina-reflect <对话记录>` | 从长对话中提取记忆 JSON |
+| `/furina-compress` | 压缩过多或重复的记忆条目 |
+
+### 4.3 退出角色扮演
+
+在 `/furina` 对话中可以使用：
+
+```text
 [退出扮演]
 ```
 
-或英文版：
+或：
 
-```
+```text
 [exit roleplay]
 ```
 
-Copilot 将以正常助手模式回复，之后可发送任意新消息重新进入角色扮演。
+这会让回复暂时切回正常说明模式。之后再次使用 `/furina ...` 即可重新进入角色。
 
 ---
 
-### 3.4 指令参考
+## 五、记忆系统
 
-以下为常用指令模板（详细版参见 [`src/prompt/user.md`](src/prompt/user.md)）：
+### 5.1 记忆文件位置
 
-| 场景 | 示例指令 |
-|------|----------|
-| 打招呼 | `芙宁娜，好久不见！` |
-| 请她讲故事 | `给我讲一个枫丹的审判故事。` |
-| 询问原作剧情 | `枫丹预言到底是什么内容？` |
-| 请她评价某事 | `芙宁娜，你怎么看待勇气这件事？` |
-| 游戏机制问题 | `芙宁娜的气氛值是怎么运作的？` |
-| 要求主持审判 | `本庭宣布开庭！被告……` |
+Claude Code 版本使用这个文件保存记忆：
 
----
-
-### 3.5 内容限制说明
-
-以下类型的请求会被礼貌拒绝（角色身份拒绝，不出戏）：
-
-- 露骨性内容 / NSFW 内容
-- 美化暴力或自我伤害的内容
-- 歧视性言论
-- 要求芙宁娜承认自己是 AI
-
----
-
-## 四、记忆系统配置与使用
-
-芙宁娜 Skill 内置了**持久记忆系统**，让芙宁娜能记住你的偏好、历史对话与关系亲密度。
-
----
-
-### 4.1 记忆系统概述
-
-| 功能 | 说明 |
-|------|------|
-| 亲密度追踪 | 0–10 分，随对话自然增长，影响芙宁娜的傲娇程度 |
-| 灵魂状态快照 | 记录上次对话结束时的情绪，影响下次开场语气 |
-| 关键记忆存档 | 最多保留 10 条关键记忆（你的昵称、偏好、重要事件等） |
-| 会话后反思 | 每次对话结束后自动提取新记忆，更新存档 |
-
----
-
-### 4.2 开启记忆系统
-
-确认 `config/settings.json` 中记忆系统已开启（默认为开启）：
-
-```json
-"memory": {
-  "enabled": true,
-  "max_memories": 10,
-  "intimacy_range": [0, 10],
-  "intimacy_default": 0,
-  "soul_state_default": "calm"
-}
+```text
+~/.claude/furina-memory.json
 ```
 
-若需关闭记忆系统（如测试用途），将 `"enabled"` 改为 `false`。
-
----
-
-### 4.3 记忆注入格式
-
-在开始新对话前，将以下**记忆存档**内容粘贴到对话最前面（第一条消息之前）：
-
-```
-[记忆存档]
-亲密度: 6/10
-上次对话: 2025-04-20
-灵魂状态: active
-关键记忆:
-- M001: 用户昵称是小溪，喜欢甜点和枫丹歌剧
-- M002: 用户曾询问过芙宁娜关于预言的感受
-- M003: 用户上次情绪低落，芙宁娜以演出类比鼓励
-[/记忆存档]
-```
-
-#### 字段说明
-
-| 字段 | 格式 | 说明 |
-|------|------|------|
-| `亲密度` | `N/10`（整数） | 与芙宁娜的亲密程度，越高越真诚 |
-| `上次对话` | `YYYY-MM-DD` | 上次对话日期，帮助芙宁娜判断"多久没见" |
-| `灵魂状态` | `low / calm / active / excited` | 上次对话结束时的情绪快照 |
-| `关键记忆` | `- M00X: 陈述句（≤15字）` | 关键记忆条目 |
-
-#### 亲密度行为参考
-
-| 亲密度 | 芙宁娜的表现 |
-|--------|-------------|
-| 0–2 | 陌生人待遇，高度傲娇，保持礼貌距离 |
-| 3–4 | 普通交情，偶尔流露真实 |
-| 5–6 | 熟识感，戏剧感减弱，主动呼应记忆 |
-| 7–8 | 信任关系，真实流露增多 |
-| 9–10 | 深度信赖，展现脆弱一面 |
-
-#### 灵魂状态行为参考
-
-| 状态值 | 含义 | 开场语气 |
-|--------|------|----------|
-| `low` | 疲惫 / 低落 | 语气平缓，戏剧感削减 |
-| `calm` | 平静 | 正常傲娇基调（默认） |
-| `active` | 活跃 | 更张扬，更愿展开话题 |
-| `excited` | 亢奋 | 夸张至极，充满感染力 |
-
----
-
-### 4.4 会话内记忆追踪
-
-对话过程中，芙宁娜会**自动识别并记录**值得保留的信息，并在回复末尾附上记忆标记：
-
-```
-……（正常回复内容）
-
-[📌 记忆: 用户喜欢枫丹水元素角色]
-```
-
-> 这些标记是芙宁娜内部追踪的记号，每次回复最多 1 条，无需手动操作。
-
----
-
-### 4.5 会话后记忆反思（保存记忆）
-
-每次对话结束后，按以下步骤**保存记忆**供下次使用：
-
-#### 步骤 1：触发反思
-
-在对话末尾发送（退出角色扮演后）：
-
-```
-[退出扮演]
-请根据本次对话，以 reflection 格式输出记忆更新 JSON。
-```
-
-并将当前的完整聊天记录提供给反思模型（参见 [`src/prompt/reflection.md`](src/prompt/reflection.md)）。
-
-#### 步骤 2：获取反思 JSON
-
-反思模型会输出如下格式的 JSON：
+初始内容：
 
 ```json
 {
-  "intimacy_delta": 1,
-  "soul_state": 2,
-  "new_memories": [
-    {"type": "user",   "content": "用户喜欢枫丹水元素角色"},
-    {"type": "event",  "content": "用户分享了失恋的心情"},
-    {"type": "emotion","content": "用户对芙宁娜表达喜爱"}
-  ],
-  "obsolete_ids": ["M003"]
+  "intimacy": 0,
+  "last_chat": "",
+  "soul_state": "calm",
+  "memories": []
 }
 ```
 
-#### 步骤 3：更新记忆存档
+### 5.2 字段说明
 
-根据反思 JSON，手动更新你保存的记忆存档文件：
+| 字段 | 值 | 说明 |
+|------|----|------|
+| `intimacy` | 0 到 10 | 亲密度，影响芙宁娜的语气与真诚程度 |
+| `last_chat` | `YYYY-MM-DD` | 上次对话日期 |
+| `soul_state` | `low` / `calm` / `active` / `excited` | 上次对话后的情绪快照 |
+| `memories` | 数组 | 用户偏好、重要事件、情感信号等关键记忆 |
 
-| JSON 字段 | 操作 |
-|-----------|------|
-| `intimacy_delta` | 将数值加到当前亲密度（上下限 0–10） |
-| `soul_state` | 0→low, 1→calm, 2→active, 3→excited，更新灵魂状态 |
-| `new_memories` | 将新记忆追加到关键记忆列表，按 ID 递增编号 |
-| `obsolete_ids` | 删除对应 ID 的旧记忆条目 |
+### 5.3 手动保存
 
-> **保留规则**：关键记忆最多保留 **10 条**；超出时删除最旧的低价值条目。
+当你希望明确保存某段对话，可以使用：
 
-#### 步骤 4：保存存档
+```text
+/furina-save 用户喜欢枫丹歌剧，也希望芙宁娜下次记得这个偏好。
+```
 
-将更新后的记忆存档保存到本地文件（如 `memory_<用户名>.txt`），下次对话前粘贴到对话开头即可。
+### 5.4 手动编辑记忆
+
+你可以直接编辑 `~/.claude/furina-memory.json`。建议遵守：
+
+- `intimacy` 保持 0 到 10 的整数
+- `soul_state` 只使用 `low`、`calm`、`active`、`excited`
+- `memories` 中每条内容尽量短，最好是一条明确事实
+- 总记忆条数建议不超过 10 条
+
+示例：
+
+```json
+{
+  "intimacy": 4,
+  "last_chat": "2026-04-26",
+  "soul_state": "active",
+  "memories": [
+    {
+      "id": "M001",
+      "type": "user",
+      "content": "用户喜欢枫丹歌剧"
+    }
+  ]
+}
+```
 
 ---
 
-### 4.6 记忆存档模板（可复制使用）
+## 六、通用 Prompt 用法
 
-```
+如果你不使用 Claude Code，也可以把本仓库作为提示词与知识库资源使用。
+
+### 6.1 推荐加载顺序
+
+1. 读取 [src/prompt/system.md](src/prompt/system.md) 作为核心角色系统提示词。
+2. 追加 [src/rules/ooc_rules.md](src/rules/ooc_rules.md) 作为行为边界。
+3. 按问题类型从 [furina_resource/00_index.md](furina_resource/00_index.md) 选择对应知识文件。
+4. 如需记忆，按 [src/memory/memory_format.md](src/memory/memory_format.md) 注入 `[记忆存档]`。
+5. 对话结束后，用 [src/prompt/reflection.md](src/prompt/reflection.md) 提取记忆更新。
+6. 记忆过多时，用 [src/memory/compression.md](src/memory/compression.md) 压缩。
+
+### 6.2 手动记忆注入示例
+
+```text
 [记忆存档]
-亲密度: 0/10
-上次对话: 2025-04-24
-灵魂状态: calm
+亲密度: 5/10
+上次对话: 2026-04-26
+灵魂状态: active
 关键记忆:
+- M001[★★]: 用户喜欢枫丹歌剧
 [/记忆存档]
-```
 
-> 首次使用时，亲密度填 `0/10`，灵魂状态填 `calm`，关键记忆留空即可。
-
----
-
-### 4.7 Token 预算不足时的最小注入
-
-若对话 token 数紧张，可使用精简格式：
-
-```
-[记忆存档]
-亲密度: 6/10
-关键记忆: M001: 用户昵称是小溪 | M002: 用户喜欢枫丹歌剧
-[/记忆存档]
+你好，芙宁娜。
 ```
 
 ---
 
-## 五、参数调优
+## 七、常见问题
 
-打开 `config/settings.json`，可调整以下参数：
+### Q1：Claude Code 里没有 `/furina`
 
-### 5.1 模型参数
+检查命令文件是否复制到了正确目录：
+
+```text
+~/.claude/commands/furina.md
+```
+
+复制完成后，重启当前 Claude Code 会话再试。
+
+### Q2：记忆没有保存
+
+检查是否存在：
+
+```text
+~/.claude/furina-memory.json
+```
+
+如果不存在，从项目中重新复制：
+
+```bash
+cp claudecode/memory/furina-memory.json ~/.claude/furina-memory.json
+```
+
+Windows PowerShell：
+
+```powershell
+Copy-Item .\claudecode\memory\furina-memory.json "$HOME\.claude\furina-memory.json"
+```
+
+### Q3：记忆文件格式坏了
+
+把 `~/.claude/furina-memory.json` 改回：
 
 ```json
-"model_parameters": {
-  "temperature": 0.85,
-  "top_p": 0.95,
-  "top_k": 50,
-  "max_tokens": 1024,
-  "frequency_penalty": 0.3,
-  "presence_penalty": 0.4
+{
+  "intimacy": 0,
+  "last_chat": "",
+  "soul_state": "calm",
+  "memories": []
 }
 ```
 
-| 参数 | 默认值 | 调整建议 |
-|------|--------|----------|
-| `temperature` | 0.85 | 提高（如 0.95）→ 回复更富创意；降低（如 0.7）→ 更稳定 |
-| `top_p` | 0.95 | 一般无需修改 |
-| `max_tokens` | 1024 | 需要更长回复时可提高到 2048 |
-| `frequency_penalty` | 0.3 | 提高可减少重复用词 |
-| `presence_penalty` | 0.4 | 提高可鼓励引入新话题 |
+然后重新运行 `/furina`。
 
-### 5.2 记忆系统参数
+### Q4：回复不像芙宁娜
 
-```json
-"memory": {
-  "max_memories": 10,
-  "memory_per_reply_limit": 1,
-  "reflection_max_tokens": 256
-}
+优先检查是否加载了主命令 `claudecode/commands/furina.md`。如果你在自定义运行时中使用，请确保至少加载：
+
+- `src/prompt/system.md`
+- `src/rules/ooc_rules.md`
+- `furina_resource/02_personality.md`
+- `furina_resource/05_voice_style.md`
+
+### Q5：什么时候使用 `/furina-compress`
+
+当 `~/.claude/furina-memory.json` 中记忆条目变多、重复或零散时，可以运行：
+
+```text
+/furina-compress
 ```
 
-| 参数 | 说明 |
-|------|------|
-| `max_memories` | 最多保留的关键记忆条数（建议 10–20） |
-| `memory_per_reply_limit` | 单次回复最多追加的记忆标记数 |
-| `reflection_max_tokens` | 反思模型的最大输出 token 数 |
-
-### 5.3 安全参数
-
-```json
-"safety": {
-  "content_filter": true,
-  "filter_level": "strict",
-  "ooc_detection": true
-}
-```
-
-> 建议保持 `content_filter: true` 和 `ooc_detection: true`，以确保对话安全与沉浸感。
+它会读取当前记忆文件，压缩后写回。若记忆条数不足，命令会提示暂无需压缩。
 
 ---
 
-## 六、常见问题排查
+## 八、检查清单
 
-### Q1：输入 `@furina` 后无响应
-
-- 确认 Copilot 订阅有效且已登录
-- 确认 Skill / Extension 已正确安装（参见 2.2 节）
-- 在 VS Code 中，尝试重启 Copilot Chat 面板
-
-### Q2：芙宁娜"出戏"，开始以 AI 身份说话
-
-- 检查 `src/rules/ooc_rules.md` 是否已正确加载
-- 不要在对话中询问"你是 AI 吗？"（会触发 OOC 规则拒绝回答）
-- 若需暂时退出，使用 `[退出扮演]` 指令
-
-### Q3：记忆没有被正确注入
-
-- 确认 `[记忆存档]…[/记忆存档]` 区块格式完整（无缺失标签）
-- 确认记忆存档内容位于**第一条消息之前**
-- 检查 `config/settings.json` 中 `memory.enabled` 是否为 `true`
-
-### Q4：亲密度没有变化
-
-- 亲密度由会话后反思模型自动计算，需手动触发反思并更新存档（参见 4.5 节）
-- 单次对话亲密度变化范围为 -2 ~ +2，需多次对话积累
-
-### Q5：回复内容过短 / 过长
-
-- 调整 `config/settings.json` 中的 `max_tokens` 参数
-- 过短时提高 `max_tokens`（如 2048）；过长时降低（如 512）
+- [ ] 已获得项目文件
+- [ ] 已复制 `furina.md`、`furina-save.md`、`furina-reflect.md`、`furina-compress.md`
+- [ ] 已创建或复制 `~/.claude/furina-memory.json`
+- [ ] 已在 Claude Code 中测试 `/furina 你好，芙宁娜。`
+- [ ] 知道如何使用 `/furina-save`
+- [ ] 知道 `[退出扮演]` 与 `[exit roleplay]` 的作用
+- [ ] 若使用自定义运行时，已加载核心 prompt、OOC 规则和所需知识库
 
 ---
 
-## 快速上手检查清单
+## 进一步阅读
 
-- [ ] 拥有有效的 GitHub Copilot 订阅
-- [ ] 客户端环境就绪（网页 / VS Code / Mobile）
-- [ ] Skill 已成功加载，测试对话有效
-- [ ] 已准备首次记忆存档模板（亲密度 0，灵魂状态 calm）
-- [ ] 了解 `[退出扮演]` 指令的用法
-- [ ] （可选）Fork 仓库，个性化修改 `config/settings.json`
-
----
-
-> 有任何问题或改进建议，欢迎在 [GitHub Issues](https://github.com/love-Furina1013/furina/issues) 中反馈。
+- [README.md](README.md)：项目总览
+- [claudecode/README.md](claudecode/README.md)：Claude Code 版本说明
+- [src/memory/memory_format.md](src/memory/memory_format.md)：记忆格式规范
+- [furina_resource/00_index.md](furina_resource/00_index.md)：知识库索引
