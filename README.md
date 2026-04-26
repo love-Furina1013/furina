@@ -278,8 +278,15 @@ Claude Code 版本默认使用本地文件保存认知记忆：
 
 ---
 
+## 资料来源与致谢
+
+- `furina_resource/` 下的角色资料整理自萌娘百科条目：[芙宁娜·德·枫丹](https://zh.moegirl.org.cn/芙宁娜·德·枫丹)。萌娘百科中文文本通常依据 **CC BY-NC-SA 3.0 CN（署名-非商业性使用-相同方式共享 3.0 中国大陆）** 提供，使用与再分发时请遵守原站著作权声明与页面历史署名要求。
+- 认知记忆系统的设计灵感来自 [astrbot_plugin_angel_memory](https://github.com/kawayiYokami/astrbot_plugin_angel_memory) 与 [astrbot_plugin_angel_heart](https://github.com/kawayiYokami/astrbot_plugin_angel_heart)：本项目参考了三层认知、主动回忆、灵魂能量、睡眠巩固、四状态交互和低成本回复决策等思路，并改写为本仓库的轻量 Prompt / Skill 资源形态。
+
+---
+
 ## 许可证与声明
 
 本项目使用 [MIT License](LICENSE)。
 
-本项目为同人创作与提示词工程实践。芙宁娜、《原神》及相关角色版权归 miHoYo / HoYoverse 所有。
+本项目为同人创作与提示词工程实践。芙宁娜、《原神》及相关角色版权归 miHoYo / HoYoverse 所有。项目代码、提示词结构与仓库组织按 MIT License 提供；来自第三方资料源的文本内容仍受其原始许可与版权声明约束。
