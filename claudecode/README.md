@@ -1,6 +1,6 @@
 # 芙宁娜 × Claude Code —— 安装与使用指南
 
-将芙宁娜的完整角色扮演 Skill 适配为 Claude Code 原生斜杠命令，包含完整人格设定、行为准则、角色知识库、**全自动**持久记忆系统与社交感知能力。
+将芙宁娜的完整角色扮演 Skill 适配为 Claude Code 原生斜杠命令，包含完整人格设定、行为准则、角色知识库、**全自动**认知记忆系统与社交感知能力。
 
 ---
 
@@ -9,7 +9,7 @@
 ```
 claudecode/
 ├── commands/
-│   ├── furina.md          # 主命令：完整芙宁娜人格 + 自动记忆读取/保存
+│   ├── furina.md          # 主命令：完整芙宁娜人格 + 自动认知记忆读取/保存
 │   ├── furina-save.md     # 主动保存命令：随时手动触发记忆存档
 │   ├── furina-reflect.md  # 反思命令：从对话记录提取记忆（高级用法）
 │   └── furina-compress.md # 压缩命令：清理重复记忆并保留核心条目
@@ -58,7 +58,7 @@ cp path/to/claudecode/commands/furina-compress.md .claude/commands/
 /furina 你好，芙宁娜。
 ```
 
-芙宁娜会自动读取 `~/.claude/furina-memory.json`，并以对应的亲密度与你互动。初次使用（文件不存在）时，以陌生人（亲密度 0）的态度接待你。
+芙宁娜会自动读取 `~/.claude/furina-memory.json`，并以对应的亲密度、灵魂状态和交互状态与你互动。初次使用（文件不存在）时，以陌生人（亲密度 0）的态度接待你。
 
 ---
 
@@ -71,6 +71,7 @@ cp path/to/claudecode/commands/furina-compress.md .claude/commands/
 | 你说再见 | "再见" / "拜拜" / "bye" / "晚安" / "我走了" |
 | 你要求保存 | "记住" / "保存" / "别忘了" / "记下来" / "存档" |
 | 对话内累计 3 条新记忆 | 自动在下一次回复后保存 |
+| 出现重要认知变化 | 明确边界、长期项目、情绪转折、关系里程碑 |
 
 ---
 
@@ -129,14 +130,28 @@ cp path/to/claudecode/commands/furina-compress.md .claude/commands/
 
 ```json
 {
+  "version": "2.0",
+  "scope": "default",
   "intimacy": 6,
-  "last_chat": "2026-04-24",
+  "last_chat": "2026-04-26",
+  "interaction_state": "observation",
   "soul_state": "active",
+  "soul_energy": {
+    "recall_depth": 50,
+    "impression_depth": 45,
+    "expression_desire": 40,
+    "creativity": 60
+  },
   "memories": [
-    {"id": "M001", "type": "user",    "content": "用户昵称是小溪"},
-    {"id": "M002", "type": "user",    "content": "用户喜欢枫丹歌剧和甜点"},
-    {"id": "M003", "type": "emotion", "content": "用户对芙宁娜表达喜爱"}
-  ]
+    {"id": "M001", "type": "user", "content": "用户昵称是小溪", "priority": 3, "strength": 92, "confidence": 0.98, "tags": ["称呼"]},
+    {"id": "M002", "type": "preference", "content": "用户喜欢甜点和歌剧", "priority": 2, "strength": 76, "confidence": 0.9, "tags": ["偏好"]}
+  ],
+  "notes": [],
+  "reflection_queue": [],
+  "sleep": {
+    "last_consolidated": "2026-04-26",
+    "pending_count": 0
+  }
 }
 ```
 
@@ -144,8 +159,13 @@ cp path/to/claudecode/commands/furina-compress.md .claude/commands/
 |------|------|
 | `intimacy` | 亲密度 0–10，越高芙宁娜越真诚 |
 | `last_chat` | 上次对话日期，影响"多久没见"的感知 |
+| `interaction_state` | 四状态交互：不在场、被呼唤、混脸熟、观测中 |
 | `soul_state` | 上次情绪快照（low/calm/active/excited） |
-| `memories` | 关键记忆条目，最多保留 10 条 |
+| `soul_energy` | 回忆深度、印象深度、表达欲和创造力 |
+| `memories` | 带 priority / strength / confidence / tags 的核心记忆 |
+| `notes` | 可选长背景笔记 |
+| `reflection_queue` | 后续学习或跟进主题 |
+| `sleep` | 睡眠巩固状态 |
 
 ---
 
@@ -159,6 +179,9 @@ cp path/to/claudecode/commands/furina-compress.md .claude/commands/
 | 行为准则 & OOC 规则（内容安全 + 身份坚守 + 角色尊严）| ✅ |
 | **自动读取本地记忆文件** | ✅ 新增 |
 | **对话结束/用户要求时自动写回** | ✅ 新增 |
+| **主动回忆 + 分寸控制** | ✅ 新增 |
+| **灵魂能量（回忆深度/表达欲/创造力）** | ✅ 新增 |
+| **睡眠巩固与弱记忆衰减** | ✅ 新增 |
 | **`/furina-save` 随时主动保存命令** | ✅ 新增 |
 | **`/furina-compress` 记忆压缩命令** | ✅ 新增 |
 | 灵魂进化（亲密度 + 情绪状态动态调整）| ✅ |

@@ -14,15 +14,44 @@
   },
   "memory": {
     "enabled": true,
-    "max_memories": 10,
+    "schema_version": "2.0",
+    "max_memories": 24,
+    "max_injected_memories": 5,
+    "max_notes": 12,
     "intimacy_range": [0, 10],
     "intimacy_default": 0,
     "soul_states": ["low", "calm", "active", "excited"],
     "soul_state_default": "calm",
     "reflection_model": "small",
-    "reflection_max_tokens": 256,
+    "reflection_max_tokens": 512,
     "memory_tag_prefix": "📌 记忆",
-    "memory_per_reply_limit": 1
+    "memory_per_reply_limit": 1,
+    "active_recall": {
+      "enabled": true,
+      "top_k": 5,
+      "min_relevance": 0.35,
+      "avoid_for_casual_greeting": true
+    },
+    "sleep_consolidation": {
+      "enabled": true,
+      "trigger_pending_count": 8,
+      "target_core_memories": 8,
+      "decay_weak_after_days": 30
+    },
+    "soul_energy": {
+      "recall_depth_default": 35,
+      "impression_depth_default": 35,
+      "expression_desire_default": 45,
+      "creativity_default": 55,
+      "min": 0,
+      "max": 100
+    },
+    "interaction_state": {
+      "states": ["not_present", "summoned", "getting_familiar", "observation"],
+      "default": "not_present",
+      "observation_turns": 2,
+      "getting_familiar_cooldown_turns": 6
+    }
   },
   "safety": {
     "content_filter": true,
