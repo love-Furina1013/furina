@@ -194,6 +194,7 @@ cp path/to/claudecode/commands/furina-compress.md .claude/commands/
 本 Claude Code 版本是对原版 Skill（`src/` 目录）的完整移植与适配：
 
 - **主命令 `furina.md`**：融合了 `src/prompt/system.md`、`src/rules/ooc_rules.md`、`src/memory/memory_format.md` 以及 `furina_resource/` 中的关键知识库；新增自动文件读写记忆机制
+- **轻量运行提示 `src/prompt/runtime_lite.md`**：供 Codex Skill 普通角色扮演优先读取，减少不必要的完整系统提示加载
 - **保存命令 `furina-save.md`**：新增，解决原版需要手动复制粘贴存档的问题
 - **反思命令 `furina-reflect.md`**：对应 `src/prompt/reflection.md`，保留为高级用法
 - **压缩命令 `furina-compress.md`**：对应 `src/memory/compression.md`，用于清理重复记忆并保留核心条目

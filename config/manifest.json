@@ -13,12 +13,14 @@
   "avatar": "assets/IMG_1877.jpg",
   "entry_point": {
     "system_prompt": "src/prompt/system.md",
+    "runtime_lite_prompt": "src/prompt/runtime_lite.md",
     "user_prompt_template": "src/prompt/user.md",
     "rules": "src/rules/ooc_rules.md",
     "furina_resource": "furina_resource/00_index.md",
     "reflection_prompt": "src/prompt/reflection.md",
     "memory_format": "src/memory/memory_format.md",
-    "cognitive_memory": "src/memory/cognitive_memory.md"
+    "cognitive_memory": "src/memory/cognitive_memory.md",
+    "voice_eval_cases": "eval/furina_voice_cases.md"
   },
   "config": {
     "settings": "config/settings.json"

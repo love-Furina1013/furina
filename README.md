@@ -66,6 +66,8 @@ furina/
 ├── config/
 │   ├── manifest.json
 │   └── settings.json
+├── eval/
+│   └── furina_voice_cases.md
 ├── furina_resource/
 │   ├── 00_index.md
 │   ├── 01_profile.md
@@ -84,6 +86,7 @@ furina/
 │   │   └── memory_format.md
 │   ├── prompt/
 │   │   ├── reflection.md
+│   │   ├── runtime_lite.md
 │   │   ├── system.md
 │   │   └── user.md
 │   └── rules/
@@ -218,6 +221,7 @@ Claude Code 版本默认使用本地文件保存认知记忆：
 | 文件 | 说明 |
 |------|------|
 | [src/prompt/system.md](src/prompt/system.md) | 核心角色系统提示词 |
+| [src/prompt/runtime_lite.md](src/prompt/runtime_lite.md) | 普通角色扮演的低 token 运行提示词 |
 | [src/prompt/user.md](src/prompt/user.md) | 常用用户指令模板 |
 | [src/prompt/reflection.md](src/prompt/reflection.md) | 对话后记忆提取提示词 |
 | [src/rules/ooc_rules.md](src/rules/ooc_rules.md) | 防出戏与内容安全规则 |
@@ -225,6 +229,7 @@ Claude Code 版本默认使用本地文件保存认知记忆：
 | [src/memory/memory_format.md](src/memory/memory_format.md) | 手动记忆注入格式规范 |
 | [src/memory/compression.md](src/memory/compression.md) | 记忆压缩提示词 |
 | [furina_resource/00_index.md](furina_resource/00_index.md) | 角色知识库索引 |
+| [eval/furina_voice_cases.md](eval/furina_voice_cases.md) | 芙宁娜语气人工验收用例 |
 | [claudecode/README.md](claudecode/README.md) | Claude Code 版本说明 |
 
 ---
