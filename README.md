@@ -1,6 +1,6 @@
 # Furina de Fontaine Roleplay Skill
 
-> 一个面向 Claude Code、GitHub Copilot Skill 与自定义 AI 运行时的芙宁娜·德·枫丹角色扮演资源包。项目将角色系统提示词、结构化知识库、OOC 行为规则、本地记忆机制与 Claude Code 斜杠命令整理为可复用组件，用于构建更稳定、更有连续感的芙宁娜互动体验。
+> 一个面向 Claude Code、Codex Skill、GitHub Copilot Skill 与自定义 AI 运行时的芙宁娜·德·枫丹角色扮演资源包。项目将角色系统提示词、结构化知识库、OOC 行为规则、认知记忆机制与 Claude Code 斜杠命令整理为可复用组件，用于构建更稳定、更懂分寸、更有长期连续感的芙宁娜互动体验。
 
 ![芙宁娜头像](assets/IMG_1877.jpg)
 
@@ -8,9 +8,9 @@
 
 ## 项目概览
 
-本仓库不是传统可执行应用，而是一套围绕芙宁娜角色扮演设计的提示词工程与知识库方案。它聚合了角色身份、语气风格、剧情资料、战斗机制、人物关系、记忆存档和会话反思规则，既可以作为 Claude Code 的原生斜杠命令使用，也可以拆分接入其他 AI 客户端、RAG 流程或自定义角色运行时。
+本仓库不是传统可执行应用，而是一套围绕芙宁娜角色扮演设计的提示词工程与知识库方案。它聚合了角色身份、语气风格、剧情资料、战斗机制、人物关系、认知记忆协议和会话反思规则，既可以作为 Claude Code 的原生斜杠命令使用，也可以拆分接入其他 AI 客户端、RAG 流程或自定义角色运行时。
 
-项目重点不只是“让模型像芙宁娜说话”，而是让角色在长期互动中保持人设一致、知道何时收放戏剧感、能根据记忆调整亲密度和情绪状态，并在不出戏的前提下遵守内容安全与 OOC 边界。
+项目重点不只是“让模型像芙宁娜说话”，而是让角色在长期互动中保持人设一致、知道何时收放戏剧感、能主动回忆真正相关的内容，并通过亲密度、灵魂能量、睡眠巩固和四状态交互控制回复分寸，在不出戏的前提下遵守内容安全与 OOC 边界。
 
 当前项目分为三条使用路径：
 
@@ -27,7 +27,7 @@
 - 完整芙宁娜人格设定：覆盖神位卸任后的身份、傲娇外壳、戏剧化表达与真实内核。
 - 结构化知识库：按基础资料、性格、剧情时间线、战斗机制、语气风格、人物关系、台词与 FAQ 拆分。
 - OOC 行为约束：包含身份坚守、内容安全、原著一致性、角色尊严与社交感知规则。
-- 记忆系统：支持亲密度、上次对话、灵魂状态、关键记忆条目与记忆压缩规则。
+- 认知记忆系统：支持 2.0 存档、亲密度、四状态交互、灵魂能量、主动回忆、睡眠巩固与弱记忆衰减。
 - Claude Code 原生命令：提供 `/furina`、`/furina-save`、`/furina-reflect`、`/furina-compress` 四个命令文件。
 - Codex Skill 兼容：提供标准 `SKILL.md`、`references/` 和 `agents/openai.yaml`，可复制到 `~/.codex/skills` 使用。
 - 向后兼容手动存档：仍可在对话开头注入 `[记忆存档]...[/记忆存档]` 区块。
@@ -79,6 +79,7 @@ furina/
 │   └── 09_voice_lines.md
 ├── src/
 │   ├── memory/
+│   │   ├── cognitive_memory.md
 │   │   ├── compression.md
 │   │   └── memory_format.md
 │   ├── prompt/
@@ -154,22 +155,42 @@ Copy-Item .\codex\skills\furina-roleplay "$HOME\.codex\skills\" -Recurse -Force
 
 ---
 
-## 记忆系统
+## 认知记忆系统
 
-Claude Code 版本默认使用本地文件保存记忆：
+Claude Code 版本默认使用本地文件保存认知记忆：
 
 ```text
 ~/.claude/furina-memory.json
 ```
 
-初始格式：
+初始格式（`version: "2.0"`）：
 
 ```json
 {
+  "version": "2.0",
+  "scope": "default",
   "intimacy": 0,
   "last_chat": "",
+  "interaction_state": "not_present",
   "soul_state": "calm",
-  "memories": []
+  "soul_energy": {
+    "recall_depth": 35,
+    "impression_depth": 35,
+    "expression_desire": 45,
+    "creativity": 55
+  },
+  "profile": {
+    "preferred_name": "",
+    "boundaries": [],
+    "style_preferences": []
+  },
+  "memories": [],
+  "notes": [],
+  "reflection_queue": [],
+  "sleep": {
+    "last_consolidated": "",
+    "pending_count": 0
+  }
 }
 ```
 
@@ -179,10 +200,16 @@ Claude Code 版本默认使用本地文件保存记忆：
 |------|------|
 | `intimacy` | 亲密度，范围 0 到 10，影响芙宁娜的真诚程度与傲娇强度 |
 | `last_chat` | 最近一次对话日期 |
+| `interaction_state` | 四状态交互：`not_present`、`summoned`、`getting_familiar`、`observation` |
 | `soul_state` | 情绪快照，可选 `low`、`calm`、`active`、`excited` |
-| `memories` | 关键记忆数组，建议最多保留 10 条 |
+| `soul_energy` | 回忆深度、印象深度、表达欲和创造力四个能量槽 |
+| `profile` | 用户称呼、边界和互动偏好 |
+| `memories` | 带 `priority`、`strength`、`confidence`、`tags` 的核心记忆 |
+| `notes` | 较长背景笔记 |
+| `reflection_queue` | 后续学习或跟进主题 |
+| `sleep` | 睡眠巩固状态，用于清理重复与弱记忆 |
 
-通用提示词运行时也可使用手动注入格式，详见 [src/memory/memory_format.md](src/memory/memory_format.md)。
+运行时会在普通寒暄中保持克制，不频繁翻旧账；当用户提到“上次/以前/你还记得”或当前话题强相关时，才自然主动回忆。通用提示词运行时也可使用手动注入格式，详见 [src/memory/memory_format.md](src/memory/memory_format.md)；完整认知机制见 [src/memory/cognitive_memory.md](src/memory/cognitive_memory.md)。
 
 ---
 
@@ -194,6 +221,7 @@ Claude Code 版本默认使用本地文件保存记忆：
 | [src/prompt/user.md](src/prompt/user.md) | 常用用户指令模板 |
 | [src/prompt/reflection.md](src/prompt/reflection.md) | 对话后记忆提取提示词 |
 | [src/rules/ooc_rules.md](src/rules/ooc_rules.md) | 防出戏与内容安全规则 |
+| [src/memory/cognitive_memory.md](src/memory/cognitive_memory.md) | 三层认知、四状态交互、主动回忆与睡眠巩固机制 |
 | [src/memory/memory_format.md](src/memory/memory_format.md) | 手动记忆注入格式规范 |
 | [src/memory/compression.md](src/memory/compression.md) | 记忆压缩提示词 |
 | [furina_resource/00_index.md](furina_resource/00_index.md) | 角色知识库索引 |
@@ -240,7 +268,7 @@ Claude Code 版本默认使用本地文件保存记忆：
 
 - 是否与原作设定冲突
 - 是否破坏角色语气一致性
-- 是否改变记忆文件格式
+- 是否改变记忆文件格式或 2.0 认知协议
 - 是否引入未记录的新命令或安装步骤
 
 ---
