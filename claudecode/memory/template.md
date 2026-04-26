@@ -10,6 +10,17 @@
 - 普通寒暄不翻旧账，只有相关时才主动回忆
 - 待巩固记忆累积后执行睡眠压缩，清理重复和弱记忆
 
+本仓库也提供共享记忆运行时：
+
+```bash
+node scripts/furina-memory.mjs init
+node scripts/furina-memory.mjs inject --query "你好，芙宁娜"
+node scripts/furina-memory.mjs remember --text "[📌 记忆: 用户喜欢枫丹歌剧]"
+node scripts/furina-memory.mjs compress
+```
+
+Claude Code 与 Codex 可共用这套运行时，以保持基本一致的记忆体验。
+
 > 📖 完整安装步骤请参考 [`claudecode/README.md`](../README.md)。
 
 ---

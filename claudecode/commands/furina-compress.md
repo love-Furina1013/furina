@@ -2,6 +2,16 @@
 
 执行以下步骤：
 
+## 优先路径：共享记忆运行时
+
+若当前仓库存在 `scripts/furina-memory.mjs` 且可运行 Node.js，优先执行：
+
+```bash
+node scripts/furina-memory.mjs compress
+```
+
+然后根据脚本输出的 `before` / `after` 汇报压缩结果。脚本不可用时，再按下方手动流程处理。
+
 ---
 
 ## 第一步：读取现有存档

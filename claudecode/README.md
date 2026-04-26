@@ -19,6 +19,14 @@ claudecode/
 └── README.md              # 本文件
 ```
 
+共享记忆运行时位于仓库根目录：
+
+```text
+scripts/furina-memory.mjs
+```
+
+Claude Code 命令会优先使用它完成认知存档读取、召回、保存和压缩；不可用时再退回提示词内的手动 JSON 流程。
+
 ---
 
 ## 安装方式
@@ -182,6 +190,7 @@ cp path/to/claudecode/commands/furina-compress.md .claude/commands/
 | **主动回忆 + 分寸控制** | ✅ 新增 |
 | **灵魂能量（回忆深度/表达欲/创造力）** | ✅ 新增 |
 | **睡眠巩固与弱记忆衰减** | ✅ 新增 |
+| **共享记忆运行时（Codex / Claude Code 共用）** | ✅ 新增 |
 | **`/furina-save` 随时主动保存命令** | ✅ 新增 |
 | **`/furina-compress` 记忆压缩命令** | ✅ 新增 |
 | 灵魂进化（亲密度 + 情绪状态动态调整）| ✅ |
@@ -195,6 +204,7 @@ cp path/to/claudecode/commands/furina-compress.md .claude/commands/
 
 - **主命令 `furina.md`**：融合了 `src/prompt/system.md`、`src/rules/ooc_rules.md`、`src/memory/memory_format.md` 以及 `furina_resource/` 中的关键知识库；新增自动认知记忆读写机制
 - **轻量运行提示 `src/prompt/runtime_lite.md`**：供 Codex Skill 普通角色扮演优先读取，减少不必要的完整系统提示加载
+- **共享记忆运行时 `scripts/furina-memory.mjs`**：提供 `init`、`heart`、`inject`、`remember`、`recall`、`compress`，让 Codex 与 Claude Code 使用一致的记忆体验
 - **保存命令 `furina-save.md`**：新增，解决原版需要手动复制粘贴存档的问题
 - **反思命令 `furina-reflect.md`**：对应 `src/prompt/reflection.md`，保留为高级用法
 - **压缩命令 `furina-compress.md`**：对应 `src/memory/compression.md`，用于清理重复记忆并保留核心条目

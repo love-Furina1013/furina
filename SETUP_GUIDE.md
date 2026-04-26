@@ -24,6 +24,7 @@
 | 项目 | 说明 |
 |------|------|
 | Git | 用于克隆或更新仓库 |
+| Node.js | 用于运行共享记忆运行时 `scripts/furina-memory.mjs` |
 | Claude Code | 用于运行 `/furina` 等斜杠命令 |
 | 一个终端 | macOS / Linux 使用 Shell，Windows 使用 PowerShell |
 
@@ -78,6 +79,7 @@ claudecode/commands/furina-save.md
 claudecode/commands/furina-reflect.md
 claudecode/commands/furina-compress.md
 claudecode/memory/furina-memory.json
+scripts/furina-memory.mjs
 ```
 
 ---
@@ -173,7 +175,14 @@ cp claudecode/commands/furina-compress.md .claude/commands/
 
 ### 5.1 记忆文件位置
 
-Claude Code 版本使用这个文件保存记忆：
+Claude Code 和 Codex 都可以通过共享记忆运行时保存记忆：
+
+```bash
+node scripts/furina-memory.mjs init
+node scripts/furina-memory.mjs status
+```
+
+默认使用这个文件：
 
 ```text
 ~/.claude/furina-memory.json
@@ -233,6 +242,12 @@ Claude Code 版本使用这个文件保存记忆：
 /furina-save 用户喜欢枫丹歌剧，也希望芙宁娜下次记得这个偏好。
 ```
 
+也可以直接调用共享运行时：
+
+```bash
+node scripts/furina-memory.mjs remember --text "[📌 记忆: 用户喜欢枫丹歌剧]"
+```
+
 ### 5.4 手动编辑记忆
 
 你可以直接编辑 `~/.claude/furina-memory.json`。建议遵守：
@@ -288,11 +303,12 @@ Claude Code 版本使用这个文件保存记忆：
 
 普通角色扮演优先使用轻量加载：
 
-1. 读取 [src/prompt/runtime_lite.md](src/prompt/runtime_lite.md) 作为低 token 角色运行提示词。
-2. 按问题类型从 [furina_resource/00_index.md](furina_resource/00_index.md) 选择对应知识文件。
-3. 如需记忆，按 [src/memory/memory_format.md](src/memory/memory_format.md) 注入 `[认知存档]`。
-4. 对话结束后，用 [src/prompt/reflection.md](src/prompt/reflection.md) 提取记忆更新。
-5. 记忆过多时，用 [src/memory/compression.md](src/memory/compression.md) 压缩。
+1. 运行 `node scripts/furina-memory.mjs inject --query "<用户消息>"`，得到本轮 `[认知存档]`。
+2. 读取 [src/prompt/runtime_lite.md](src/prompt/runtime_lite.md) 作为低 token 角色运行提示词。
+3. 按问题类型从 [furina_resource/00_index.md](furina_resource/00_index.md) 选择对应知识文件。
+4. 对话结束后，用 [src/prompt/reflection.md](src/prompt/reflection.md) 提取记忆 JSON。
+5. 用 `node scripts/furina-memory.mjs remember --reflection reflection.json` 合并记忆。
+6. 记忆过多时，用 `node scripts/furina-memory.mjs compress` 执行睡眠巩固。
 
 需要严格角色一致性、提示词维护或复杂边界审查时，再额外加载：
 
@@ -426,5 +442,6 @@ Copy-Item .\claudecode\memory\furina-memory.json "$HOME\.claude\furina-memory.js
 - [claudecode/README.md](claudecode/README.md)：Claude Code 版本说明
 - [src/memory/memory_format.md](src/memory/memory_format.md)：记忆格式规范
 - [src/prompt/runtime_lite.md](src/prompt/runtime_lite.md)：低 token 角色运行提示词
+- [scripts/README.md](scripts/README.md)：共享记忆运行时说明
 - [eval/furina_voice_cases.md](eval/furina_voice_cases.md)：芙宁娜语气人工验收用例
 - [furina_resource/00_index.md](furina_resource/00_index.md)：知识库索引

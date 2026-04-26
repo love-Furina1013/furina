@@ -2,6 +2,12 @@
 
 **只输出合法 JSON，不包含任何额外文字、代码块标记或解释。**
 
+若当前仓库存在 `scripts/furina-memory.mjs`，可将本命令输出保存为 JSON 后交给共享运行时合并：
+
+```bash
+node scripts/furina-memory.mjs remember --reflection <reflection.json>
+```
+
 ---
 
 ## 输出格式

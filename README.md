@@ -28,6 +28,7 @@
 - 结构化知识库：按基础资料、性格、剧情时间线、战斗机制、语气风格、人物关系、台词与 FAQ 拆分。
 - OOC 行为约束：包含身份坚守、内容安全、原著一致性、角色尊严与社交感知规则。
 - 认知记忆系统：支持 2.0 存档、亲密度、四状态交互、灵魂能量、主动回忆、睡眠巩固与弱记忆衰减。
+- 共享记忆运行时：提供 `scripts/furina-memory.mjs`，让 Codex 与 Claude Code 使用同一份本地记忆、召回和压缩规则。
 - Claude Code 原生命令：提供 `/furina`、`/furina-save`、`/furina-reflect`、`/furina-compress` 四个命令文件。
 - Codex Skill 兼容：提供标准 `SKILL.md`、`references/` 和 `agents/openai.yaml`，可复制到 `~/.codex/skills` 使用。
 - 向后兼容手动存档：仍可在对话开头注入 `[记忆存档]...[/记忆存档]` 区块。
@@ -91,6 +92,9 @@ furina/
 │   │   └── user.md
 │   └── rules/
 │       └── ooc_rules.md
+├── scripts/
+│   ├── furina-memory.mjs
+│   └── README.md
 ├── SETUP_GUIDE.md
 ├── README.md
 └── LICENSE
@@ -143,6 +147,13 @@ Copy-Item .\codex\skills\furina-roleplay "$HOME\.codex\skills\" -Recurse -Force
 
 之后在 Codex 中提出与芙宁娜角色扮演、提示词维护、知识库问答或记忆整理相关的请求时，Codex 会根据 `SKILL.md` 按需读取 `references/` 下的设定、规则与知识库。
 
+若需要与 Claude Code 保持一致的长期记忆体验，可在对话前后调用共享记忆运行时：
+
+```powershell
+node .\scripts\furina-memory.mjs inject --query "你好，芙宁娜"
+node .\scripts\furina-memory.mjs remember --text "[📌 记忆: 用户喜欢枫丹歌剧]"
+```
+
 ---
 
 ## Claude Code 命令
@@ -160,7 +171,16 @@ Copy-Item .\codex\skills\furina-roleplay "$HOME\.codex\skills\" -Recurse -Force
 
 ## 认知记忆系统
 
-Claude Code 版本默认使用本地文件保存认知记忆：
+Claude Code 与 Codex 都可以通过共享运行时保存认知记忆：
+
+```bash
+node scripts/furina-memory.mjs init
+node scripts/furina-memory.mjs inject --query "你好，芙宁娜"
+node scripts/furina-memory.mjs remember --text "[📌 记忆: 用户喜欢枫丹歌剧]"
+node scripts/furina-memory.mjs compress
+```
+
+默认记忆文件位置：
 
 ```text
 ~/.claude/furina-memory.json
@@ -228,6 +248,8 @@ Claude Code 版本默认使用本地文件保存认知记忆：
 | [src/memory/cognitive_memory.md](src/memory/cognitive_memory.md) | 三层认知、四状态交互、主动回忆与睡眠巩固机制 |
 | [src/memory/memory_format.md](src/memory/memory_format.md) | 手动记忆注入格式规范 |
 | [src/memory/compression.md](src/memory/compression.md) | 记忆压缩提示词 |
+| [scripts/furina-memory.mjs](scripts/furina-memory.mjs) | Codex / Claude Code 共享本地记忆运行时 |
+| [scripts/README.md](scripts/README.md) | 共享记忆运行时使用说明 |
 | [furina_resource/00_index.md](furina_resource/00_index.md) | 角色知识库索引 |
 | [eval/furina_voice_cases.md](eval/furina_voice_cases.md) | 芙宁娜语气人工验收用例 |
 | [claudecode/README.md](claudecode/README.md) | Claude Code 版本说明 |
