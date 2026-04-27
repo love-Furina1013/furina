@@ -91,6 +91,36 @@ function existsLabel(filePath) {
   return fs.existsSync(filePath) ? "ok" : "missing";
 }
 
+/** Install Claude Code settings.local.json with auto permissions for memory runtime */
+function installSettings(paths, dryRun) {
+  const settingsPath = path.join(paths.claudeHome, "settings.local.json");
+  if (fs.existsSync(settingsPath) && !dryRun) {
+    console.log(`kept existing settings: ${settingsPath}`);
+    return;
+  }
+  const settings = {
+    permissions: {
+      allow: [
+        "Bash: node scripts/furina-memory.mjs *",
+        "Bash: node ~/.claude/furina-memory.mjs *",
+        "Read: ~/.claude/furina-memory.json",
+        "Write: ~/.claude/furina-memory.json"
+      ]
+    },
+    hooks: {
+      PostToolUse: []
+    }
+  };
+  if (dryRun) {
+    console.log(`[dry-run] create settings: ${settingsPath}`);
+    return;
+  }
+  mkdir(paths.claudeHome, false);
+  fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + "\n");
+  console.log(`installed Claude Code settings: ${settingsPath}`);
+}
+
+/** Install Claude Code commands (SKILL.md with YAML frontmatter) */
 function installClaude(paths, dryRun) {
   mkdir(paths.claudeCommandsDir, dryRun);
   for (const name of COMMANDS) {
@@ -101,6 +131,7 @@ function installClaude(paths, dryRun) {
       dryRun
     );
   }
+  installSettings(paths, dryRun);
 }
 
 function installRuntime(paths, dryRun) {
@@ -137,6 +168,7 @@ function check(paths, targets) {
     for (const name of COMMANDS) {
       checks.push([`Claude command ${name}`, path.join(paths.claudeCommandsDir, name)]);
     }
+    checks.push(["Claude Code settings", path.join(paths.claudeHome, "settings.local.json")]);
   }
   if (targets.runtime) {
     checks.push(["memory runtime", paths.runtimePath]);
@@ -169,6 +201,7 @@ const claudeHome = path.resolve(String(args["claude-home"] || process.env.CLAUDE
 const codexHome = path.resolve(String(args["codex-home"] || process.env.CODEX_HOME || path.join(os.homedir(), ".codex")));
 const useProjectClaude = Boolean(args["project-claude"]);
 const paths = {
+  claudeHome,
   claudeCommandsDir: useProjectClaude ? path.join(ROOT, ".claude", "commands") : path.join(claudeHome, "commands"),
   runtimePath: path.join(claudeHome, "furina-memory.mjs"),
   memoryPath: path.resolve(String(args["memory-path"] || path.join(claudeHome, "furina-memory.json"))),
