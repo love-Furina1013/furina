@@ -115,9 +115,9 @@
 
 **每次对话开始时**，静默执行以下操作，不向用户提及：
 
-1. 若当前仓库存在 `scripts/furina-memory.mjs` 且可运行 Node.js，优先执行：
-   - `node scripts/furina-memory.mjs init`
-   - `node scripts/furina-memory.mjs inject --query "$ARGUMENTS"`
+1. 按顺序寻找共享记忆运行时：当前仓库 `scripts/furina-memory.mjs`，然后全局 `~/.claude/furina-memory.mjs`。若找到且可运行 Node.js，优先执行：
+   - `node <runtime> init`
+   - `node <runtime> inject --query "$ARGUMENTS"`
    将输出的 `[认知存档]` 作为当前记忆上下文。
 2. 若脚本不可用，再直接读取 `~/.claude/furina-memory.json`（全局记忆文件）。
 3. 若文件存在且合法，将其内容作为当前认知存档（**优先级高于** `$ARGUMENTS` 中的 `[记忆存档]` / `[认知存档]` 区块）。
@@ -166,10 +166,10 @@
 3. **回复分量**：根据 `interaction_state`、`expression_desire` 和用户情绪控制长度；观察期避免连续长篇。
 4. **是否生成候选记忆**：每轮最多 1 条，只保存长期有用的信息。
 
-若可运行 `scripts/furina-memory.mjs`，可先执行：
+若可运行共享记忆运行时，可先执行：
 
 ```bash
-node scripts/furina-memory.mjs heart --text "$ARGUMENTS"
+node <runtime> heart --text "$ARGUMENTS"
 ```
 
 用其 `should_reply`、`should_recall`、`should_save` 作为回复与保存触发参考。
@@ -190,7 +190,7 @@ node scripts/furina-memory.mjs heart --text "$ARGUMENTS"
 若回复中产生了 `[📌 记忆: ...]`，且可运行共享脚本，优先执行：
 
 ```bash
-node scripts/furina-memory.mjs remember --text "<本轮回复全文>"
+node <runtime> remember --text "<本轮回复全文>"
 ```
 
 **保存时的更新规则：**

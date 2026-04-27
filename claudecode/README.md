@@ -19,40 +19,40 @@ claudecode/
 └── README.md              # 本文件
 ```
 
-共享记忆运行时位于仓库根目录：
+共享记忆运行时位于仓库根目录，并会在自动安装时复制到 `~/.claude/furina-memory.mjs`：
 
 ```text
 scripts/furina-memory.mjs
 ```
 
-Claude Code 命令会优先使用它完成认知存档读取、召回、保存和压缩；不可用时再退回提示词内的手动 JSON 流程。
+Claude Code 命令会优先使用当前仓库或全局位置的运行时完成认知存档读取、召回、保存和压缩；不可用时再退回提示词内的手动 JSON 流程。
 
 ---
 
 ## 安装方式
 
-### 方式一：用户级（推荐，对你的所有项目生效）
+推荐在仓库根目录运行自动安装器：
 
 ```bash
-mkdir -p ~/.claude/commands
-cp path/to/claudecode/commands/furina.md ~/.claude/commands/
-cp path/to/claudecode/commands/furina-save.md ~/.claude/commands/
-cp path/to/claudecode/commands/furina-reflect.md ~/.claude/commands/
-cp path/to/claudecode/commands/furina-compress.md ~/.claude/commands/
-
-# 初始化空记忆文件（仅首次需要）
-cp path/to/claudecode/memory/furina-memory.json ~/.claude/furina-memory.json
+node scripts/setup.mjs --claude
+node scripts/setup.mjs --check --claude
 ```
 
-### 方式二：项目级（仅当前项目生效）
+它会安装四个斜杠命令、全局记忆运行时和初始记忆文件；已有 `~/.claude/furina-memory.json` 不会被覆盖。
+
+也可以把这段交给 Claude Code：
+
+```text
+请在当前仓库根目录运行 `node scripts/setup.mjs --claude`，然后运行 `node scripts/setup.mjs --check --claude`。如果已有记忆文件，不要覆盖。
+```
+
+### 项目级安装
 
 ```bash
-mkdir -p .claude/commands
-cp path/to/claudecode/commands/furina.md .claude/commands/
-cp path/to/claudecode/commands/furina-save.md .claude/commands/
-cp path/to/claudecode/commands/furina-reflect.md .claude/commands/
-cp path/to/claudecode/commands/furina-compress.md .claude/commands/
+node scripts/setup.mjs --claude --project-claude
 ```
+
+项目级安装只把命令放进当前仓库 `.claude/commands`；记忆运行时和记忆 JSON 仍使用全局 `~/.claude/`，方便跨项目共享。
 
 ---
 

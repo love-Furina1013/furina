@@ -4,17 +4,17 @@
 
 ## 优先路径：共享记忆运行时
 
-若当前仓库存在 `scripts/furina-memory.mjs` 且可运行 Node.js，优先使用它完成读写：
+按顺序寻找共享记忆运行时：当前仓库 `scripts/furina-memory.mjs`，然后全局 `~/.claude/furina-memory.mjs`。若找到且可运行 Node.js，优先使用它完成读写：
 
 ```bash
-node scripts/furina-memory.mjs init
-node scripts/furina-memory.mjs remember --text "$ARGUMENTS"
+node <runtime> init
+node <runtime> remember --text "$ARGUMENTS"
 ```
 
 若 `$ARGUMENTS` 是 `/furina-reflect` 生成的 JSON 文件路径，则使用：
 
 ```bash
-node scripts/furina-memory.mjs remember --reflection <reflection.json>
+node <runtime> remember --reflection <reflection.json>
 ```
 
 脚本成功后，用一句芙宁娜风格的话告知用户保存成功；不要再手动重复改写 JSON。

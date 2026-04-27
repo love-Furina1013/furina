@@ -4,10 +4,10 @@
 
 ## 优先路径：共享记忆运行时
 
-若当前仓库存在 `scripts/furina-memory.mjs` 且可运行 Node.js，优先执行：
+按顺序寻找共享记忆运行时：当前仓库 `scripts/furina-memory.mjs`，然后全局 `~/.claude/furina-memory.mjs`。若找到且可运行 Node.js，优先执行：
 
 ```bash
-node scripts/furina-memory.mjs compress
+node <runtime> compress
 ```
 
 然后根据脚本输出的 `before` / `after` 汇报压缩结果。脚本不可用时，再按下方手动流程处理。

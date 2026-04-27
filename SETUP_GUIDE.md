@@ -1,447 +1,203 @@
-# 芙宁娜 Skill 从零配置指南
+# 安装与配置手册
 
-这份指南面向第一次使用本项目的用户，按最常见的 Claude Code 使用方式编写。若你只是想了解项目内容，可以先阅读 [README.md](README.md)。
+这份手册只处理安装、检查和排障。项目介绍请看 [README.md](README.md)。
 
----
+## 1. 准备
 
-## 目录
-
-1. [准备工作](#一准备工作)
-2. [获取项目](#二获取项目)
-3. [安装到 Claude Code](#三安装到-claude-code)
-4. [开始使用](#四开始使用)
-5. [认知记忆系统](#五认知记忆系统)
-6. [通用 Prompt 用法](#六通用-prompt-用法)
-7. [常见问题](#七常见问题)
-8. [检查清单](#八检查清单)
-
----
-
-## 一、准备工作
-
-### 1.1 你需要什么
-
-| 项目 | 说明 |
-|------|------|
-| Git | 用于克隆或更新仓库 |
-| Node.js | 用于运行共享记忆运行时 `scripts/furina-memory.mjs` |
-| Claude Code | 用于运行 `/furina` 等斜杠命令 |
-| 一个终端 | macOS / Linux 使用 Shell，Windows 使用 PowerShell |
-
-如果你只想把 `src/` 与 `furina_resource/` 接入自己的 AI 客户端，则不强制要求 Claude Code。
-
-### 1.2 确认 Claude Code 命令目录
-
-Claude Code 通常从以下目录读取用户级斜杠命令：
-
-```text
-~/.claude/commands
-```
-
-在 Windows PowerShell 中，`~` 或 `$HOME` 通常指向：
-
-```text
-C:\Users\<你的用户名>
-```
-
----
-
-## 二、获取项目
-
-### 2.1 克隆仓库
-
-```bash
-git clone https://github.com/love-Furina1013/furina.git
-cd furina
-```
-
-如果你已经下载了压缩包，解压后进入项目根目录即可。
-
-### 2.2 确认文件完整
-
-项目根目录应至少包含：
-
-```text
-README.md
-SETUP_GUIDE.md
-claudecode/
-src/
-furina_resource/
-config/
-assets/
-```
-
-Claude Code 版本的关键文件是：
-
-```text
-claudecode/commands/furina.md
-claudecode/commands/furina-save.md
-claudecode/commands/furina-reflect.md
-claudecode/commands/furina-compress.md
-claudecode/memory/furina-memory.json
-scripts/furina-memory.mjs
-```
-
----
-
-## 三、安装到 Claude Code
-
-### 3.1 macOS / Linux
-
-在项目根目录执行：
-
-```bash
-mkdir -p ~/.claude/commands
-cp claudecode/commands/furina.md ~/.claude/commands/
-cp claudecode/commands/furina-save.md ~/.claude/commands/
-cp claudecode/commands/furina-reflect.md ~/.claude/commands/
-cp claudecode/commands/furina-compress.md ~/.claude/commands/
-cp claudecode/memory/furina-memory.json ~/.claude/furina-memory.json
-```
-
-### 3.2 Windows PowerShell
-
-在项目根目录执行：
+你只需要准备 Node.js：
 
 ```powershell
-New-Item -ItemType Directory -Force "$HOME\.claude\commands"
-Copy-Item .\claudecode\commands\furina.md "$HOME\.claude\commands\"
-Copy-Item .\claudecode\commands\furina-save.md "$HOME\.claude\commands\"
-Copy-Item .\claudecode\commands\furina-reflect.md "$HOME\.claude\commands\"
-Copy-Item .\claudecode\commands\furina-compress.md "$HOME\.claude\commands\"
-Copy-Item .\claudecode\memory\furina-memory.json "$HOME\.claude\furina-memory.json"
+node --version
 ```
 
-### 3.3 项目级安装
+如果能输出版本号，就可以继续。Claude Code 和 Codex 只在你要使用对应入口时需要。
 
-如果你只想在当前项目中使用命令，可以复制到当前项目的 `.claude/commands/`：
+## 2. 推荐安装
 
-```bash
-mkdir -p .claude/commands
-cp claudecode/commands/furina.md .claude/commands/
-cp claudecode/commands/furina-save.md .claude/commands/
-cp claudecode/commands/furina-reflect.md .claude/commands/
-cp claudecode/commands/furina-compress.md .claude/commands/
+在仓库根目录运行：
+
+```powershell
+node .\scripts\setup.mjs
 ```
 
-项目级安装不会自动创建全局记忆文件。若仍想使用同一份全局记忆，请保留：
+这会安装：
+
+| 目标 | 默认位置 |
+|------|----------|
+| Claude Code 命令 | `~/.claude/commands` |
+| Codex Skill | `~/.codex/skills/furina-roleplay` |
+| 共享记忆运行时 | `~/.claude/furina-memory.mjs` |
+| 记忆文件 | `~/.claude/furina-memory.json` |
+
+安装器不会覆盖已有 `furina-memory.json`。如果你已经有长期记忆，可以放心运行。
+
+## 3. 检查
+
+```powershell
+node .\scripts\setup.mjs --check
+```
+
+看到所有项目都是 `ok` 即安装完成。
+
+如果只安装了某一个入口，用对应检查：
+
+```powershell
+node .\scripts\setup.mjs --check --claude
+node .\scripts\setup.mjs --check --codex
+```
+
+## 4. 交给 Claude Code / Codex 做
+
+把下面这段发给 AI 代理：
 
 ```text
-~/.claude/furina-memory.json
+请在当前仓库根目录运行 `node scripts/setup.mjs`，然后运行 `node scripts/setup.mjs --check`。如果已有记忆文件，不要覆盖；如果命令失败，只说明缺少的依赖或权限。
 ```
 
----
+AI 代理可以自动处理目录创建、文件复制、记忆初始化和安装检查。你只需要在它请求写入用户目录时批准权限。
 
-## 四、开始使用
+## 5. 常见安装方式
 
-### 4.1 第一次对话
+| 需求 | 命令 |
+|------|------|
+| 完整安装 | `node .\scripts\setup.mjs` |
+| 只装 Claude Code | `node .\scripts\setup.mjs --claude` |
+| 只装 Codex Skill | `node .\scripts\setup.mjs --codex` |
+| Claude 命令只对当前仓库生效 | `node .\scripts\setup.mjs --claude --project-claude` |
+| 预览安装动作 | `node .\scripts\setup.mjs --dry-run` |
+| 重置空记忆 | `node .\scripts\setup.mjs --reset-memory` |
 
-打开 Claude Code 后输入：
+谨慎使用 `--reset-memory`。它会把现有记忆文件替换为空模板。
+
+## 6. 自定义路径
+
+可以用环境变量改默认目录：
+
+```powershell
+$env:CLAUDE_HOME="D:\ai\.claude"
+$env:CODEX_HOME="D:\ai\.codex"
+node .\scripts\setup.mjs
+```
+
+也可以用参数：
+
+```powershell
+node .\scripts\setup.mjs --claude-home "D:\ai\.claude" --codex-home "D:\ai\.codex"
+```
+
+单独指定记忆文件：
+
+```powershell
+node .\scripts\setup.mjs --memory-path "D:\ai\furina-memory.json"
+```
+
+## 7. 使用验证
+
+### Claude Code
+
+安装后在 Claude Code 中输入：
 
 ```text
 /furina 你好，芙宁娜。
 ```
 
-如果一切正常，芙宁娜会以角色身份回应。初次使用时，记忆文件为空，亲密度默认为 0。
-
-### 4.2 常用命令
-
-| 命令 | 用法 |
-|------|------|
-| `/furina 你好，芙宁娜。` | 开始普通角色对话 |
-| `/furina-save 今天聊得很开心，请记住这次对话。` | 手动保存本次关键记忆 |
-| `/furina-reflect <对话记录>` | 从长对话中提取记忆 JSON |
-| `/furina-compress` | 压缩过多或重复的记忆条目 |
-
-### 4.3 退出角色扮演
-
-在 `/furina` 对话中可以使用：
-
-```text
-[退出扮演]
-```
-
-或：
-
-```text
-[exit roleplay]
-```
-
-这会让回复暂时切回正常说明模式。之后再次使用 `/furina ...` 即可重新进入角色。
-
----
-
-## 五、认知记忆系统
-
-### 5.1 记忆文件位置
-
-Claude Code 和 Codex 都可以通过共享记忆运行时保存记忆：
-
-```bash
-node scripts/furina-memory.mjs init
-node scripts/furina-memory.mjs status
-```
-
-默认使用这个文件：
-
-```text
-~/.claude/furina-memory.json
-```
-
-初始内容（`version: "2.0"`）：
-
-```json
-{
-  "version": "2.0",
-  "scope": "default",
-  "intimacy": 0,
-  "last_chat": "",
-  "interaction_state": "not_present",
-  "soul_state": "calm",
-  "soul_energy": {
-    "recall_depth": 35,
-    "impression_depth": 35,
-    "expression_desire": 45,
-    "creativity": 55
-  },
-  "profile": {
-    "preferred_name": "",
-    "boundaries": [],
-    "style_preferences": []
-  },
-  "memories": [],
-  "notes": [],
-  "reflection_queue": [],
-  "sleep": {
-    "last_consolidated": "",
-    "pending_count": 0
-  }
-}
-```
-
-### 5.2 字段说明
-
-| 字段 | 值 | 说明 |
-|------|----|------|
-| `intimacy` | 0 到 10 | 亲密度，影响芙宁娜的语气与真诚程度 |
-| `last_chat` | `YYYY-MM-DD` | 上次对话日期 |
-| `interaction_state` | `not_present` / `summoned` / `getting_familiar` / `observation` | 控制回应时机与分寸 |
-| `soul_state` | `low` / `calm` / `active` / `excited` | 上次对话后的情绪快照 |
-| `soul_energy` | 0 到 100 | 回忆深度、印象深度、表达欲与创造力 |
-| `profile` | object | 用户称呼、边界和互动偏好 |
-| `memories` | 数组 | 带 priority / strength / confidence / tags 的核心记忆 |
-| `notes` | 数组 | 较长背景笔记 |
-| `reflection_queue` | 数组 | 后续学习或跟进主题 |
-| `sleep` | object | 睡眠巩固状态 |
-
-### 5.3 手动保存
-
-当你希望明确保存某段对话，可以使用：
-
-```text
-/furina-save 用户喜欢枫丹歌剧，也希望芙宁娜下次记得这个偏好。
-```
-
-也可以直接调用共享运行时：
-
-```bash
-node scripts/furina-memory.mjs remember --text "[📌 记忆: 用户喜欢枫丹歌剧]"
-```
-
-### 5.4 手动编辑记忆
-
-你可以直接编辑 `~/.claude/furina-memory.json`。建议遵守：
-
-- `intimacy` 保持 0 到 10 的整数
-- `soul_state` 只使用 `low`、`calm`、`active`、`excited`
-- `interaction_state` 只使用 `not_present`、`summoned`、`getting_familiar`、`observation`
-- `memories` 中每条内容尽量短，最好是一条明确事实，并补齐 `priority`、`strength`、`confidence`、`tags`
-- 普通寒暄、一次性问题和未明确要求保存的敏感隐私不建议写入记忆
-
-示例：
-
-```json
-{
-  "version": "2.0",
-  "intimacy": 4,
-  "last_chat": "2026-04-26",
-  "interaction_state": "observation",
-  "soul_state": "active",
-  "soul_energy": {
-    "recall_depth": 40,
-    "impression_depth": 40,
-    "expression_desire": 45,
-    "creativity": 55
-  },
-  "memories": [
-    {
-      "id": "M001",
-      "type": "preference",
-      "content": "用户喜欢枫丹歌剧",
-      "priority": 2,
-      "strength": 70,
-      "confidence": 0.9,
-      "tags": ["偏好", "歌剧"]
-    }
-  ],
-  "notes": [],
-  "reflection_queue": [],
-  "sleep": {
-    "last_consolidated": "",
-    "pending_count": 1
-  }
-}
-```
-
----
-
-## 六、通用 Prompt 用法
-
-如果你不使用 Claude Code，也可以把本仓库作为提示词与知识库资源使用。
-
-### 6.1 推荐加载顺序
-
-普通角色扮演优先使用轻量加载：
-
-1. 运行 `node scripts/furina-memory.mjs inject --query "<用户消息>"`，得到本轮 `[认知存档]`。
-2. 读取 [src/prompt/runtime_lite.md](src/prompt/runtime_lite.md) 作为低 token 角色运行提示词。
-3. 按问题类型从 [furina_resource/00_index.md](furina_resource/00_index.md) 选择对应知识文件。
-4. 对话结束后，用 [src/prompt/reflection.md](src/prompt/reflection.md) 提取记忆 JSON。
-5. 用 `node scripts/furina-memory.mjs remember --reflection reflection.json` 合并记忆。
-6. 记忆过多时，用 `node scripts/furina-memory.mjs compress` 执行睡眠巩固。
-
-需要严格角色一致性、提示词维护或复杂边界审查时，再额外加载：
-
-- [src/prompt/system.md](src/prompt/system.md)
-- [src/rules/ooc_rules.md](src/rules/ooc_rules.md)
-
-### 6.2 手动记忆注入示例
-
-```text
-[认知存档]
-版本: 2.0
-亲密度: 5/10
-上次对话: 2026-04-26
-交互状态: observation
-灵魂状态: active
-主动回忆:
-- M001[中|70|0.90]: 用户喜欢枫丹歌剧 #偏好
-边界与偏好:
-- 普通寒暄时不要频繁翻旧账
-[/认知存档]
-
-你好，芙宁娜。
-```
-
----
-
-## 七、常见问题
-
-### Q1：Claude Code 里没有 `/furina`
-
-检查命令文件是否复制到了正确目录：
-
-```text
-~/.claude/commands/furina.md
-```
-
-复制完成后，重启当前 Claude Code 会话再试。
-
-### Q2：记忆没有保存
-
-检查是否存在：
-
-```text
-~/.claude/furina-memory.json
-```
-
-如果不存在，从项目中重新复制：
-
-```bash
-cp claudecode/memory/furina-memory.json ~/.claude/furina-memory.json
-```
-
-Windows PowerShell：
+如果命令不存在，先重启 Claude Code 会话，再运行：
 
 ```powershell
-Copy-Item .\claudecode\memory\furina-memory.json "$HOME\.claude\furina-memory.json"
+node .\scripts\setup.mjs --check --claude
 ```
 
-### Q3：记忆文件格式坏了
+### Codex
 
-把 `~/.claude/furina-memory.json` 改回项目中的空模板，或手动恢复为：
-
-```json
-{
-  "version": "2.0",
-  "scope": "default",
-  "intimacy": 0,
-  "last_chat": "",
-  "interaction_state": "not_present",
-  "soul_state": "calm",
-  "soul_energy": {
-    "recall_depth": 35,
-    "impression_depth": 35,
-    "expression_desire": 45,
-    "creativity": 55
-  },
-  "profile": {
-    "preferred_name": "",
-    "boundaries": [],
-    "style_preferences": []
-  },
-  "memories": [],
-  "notes": [],
-  "reflection_queue": [],
-  "sleep": {
-    "last_consolidated": "",
-    "pending_count": 0
-  }
-}
-```
-
-然后重新运行 `/furina`。
-
-### Q4：回复不像芙宁娜
-
-优先检查是否加载了主命令 `claudecode/commands/furina.md`。如果你在自定义运行时中使用，请确保至少加载：
-
-- `src/prompt/runtime_lite.md`
-- `furina_resource/02_personality.md`
-- `furina_resource/05_voice_style.md`
-
-若仍不稳定，可用 [eval/furina_voice_cases.md](eval/furina_voice_cases.md) 做人工验收；需要完整边界审查时再补充 `src/prompt/system.md` 与 `src/rules/ooc_rules.md`。
-
-### Q5：什么时候使用 `/furina-compress`
-
-当 `~/.claude/furina-memory.json` 中记忆条目变多、重复或零散时，可以运行：
+安装后直接提出相关请求，例如：
 
 ```text
-/furina-compress
+使用 Furina Roleplay skill，帮我进行芙宁娜角色扮演。
 ```
 
-它会读取当前记忆文件，压缩后写回。若记忆条数不足，命令会提示暂无需压缩。
+如果没有触发，检查：
 
----
+```powershell
+node .\scripts\setup.mjs --check --codex
+```
 
-## 八、检查清单
+## 8. 记忆文件
 
-- [ ] 已获得项目文件
-- [ ] 已复制 `furina.md`、`furina-save.md`、`furina-reflect.md`、`furina-compress.md`
-- [ ] 已创建或复制 `~/.claude/furina-memory.json`
-- [ ] 已在 Claude Code 中测试 `/furina 你好，芙宁娜。`
-- [ ] 知道如何使用 `/furina-save`
-- [ ] 知道 `[退出扮演]` 与 `[exit roleplay]` 的作用
-- [ ] 若使用自定义运行时，已加载核心 prompt、OOC 规则和所需知识库
+默认记忆位置：
 
----
+```text
+~/.claude/furina-memory.json
+```
 
-## 进一步阅读
+常用检查：
 
-- [README.md](README.md)：项目总览
-- [claudecode/README.md](claudecode/README.md)：Claude Code 版本说明
-- [src/memory/memory_format.md](src/memory/memory_format.md)：记忆格式规范
-- [src/prompt/runtime_lite.md](src/prompt/runtime_lite.md)：低 token 角色运行提示词
-- [scripts/README.md](scripts/README.md)：共享记忆运行时说明
-- [eval/furina_voice_cases.md](eval/furina_voice_cases.md)：芙宁娜语气人工验收用例
-- [furina_resource/00_index.md](furina_resource/00_index.md)：知识库索引
+```powershell
+node "$HOME\.claude\furina-memory.mjs" status
+```
+
+如果记忆文件损坏：
+
+1. 先备份当前 `furina-memory.json`。
+2. 再运行：
+
+```powershell
+node .\scripts\setup.mjs --reset-memory
+```
+
+## 9. 常见问题
+
+### `node` 命令不存在
+
+安装 Node.js，并重新打开终端后再试。
+
+### Claude Code 没有 `/furina`
+
+```powershell
+node .\scripts\setup.mjs --claude
+node .\scripts\setup.mjs --check --claude
+```
+
+确认 `Claude command furina.md` 是 `ok`，然后重启 Claude Code 会话。
+
+### Codex 没有识别 skill
+
+```powershell
+node .\scripts\setup.mjs --codex
+node .\scripts\setup.mjs --check --codex
+```
+
+确认 `Codex SKILL.md` 是 `ok`。
+
+### 不想覆盖现有记忆
+
+默认不会覆盖。不要使用 `--reset-memory` 即可。
+
+### 想迁移旧记忆
+
+把旧 `furina-memory.json` 放到目标 `~/.claude/furina-memory.json`，再运行：
+
+```powershell
+node .\scripts\setup.mjs
+```
+
+安装器会保留它。
+
+## 10. 手动兜底
+
+只有安装器不可用时才手动复制：
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\.claude\commands"
+Copy-Item .\claudecode\commands\*.md "$HOME\.claude\commands\" -Force
+Copy-Item .\scripts\furina-memory.mjs "$HOME\.claude\furina-memory.mjs" -Force
+Copy-Item .\claudecode\memory\furina-memory.json "$HOME\.claude\furina-memory.json" -Force
+
+New-Item -ItemType Directory -Force "$HOME\.codex\skills"
+Copy-Item .\codex\skills\furina-roleplay "$HOME\.codex\skills\" -Recurse -Force
+```
+
+手动方式容易遗漏更新。恢复正常后，仍建议使用：
+
+```powershell
+node .\scripts\setup.mjs
+```

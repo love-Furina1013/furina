@@ -1,6 +1,26 @@
-# Furina Memory Runtime
+# Furina Scripts
 
 `furina-memory.mjs` 是 Codex Skill 与 Claude Code 共享的轻量本地记忆运行时，用纯 Node.js 标准库实现，不需要安装依赖。
+
+`setup.mjs` 是一键安装器，用来自动安装 Claude Code 命令、Codex Skill、全局记忆运行时和初始记忆文件。
+
+## 一键安装
+
+```bash
+node scripts/setup.mjs
+node scripts/setup.mjs --check
+```
+
+常用选项：
+
+```bash
+node scripts/setup.mjs --claude
+node scripts/setup.mjs --codex
+node scripts/setup.mjs --project-claude
+node scripts/setup.mjs --check --claude
+node scripts/setup.mjs --check --codex
+node scripts/setup.mjs --dry-run
+```
 
 ## 目标
 
