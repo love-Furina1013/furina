@@ -136,14 +136,6 @@ node .\scripts\furina-memory.mjs compress
 | `09_voice_lines.md` | 语音台词整理 |
 | `10_moegirl_supplement.md` | 萌娘百科补充、创作要点与二创边界 |
 
-## 维护建议
-
-- 改角色设定：只更新根目录 `furina_resource/`；Codex Skill 通过安装器写入的路径上下文引用它，不维护镜像副本。
-- 改角色口吻：优先更新 `furina_resource/05_voice_style.md` 和 `eval/furina_voice_cases.md`。
-- 改 Claude Code 行为：更新 `claudecode/commands/`。
-- 改 Codex Skill 触发或路由：更新 `codex/skills/furina-roleplay/SKILL.md`。
-- 改安装流程：更新 `scripts/setup.mjs` 和 [SETUP_GUIDE.md](SETUP_GUIDE.md)。
-
 ## 资料来源与声明
 
 - `furina_resource/` 的角色资料整理自萌娘百科条目：[芙宁娜·德·枫丹](https://zh.moegirl.org.cn/芙宁娜·德·枫丹)。使用与再分发时请遵守原站著作权声明与页面历史署名要求。
