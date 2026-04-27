@@ -236,7 +236,7 @@ function isCasualGreeting(query) {
 
 function recall(store, query, options = {}) {
   const topK = Number(options.topK || options["top-k"] || 5);
-  const minRelevance = Number(options.minRelevance || options["min-relevance"] || 0.05);
+  const minRelevance = Number(options.minRelevance || options["min-relevance"] || 0.35);
   if (options.avoidCasualGreeting !== false && isCasualGreeting(query)) return [];
   const scored = store.memories.map((memory) => {
     const relevance = overlapScore(query, memory);

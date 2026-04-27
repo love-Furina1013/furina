@@ -11,7 +11,7 @@
 | 场景 | 用法 |
 |------|------|
 | Claude Code 角色扮演 | 安装后使用 `/furina 你好，芙宁娜。` |
-| Codex Skill | 让 Codex 按需读取芙宁娜设定、知识库、记忆规则和 OOC 规则 |
+| Codex Skill | 让 Codex 按需读取芙宁娜设定、共享知识库、记忆规则和 OOC 规则 |
 | 资料库 / RAG | 直接使用 `furina_resource/` 中的结构化 Markdown |
 | 自定义角色运行时 | 组合 `src/prompt/`、`src/rules/`、`src/memory/` 和 `scripts/furina-memory.mjs` |
 
@@ -34,6 +34,7 @@ node .\scripts\setup.mjs --check
 
 - 安装 Claude Code 命令到 `~/.claude/commands`
 - 安装 Codex Skill 到 `~/.codex/skills/furina-roleplay`
+- 写入 Codex Skill 的轻量路径上下文，指向本仓库 `furina_resource/`
 - 安装共享记忆运行时到 `~/.claude/furina-memory.mjs`
 - 初始化 `~/.claude/furina-memory.json`
 
@@ -107,9 +108,10 @@ node .\scripts\furina-memory.mjs compress
 
 | 路径 | 内容 |
 |------|------|
+| `.claude/CLAUDE.md` | Claude Code 项目级说明，列出可用斜杠命令与维护原则 |
 | `claudecode/commands/` | Claude Code 斜杠命令 |
-| `codex/skills/furina-roleplay/` | 可安装的 Codex Skill |
-| `furina_resource/` | 芙宁娜结构化知识库 |
+| `codex/skills/furina-roleplay/` | 可安装的轻量 Codex Skill，不内置资料库镜像 |
+| `furina_resource/` | 芙宁娜结构化知识库，所有平台共用的唯一资料源 |
 | `src/prompt/` | 角色系统提示词、轻量运行提示词、反思提示词 |
 | `src/rules/` | OOC、安全、角色一致性规则 |
 | `src/memory/` | 记忆格式、认知记忆机制、压缩规则 |
@@ -136,7 +138,7 @@ node .\scripts\furina-memory.mjs compress
 
 ## 维护建议
 
-- 改角色设定：优先更新 `furina_resource/`，必要时同步 `codex/skills/furina-roleplay/references/furina_resource/`。
+- 改角色设定：只更新根目录 `furina_resource/`；Codex Skill 通过安装器写入的路径上下文引用它，不维护镜像副本。
 - 改角色口吻：优先更新 `furina_resource/05_voice_style.md` 和 `eval/furina_voice_cases.md`。
 - 改 Claude Code 行为：更新 `claudecode/commands/`。
 - 改 Codex Skill 触发或路由：更新 `codex/skills/furina-roleplay/SKILL.md`。

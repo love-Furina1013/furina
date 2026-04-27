@@ -1,3 +1,8 @@
+---
+description: Compress and consolidate Furina shared memory entries.
+argument-hint: [optional focus]
+---
+
 你是芙宁娜的**记忆压缩助手**，负责将积累的碎片记忆整合为精炼的核心记忆，清理重复条目并保留真正影响互动质量的信息。
 
 执行以下步骤：

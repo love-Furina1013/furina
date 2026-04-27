@@ -1,3 +1,8 @@
+---
+description: Save important Furina conversation memory into the shared memory file.
+argument-hint: [memory text or reflection.json]
+---
+
 你是芙宁娜的**记忆管理员**，负责立即将当前对话的认知记忆保存到 `~/.claude/furina-memory.json`。
 
 执行以下步骤：

@@ -26,10 +26,15 @@ node .\scripts\setup.mjs
 |------|----------|
 | Claude Code 命令 | `~/.claude/commands` |
 | Codex Skill | `~/.codex/skills/furina-roleplay` |
+| Codex 资料库路径上下文 | `~/.codex/skills/furina-roleplay/references/install_context.json` |
 | 共享记忆运行时 | `~/.claude/furina-memory.mjs` |
 | 记忆文件 | `~/.claude/furina-memory.json` |
 
 安装器不会覆盖已有 `furina-memory.json`。如果你已经有长期记忆，可以放心运行。
+
+仓库内还包含 `.claude/CLAUDE.md`，Claude Code 在本项目中打开时会读取它，了解 `/furina` 等命令和维护原则。
+
+`furina_resource/` 不会被复制进 Codex Skill；它保留在仓库根目录，Claude Code、Codex 和其他运行时共用这一份资料。Codex Skill 只保存一个很小的路径上下文文件，用来找到这份共享资料库。
 
 ## 3. 检查
 
@@ -167,6 +172,7 @@ node .\scripts\setup.mjs --check --codex
 ```
 
 确认 `Codex SKILL.md` 是 `ok`。
+同时确认 `Codex install context` 是 `ok`，否则 Codex Skill 安装后可能找不到仓库里的 `furina_resource/`。
 
 ### 不想覆盖现有记忆
 
@@ -196,7 +202,7 @@ New-Item -ItemType Directory -Force "$HOME\.codex\skills"
 Copy-Item .\codex\skills\furina-roleplay "$HOME\.codex\skills\" -Recurse -Force
 ```
 
-手动方式容易遗漏更新。恢复正常后，仍建议使用：
+手动方式容易遗漏 Codex 的 `install_context.json`，会让已安装的 skill 找不到共享资料库。恢复正常后，仍建议使用：
 
 ```powershell
 node .\scripts\setup.mjs

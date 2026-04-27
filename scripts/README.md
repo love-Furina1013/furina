@@ -2,7 +2,7 @@
 
 `furina-memory.mjs` 是 Codex Skill 与 Claude Code 共享的轻量本地记忆运行时，用纯 Node.js 标准库实现，不需要安装依赖。
 
-`setup.mjs` 是一键安装器，用来自动安装 Claude Code 命令、Codex Skill、全局记忆运行时和初始记忆文件。
+`setup.mjs` 是一键安装器，用来自动安装 Claude Code 命令、Codex Skill、全局记忆运行时和初始记忆文件，并为 Codex 写入指向仓库 `furina_resource/` 的轻量路径上下文。
 
 ## 一键安装
 
@@ -25,6 +25,7 @@ node scripts/setup.mjs --dry-run
 ## 目标
 
 - 让 Codex 和 Claude Code 都使用同一份 `version: "2.0"` 认知记忆 JSON。
+- 让 Codex、Claude Code 和自定义运行时共用根目录 `furina_resource/`，避免在 skill 里维护知识库镜像。
 - 提供 Angel Memory / Angel Heart 风格的基本能力：主动回忆、记忆写入、睡眠巩固、弱记忆衰减、交互状态判断。
 - 避免每次对话都把完整记忆塞进上下文，只注入与当前话题相关的 3-5 条。
 

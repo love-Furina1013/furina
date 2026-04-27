@@ -53,6 +53,19 @@ Options:
 `;
 }
 
+function expandHome(input) {
+  const value = String(input);
+  if (value === "~") return os.homedir();
+  if (value.startsWith("~/") || value.startsWith("~\\")) {
+    return path.join(os.homedir(), value.slice(2));
+  }
+  return value;
+}
+
+function resolveUserPath(input) {
+  return path.resolve(expandHome(input));
+}
+
 function ensureSource(filePath) {
   if (!fs.existsSync(filePath)) {
     throw new Error(`Missing source: ${path.relative(ROOT, filePath)}`);
@@ -84,6 +97,16 @@ function copyDir(src, dst, label, dryRun) {
   mkdir(path.dirname(dst), false);
   fs.rmSync(dst, { recursive: true, force: true });
   fs.cpSync(src, dst, { recursive: true, force: true });
+  console.log(`installed ${label}: ${dst}`);
+}
+
+function writeJson(dst, value, label, dryRun) {
+  if (dryRun) {
+    console.log(`[dry-run] write ${label}: ${dst}`);
+    return;
+  }
+  mkdir(path.dirname(dst), false);
+  fs.writeFileSync(dst, `${JSON.stringify(value, null, 2)}\n`);
   console.log(`installed ${label}: ${dst}`);
 }
 
@@ -129,6 +152,17 @@ function installCodex(paths, dryRun) {
     "Codex skill furina-roleplay",
     dryRun
   );
+  writeJson(
+    paths.codexInstallContext,
+    {
+      repo_root: ROOT,
+      furina_resource: path.join(ROOT, "furina_resource"),
+      memory_runtime: path.join(ROOT, "scripts", "furina-memory.mjs"),
+      generated_by: "scripts/setup.mjs"
+    },
+    "Codex install context",
+    dryRun
+  );
 }
 
 function check(paths, targets) {
@@ -147,6 +181,7 @@ function check(paths, targets) {
   if (targets.codex) {
     checks.push(["Codex skill", paths.codexSkillDir]);
     checks.push(["Codex SKILL.md", path.join(paths.codexSkillDir, "SKILL.md")]);
+    checks.push(["Codex install context", paths.codexInstallContext]);
   }
 
   let ok = true;
@@ -165,14 +200,15 @@ if (args.help || args.h) {
   process.exit(0);
 }
 
-const claudeHome = path.resolve(String(args["claude-home"] || process.env.CLAUDE_HOME || path.join(os.homedir(), ".claude")));
-const codexHome = path.resolve(String(args["codex-home"] || process.env.CODEX_HOME || path.join(os.homedir(), ".codex")));
+const claudeHome = resolveUserPath(args["claude-home"] || process.env.CLAUDE_HOME || path.join(os.homedir(), ".claude"));
+const codexHome = resolveUserPath(args["codex-home"] || process.env.CODEX_HOME || path.join(os.homedir(), ".codex"));
 const useProjectClaude = Boolean(args["project-claude"]);
 const paths = {
   claudeCommandsDir: useProjectClaude ? path.join(ROOT, ".claude", "commands") : path.join(claudeHome, "commands"),
   runtimePath: path.join(claudeHome, "furina-memory.mjs"),
-  memoryPath: path.resolve(String(args["memory-path"] || path.join(claudeHome, "furina-memory.json"))),
-  codexSkillDir: path.join(codexHome, "skills", "furina-roleplay")
+  memoryPath: resolveUserPath(args["memory-path"] || path.join(claudeHome, "furina-memory.json")),
+  codexSkillDir: path.join(codexHome, "skills", "furina-roleplay"),
+  codexInstallContext: path.join(codexHome, "skills", "furina-roleplay", "references", "install_context.json")
 };
 
 const dryRun = Boolean(args["dry-run"]);
@@ -180,8 +216,8 @@ const explicitTargets = Boolean(args.claude || args.codex || args.memory || args
 const installAll = !explicitTargets;
 const wantsClaude = installAll || Boolean(args.claude);
 const wantsCodex = installAll || Boolean(args.codex);
-const wantsRuntime = installAll || wantsClaude || wantsCodex || Boolean(args.runtime);
-const wantsMemory = installAll || wantsClaude || wantsCodex || Boolean(args.memory);
+const wantsRuntime = installAll || wantsClaude || Boolean(args.runtime);
+const wantsMemory = installAll || wantsClaude || Boolean(args.memory);
 const targets = {
   claude: wantsClaude,
   codex: wantsCodex,
