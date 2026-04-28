@@ -5,7 +5,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const COMMANDS = ["furina.md", "furina-save.md", "furina-reflect.md", "furina-compress.md"];
+const LEGACY_COMMANDS = ["furina.md", "furina-save.md", "furina-reflect.md", "furina-compress.md"];
+const CLAUDE_SKILLS = ["furina", "furina-save", "furina-reflect", "furina-compress"];
 
 function parseArgs(argv) {
   const args = { _: [] };
@@ -37,14 +38,15 @@ function help() {
 
 Usage:
   node scripts/setup.mjs                 Install Claude Code + Codex Skill + memory runtime
-  node scripts/setup.mjs --claude        Install Claude Code commands only
+  node scripts/setup.mjs --claude        Install Claude Code skills only
   node scripts/setup.mjs --codex         Install Codex Skill only
   node scripts/setup.mjs --check         Check installed files
   node scripts/setup.mjs --check --claude
   node scripts/setup.mjs --check --codex
 
 Options:
-  --project-claude       Install Claude commands into this repo's .claude/commands
+  --project-claude       Use project .claude/skills instead of installing personal Claude skills
+  --legacy-commands      Also install legacy Claude command templates to ~/.claude/commands
   --reset-memory         Replace the existing memory JSON with the empty template
   --dry-run              Print actions without writing files
   --claude-home <dir>    Override Claude home, defaults to CLAUDE_HOME or ~/.claude
@@ -115,8 +117,34 @@ function existsLabel(filePath) {
 }
 
 function installClaude(paths, dryRun) {
+  if (!paths.useProjectClaude) {
+    mkdir(paths.claudeSkillsDir, dryRun);
+    for (const name of CLAUDE_SKILLS) {
+      copyDir(
+        path.join(ROOT, ".claude", "skills", name),
+        path.join(paths.claudeSkillsDir, name),
+        `Claude skill ${name}`,
+        dryRun
+      );
+    }
+    installLegacyCommands(paths, dryRun);
+    return;
+  }
+
+  for (const name of CLAUDE_SKILLS) {
+    ensureSource(path.join(ROOT, ".claude", "skills", name, "SKILL.md"));
+  }
+  console.log("kept project Claude skills: .claude/skills");
+  installLegacyCommands(paths, dryRun);
+}
+
+function installLegacyCommands(paths, dryRun) {
+  if (!paths.installLegacyCommands) {
+    console.log("skipped legacy Claude commands: pass --legacy-commands to install them");
+    return;
+  }
   mkdir(paths.claudeCommandsDir, dryRun);
-  for (const name of COMMANDS) {
+  for (const name of LEGACY_COMMANDS) {
     copyFile(
       path.join(ROOT, "claudecode", "commands", name),
       path.join(paths.claudeCommandsDir, name),
@@ -169,8 +197,16 @@ function installCodex(paths, dryRun) {
 function check(paths, targets) {
   const checks = [];
   if (targets.claude) {
-    for (const name of COMMANDS) {
-      checks.push([`Claude command ${name}`, path.join(paths.claudeCommandsDir, name)]);
+    for (const name of CLAUDE_SKILLS) {
+      const skillPath = paths.useProjectClaude
+        ? path.join(ROOT, ".claude", "skills", name, "SKILL.md")
+        : path.join(paths.claudeSkillsDir, name, "SKILL.md");
+      checks.push([`Claude skill ${name}`, skillPath]);
+    }
+    if (paths.installLegacyCommands) {
+      for (const name of LEGACY_COMMANDS) {
+        checks.push([`Claude command ${name}`, path.join(paths.claudeCommandsDir, name)]);
+      }
     }
   }
   if (targets.runtime) {
@@ -205,7 +241,10 @@ const claudeHome = resolveUserPath(args["claude-home"] || process.env.CLAUDE_HOM
 const codexHome = resolveUserPath(args["codex-home"] || process.env.CODEX_HOME || path.join(os.homedir(), ".codex"));
 const useProjectClaude = Boolean(args["project-claude"]);
 const paths = {
-  claudeCommandsDir: useProjectClaude ? path.join(ROOT, ".claude", "commands") : path.join(claudeHome, "commands"),
+  useProjectClaude,
+  installLegacyCommands: Boolean(args["legacy-commands"]),
+  claudeSkillsDir: useProjectClaude ? path.join(ROOT, ".claude", "skills") : path.join(claudeHome, "skills"),
+  claudeCommandsDir: path.join(claudeHome, "commands"),
   runtimePath: path.join(claudeHome, "furina-memory.mjs"),
   memoryPath: resolveUserPath(args["memory-path"] || path.join(claudeHome, "furina-memory.json")),
   codexSkillDir: path.join(codexHome, "skills", "furina-roleplay"),

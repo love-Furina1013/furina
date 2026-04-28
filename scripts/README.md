@@ -4,7 +4,7 @@
 
 `furina-wiki.mjs` 是外部原神 wiki 查询工具，默认查询在线原神 BWIKI；本地 GenshinStory 可作为可选缓存，用于补查 `furina_resource/` 未覆盖的剧情、任务、语音和角色逸闻。
 
-`setup.mjs` 是一键安装器，用来自动安装 Claude Code 命令、Codex Skill、全局记忆运行时和初始记忆文件，并为 Codex 写入指向仓库 `furina_resource/` 的轻量路径上下文。
+`setup.mjs` 是一键安装器，用来自动安装 Claude Code 原生 skills、Codex Skill、全局记忆运行时和初始记忆文件，并为 Codex 写入指向仓库 `furina_resource/` 的轻量路径上下文。旧式 Claude commands 只会在显式传入 `--legacy-commands` 时安装。
 
 ## 一键安装
 
@@ -19,6 +19,7 @@ node scripts/setup.mjs --check
 node scripts/setup.mjs --claude
 node scripts/setup.mjs --codex
 node scripts/setup.mjs --project-claude
+node scripts/setup.mjs --legacy-commands
 node scripts/setup.mjs --check --claude
 node scripts/setup.mjs --check --codex
 node scripts/setup.mjs --dry-run

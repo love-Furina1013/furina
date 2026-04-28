@@ -1,6 +1,6 @@
 # 芙宁娜 × Claude Code —— 安装与使用指南
 
-将芙宁娜的完整角色扮演 Skill 适配为 Claude Code 原生斜杠命令，包含完整人格设定、行为准则、角色知识库、**全自动**认知记忆系统与社交感知能力。
+将芙宁娜的角色扮演能力适配为 Claude Code 原生 project skills，并保留旧式斜杠命令模板作为兼容入口。
 
 ---
 
@@ -9,7 +9,7 @@
 ```
 claudecode/
 ├── commands/
-│   ├── furina.md          # 主命令：完整芙宁娜人格 + 自动认知记忆读取/保存
+│   ├── furina.md          # 旧式兼容命令：完整芙宁娜人格 + 自动认知记忆读取/保存
 │   ├── furina-save.md     # 主动保存命令：随时手动触发记忆存档
 │   ├── furina-reflect.md  # 反思命令：从对话记录提取记忆（高级用法）
 │   └── furina-compress.md # 压缩命令：清理重复记忆并保留核心条目
@@ -38,7 +38,7 @@ node scripts/setup.mjs --claude
 node scripts/setup.mjs --check --claude
 ```
 
-它会安装四个斜杠命令、全局记忆运行时和初始记忆文件；已有 `~/.claude/furina-memory.json` 不会被覆盖。
+它会安装四个原生 skills、全局记忆运行时和初始记忆文件；已有 `~/.claude/furina-memory.json` 不会被覆盖。旧式兼容命令默认不安装，如确实需要，额外加 `--legacy-commands`。
 
 也可以把这段交给 Claude Code：
 
@@ -52,7 +52,7 @@ node scripts/setup.mjs --check --claude
 node scripts/setup.mjs --claude --project-claude
 ```
 
-项目级安装只把命令放进当前仓库 `.claude/commands`；记忆运行时和记忆 JSON 仍使用全局 `~/.claude/`，方便跨项目共享。
+本仓库已内置 `.claude/skills/`，在当前项目中打开 Claude Code 时会自动发现 `/furina` 等 skills。项目级安装不再写入 `.claude/commands`；记忆运行时和记忆 JSON 仍使用全局 `~/.claude/`，方便跨项目共享。
 
 ---
 
