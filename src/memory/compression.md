@@ -2,7 +2,7 @@
 
 ## 用途
 
-本提示词在待巩固记忆达到阈值、总记忆数超过上限、或用户主动要求整理时调用。默认触发条件与运行时一致：`sleep.pending_count >= 8`，或 `memories.length > 24`。目标不是“尽量少”，而是保留能长期改善互动质量的核心信息，清理重复、低置信度和过期弱记忆。
+本提示词在待巩固记忆达到阈值、总记忆数超过上限、或用户主动要求整理时调用。默认触发条件与运行时一致：`sleep.pending_count >= 8`，或 `memories.length > 24`。压缩目标采用两段式配置：`soft_target_core_memories = 8` 是优先收敛目标，`hard_max_memories = 24` 是硬上限。目标不是“尽量少”，而是保留能长期改善互动质量的核心信息，清理重复、低置信度和过期弱记忆。
 
 ---
 
@@ -50,7 +50,7 @@
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
-| `compressed_memories` | array | 压缩后保留的核心记忆；优先收敛到约 8 条高价值记忆，最多不超过运行时上限 24 条 |
+| `compressed_memories` | array | 压缩后保留的核心记忆；优先收敛到 `soft_target_core_memories` 条高价值记忆，最多不超过 `hard_max_memories` 条 |
 | `updated_notes` | array | 被整理后的长笔记，可为空 |
 | `removed_ids` | array | 被删除的原记忆 ID 列表 |
 | `decayed_ids` | array | 降权但未删除的弱记忆 ID 列表 |

@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const CASES_PATH = path.join(ROOT, "eval", "furina_voice_cases.md");
+const EVAL_NOTICE = "This helper only prints manual-eval prompts. It does not call a model or send data to any external service.";
 
 function parseArgs(argv) {
   const args = { _: [] };
@@ -35,8 +36,7 @@ Usage:
   node scripts/furina-eval.mjs prompt --all
   node scripts/furina-eval.mjs json
 
-This helper parses eval/furina_voice_cases.md and prints stable manual-eval prompts.
-It does not call a model or send data to any external service.
+${EVAL_NOTICE}
 `;
 }
 
@@ -70,6 +70,9 @@ function printList(cases) {
     console.log(`   expected: ${item.expected}`);
     console.log(`   avoid: ${item.avoid}`);
   }
+  console.log("");
+  console.log(EVAL_NOTICE);
+  console.log("Next: run `node scripts/furina-eval.mjs prompt --case <id>` and score the model response manually.");
 }
 
 function printPrompt(cases) {

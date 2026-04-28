@@ -4,7 +4,7 @@
 
 ## 1. 准备
 
-你只需要准备 Node.js：
+你只需要准备 Node.js 18 或更高版本：
 
 ```powershell
 node --version

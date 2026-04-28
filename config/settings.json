@@ -37,7 +37,8 @@
     "sleep_consolidation": {
       "enabled": true,
       "trigger_pending_count": 8,
-      "target_core_memories": 8,
+      "soft_target_core_memories": 8,
+      "hard_max_memories": 24,
       "decay_weak_after_days": 30
     },
     "soul_energy": {
