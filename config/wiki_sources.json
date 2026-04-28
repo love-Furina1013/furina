@@ -1,0 +1,22 @@
+{
+  "default_source": "bwiki-online",
+  "sources": [
+    {
+      "id": "bwiki-online",
+      "type": "mediawiki_api",
+      "description": "Online 原神WIKI_BWIKI MediaWiki API.",
+      "api": "https://wiki.biligame.com/ys/api.php",
+      "page": "https://wiki.biligame.com/ys/",
+      "enabled": true
+    },
+    {
+      "id": "genshin-story",
+      "type": "local_markdown",
+      "description": "Local clone of kawayiYokami/GenshinStory generated Genshin Impact Markdown docs.",
+      "env": "GENSHIN_STORY_ROOT",
+      "root": "",
+      "docs": "web/docs-site/public/domains/gi/docs",
+      "enabled": true
+    }
+  ]
+}

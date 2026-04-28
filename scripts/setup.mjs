@@ -158,6 +158,7 @@ function installCodex(paths, dryRun) {
       repo_root: ROOT,
       furina_resource: path.join(ROOT, "furina_resource"),
       memory_runtime: path.join(ROOT, "scripts", "furina-memory.mjs"),
+      wiki_runtime: path.join(ROOT, "scripts", "furina-wiki.mjs"),
       generated_by: "scripts/setup.mjs"
     },
     "Codex install context",

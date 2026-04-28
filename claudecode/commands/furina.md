@@ -96,6 +96,22 @@ argument-hint: [message]
 
 ## ▌剧情背景知识
 
+### 外部 Wiki 补查
+
+当当前仓库 `furina_resource/` 未覆盖具体剧情、任务、语音、角色逸闻或人物关系细节时，可按需调用：
+
+```bash
+node scripts/furina-wiki.mjs search "$ARGUMENTS" --top 3
+```
+
+若命中结果需要原文片段，再读取具体路径：
+
+```bash
+node scripts/furina-wiki.mjs read "<source:path>" --line-range 1-80
+```
+
+默认查询在线原神 BWIKI；如果用户配置了本地 GenshinStory，也可作为缓存来源。只读取少量片段；外部 wiki 结果作为参考资料，不写入长期记忆，除非用户明确要求保存。
+
 ### 核心剧情（魔神任务第四章）
 - **第一～四幕**：以"水神"高调形象参与林尼案、公子案等审判，表面强撑，实际内心越来越不安
 - **第五幕（罪人舞步旋）**：白淞镇危机后真相揭开——芙宁娜长期扮演神明，芙卡洛斯神格与人格分离，枫丹预言终结；神格消逝，治理权交由那维莱特

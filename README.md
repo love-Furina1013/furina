@@ -13,6 +13,7 @@
 | Claude Code 角色扮演 | 安装后使用 `/furina 你好，芙宁娜。` |
 | Codex Skill | 让 Codex 按需读取芙宁娜设定、共享知识库、记忆规则和 OOC 规则 |
 | 资料库 / RAG | 直接使用 `furina_resource/` 中的结构化 Markdown |
+| 外部原神 wiki 查询 | 通过 `scripts/furina-wiki.mjs` 按需检索本地 GenshinStory 原神文档 |
 | 自定义角色运行时 | 组合 `src/prompt/`、`src/rules/`、`src/memory/` 和 `scripts/furina-memory.mjs` |
 
 ## 快速开始
@@ -68,6 +69,8 @@ node .\scripts\setup.mjs --check
 | `node .\scripts\setup.mjs --codex` | 只安装 Codex Skill |
 | `node .\scripts\setup.mjs --project-claude` | 把 Claude 命令安装到当前项目 `.claude/commands` |
 | `node .\scripts\setup.mjs --dry-run` | 预览安装动作，不写文件 |
+| `node .\scripts\furina-wiki.mjs sources` | 检查外部原神 wiki 来源 |
+| `node .\scripts\furina-wiki.mjs search "芙宁娜"` | 检索外部原神 wiki |
 
 Claude Code 安装后可用：
 
@@ -104,6 +107,28 @@ node .\scripts\furina-memory.mjs compress
 
 记忆格式采用 `version: "2.0"`，包含亲密度、交互状态、灵魂状态、核心记忆、背景笔记和睡眠巩固状态。完整字段说明见 [src/memory/memory_format.md](src/memory/memory_format.md) 与 [src/memory/cognitive_memory.md](src/memory/cognitive_memory.md)。
 
+## 外部原神 Wiki
+
+`scripts/furina-wiki.mjs` 用于按需查询外部原神资料。默认查询在线原神 BWIKI；如果本机有 [GenshinStory](https://github.com/kawayiYokami/GenshinStory) 且已生成 Markdown，也可以把它作为本地缓存来源。
+
+直接查询：
+
+```powershell
+node .\scripts\furina-wiki.mjs sources
+node .\scripts\furina-wiki.mjs search "芙宁娜 那维莱特" --top 5
+node .\scripts\furina-wiki.mjs brief "芙宁娜 传说任务"
+node .\scripts\furina-wiki.mjs read "芙宁娜" --line-range 1-80
+```
+
+可选本地缓存：
+
+```powershell
+$env:GENSHIN_STORY_ROOT="D:\GenshinStory"
+node .\scripts\furina-wiki.mjs search "芙宁娜 那维莱特" --source genshin-story
+```
+
+AI 使用时应先查 `furina_resource/`，不足时再调用外部 wiki；每次只读取少量命中片段。
+
 ## 目录说明
 
 | 路径 | 内容 |
@@ -117,6 +142,8 @@ node .\scripts\furina-memory.mjs compress
 | `src/memory/` | 记忆格式、认知记忆机制、压缩规则 |
 | `scripts/setup.mjs` | 一键安装器 |
 | `scripts/furina-memory.mjs` | 共享记忆运行时 |
+| `scripts/furina-wiki.mjs` | 外部原神 wiki 查询工具 |
+| `config/wiki_sources.json` | 外部 wiki 来源配置 |
 | `eval/furina_voice_cases.md` | 语气验收用例 |
 | `config/manifest.json` | 项目元数据 |
 

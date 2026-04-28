@@ -2,6 +2,8 @@
 
 `furina-memory.mjs` 是 Codex Skill 与 Claude Code 共享的轻量本地记忆运行时，用纯 Node.js 标准库实现，不需要安装依赖。
 
+`furina-wiki.mjs` 是外部原神 wiki 查询工具，默认查询在线原神 BWIKI；本地 GenshinStory 可作为可选缓存，用于补查 `furina_resource/` 未覆盖的剧情、任务、语音和角色逸闻。
+
 `setup.mjs` 是一键安装器，用来自动安装 Claude Code 命令、Codex Skill、全局记忆运行时和初始记忆文件，并为 Codex 写入指向仓库 `furina_resource/` 的轻量路径上下文。
 
 ## 一键安装
@@ -20,12 +22,15 @@ node scripts/setup.mjs --project-claude
 node scripts/setup.mjs --check --claude
 node scripts/setup.mjs --check --codex
 node scripts/setup.mjs --dry-run
+node scripts/furina-wiki.mjs sources
+node scripts/furina-wiki.mjs search "芙宁娜"
 ```
 
 ## 目标
 
 - 让 Codex 和 Claude Code 都使用同一份 `version: "2.0"` 认知记忆 JSON。
 - 让 Codex、Claude Code 和自定义运行时共用根目录 `furina_resource/`，避免在 skill 里维护知识库镜像。
+- 在需要补查外部原神资料时，通过本地 wiki 检索返回少量片段，而不是把整套 wiki 塞进上下文。
 - 提供 Angel Memory / Angel Heart 风格的基本能力：主动回忆、记忆写入、睡眠巩固、弱记忆衰减、交互状态判断。
 - 避免每次对话都把完整记忆塞进上下文，只注入与当前话题相关的 3-5 条。
 
@@ -83,3 +88,21 @@ node scripts/furina-memory.mjs remember --reflection reflection.json
 ```
 
 这样 Codex 与 Claude Code 会共享同一套记忆文件和压缩规则。
+
+## 外部 Wiki 查询
+
+直接查询：
+
+```bash
+node scripts/furina-wiki.mjs sources
+node scripts/furina-wiki.mjs search "芙宁娜 那维莱特" --top 5
+node scripts/furina-wiki.mjs brief "芙宁娜 传说任务"
+node scripts/furina-wiki.mjs read "芙宁娜" --line-range 1-80
+```
+
+可选本地缓存：
+
+```powershell
+$env:GENSHIN_STORY_ROOT="D:\GenshinStory"
+node scripts/furina-wiki.mjs search "芙宁娜" --source genshin-story
+```

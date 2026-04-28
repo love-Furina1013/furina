@@ -1,6 +1,6 @@
 {
   "id": "furina-de-fontaine-roleplay",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "name": "芙宁娜 · 角色扮演 Skill",
   "name_en": "Furina de Fontaine Roleplay Skill",
   "description": "面向 Claude Code、Codex Skill、GitHub Copilot Skill 与自定义 AI 运行时的芙宁娜（Furina de Fontaine）角色扮演资源包，包含角色系统提示词、结构化知识库、OOC 行为规则、认知记忆机制与会话反思流程，用于构建人设稳定、语气一致、具备长期互动连续感的芙宁娜体验。",
@@ -22,10 +22,12 @@
     "cognitive_memory": "src/memory/cognitive_memory.md",
     "voice_eval_cases": "eval/furina_voice_cases.md",
     "memory_runtime": "scripts/furina-memory.mjs",
+    "wiki_runtime": "scripts/furina-wiki.mjs",
     "setup": "scripts/setup.mjs"
   },
   "config": {
-    "settings": "config/settings.json"
+    "settings": "config/settings.json",
+    "wiki_sources": "config/wiki_sources.json"
   },
   "capabilities": [
     "character-roleplay",
@@ -40,6 +42,7 @@
     "interaction-state-machine",
     "shared-memory-runtime",
     "shared-resource-source",
+    "external-wiki-lookup",
     "claude-code-commands",
     "codex-skill",
     "auto-setup"
@@ -61,6 +64,7 @@
     "1.4.0": "新增低 token 运行提示词 runtime_lite.md 与语气人工验收用例，精简 Codex Skill 入口，并修正芙宁娜身份表述以更贴近原作。",
     "1.5.0": "新增 Node.js 共享记忆运行时 scripts/furina-memory.mjs，为 Codex 与 Claude Code 提供一致的本地记忆初始化、心跳判断、主动召回、记忆合并和睡眠巩固流程。",
     "1.6.0": "新增一键安装器 scripts/setup.mjs，简化 Claude Code、Codex Skill、全局记忆运行时和初始记忆文件的安装与检查流程。",
-    "1.7.0": "移除 Codex Skill 内置 furina_resource 镜像，改为所有平台共用仓库根目录资料库；补充 Claude Code 命令 frontmatter 与项目级 CLAUDE.md。"
+    "1.7.0": "移除 Codex Skill 内置 furina_resource 镜像，改为所有平台共用仓库根目录资料库；补充 Claude Code 命令 frontmatter 与项目级 CLAUDE.md。",
+    "1.8.0": "新增 scripts/furina-wiki.mjs 与 config/wiki_sources.json，支持按需检索本地 GenshinStory 原神 Markdown 资料。"
   }
 }

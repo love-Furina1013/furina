@@ -36,6 +36,22 @@ node .\scripts\setup.mjs
 
 `furina_resource/` 不会被复制进 Codex Skill；它保留在仓库根目录，Claude Code、Codex 和其他运行时共用这一份资料。Codex Skill 只保存一个很小的路径上下文文件，用来找到这份共享资料库。
 
+外部原神 wiki 默认走在线 BWIKI，无需额外配置：
+
+```powershell
+node .\scripts\furina-wiki.mjs sources
+node .\scripts\furina-wiki.mjs search "芙宁娜"
+```
+
+如果想用本地 GenshinStory 作为缓存，再设置路径：
+
+```powershell
+$env:GENSHIN_STORY_ROOT="D:\GenshinStory"
+node .\scripts\furina-wiki.mjs search "芙宁娜" --source genshin-story
+```
+
+没有设置外部 wiki 时，本 skill 仍会正常使用内置 `furina_resource/`。
+
 ## 3. 检查
 
 ```powershell

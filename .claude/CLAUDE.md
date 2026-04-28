@@ -27,5 +27,6 @@ node scripts/setup.mjs --claude --project-claude
 ## 维护原则
 
 - `furina_resource/` 是所有平台共用的唯一角色资料源。
+- 外部原神 wiki 只用于补查资料库未覆盖的内容；默认在线 BWIKI 可直接 `search` / `read`，本地 GenshinStory 只是可选缓存。
 - Claude Code 命令保留 `$ARGUMENTS`，让用户在斜杠命令后的文本能进入提示词。
 - 记忆读写优先使用 `scripts/furina-memory.mjs`，再回退到 `~/.claude/furina-memory.mjs`。
