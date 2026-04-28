@@ -69,7 +69,7 @@ node .\scripts\setup.mjs --check
 | `node .\scripts\setup.mjs --claude` | 只安装 Claude Code 原生 skills |
 | `node .\scripts\setup.mjs --legacy-commands` | 完整安装时额外安装旧式 Claude Code commands |
 | `node .\scripts\setup.mjs --codex` | 只安装 Codex Skill |
-| `node .\scripts\setup.mjs --project-claude` | 使用当前项目 `.claude/skills`，不再安装项目级旧式命令 |
+| `node .\scripts\setup.mjs --project-claude` | 使用当前项目 `.claude/skills`，不复制到个人 Claude skills 目录 |
 | `node .\scripts\setup.mjs --dry-run` | 预览安装动作，不写文件 |
 | `node .\scripts\furina-wiki.mjs sources` | 检查外部原神 wiki 来源 |
 | `node .\scripts\furina-wiki.mjs search "芙宁娜"` | 检索外部原神 wiki |

@@ -185,27 +185,27 @@ node scripts/setup.mjs --claude --project-claude
 | 语气风格指南 | ✅ |
 | 角色知识库（剧情/人物关系/台词）| ✅ |
 | 行为准则 & OOC 规则（内容安全 + 身份坚守 + 角色尊严）| ✅ |
-| **自动读取本地记忆文件** | ✅ 新增 |
-| **对话结束/用户要求时自动写回** | ✅ 新增 |
-| **主动回忆 + 分寸控制** | ✅ 新增 |
-| **灵魂能量（回忆深度/表达欲/创造力）** | ✅ 新增 |
-| **睡眠巩固与弱记忆衰减** | ✅ 新增 |
-| **共享记忆运行时（Codex / Claude Code 共用）** | ✅ 新增 |
-| **`/furina-save` 随时主动保存命令** | ✅ 新增 |
-| **`/furina-compress` 记忆压缩命令** | ✅ 新增 |
+| **自动读取本地记忆文件** | ✅ |
+| **对话结束/用户要求时自动写回** | ✅ |
+| **主动回忆 + 分寸控制** | ✅ |
+| **灵魂能量（回忆深度/表达欲/创造力）** | ✅ |
+| **睡眠巩固与弱记忆衰减** | ✅ |
+| **共享记忆运行时（Codex / Claude Code 共用）** | ✅ |
+| **`/furina-save` 随时主动保存命令** | ✅ |
+| **`/furina-compress` 记忆压缩命令** | ✅ |
 | 灵魂进化（亲密度 + 情绪状态动态调整）| ✅ |
 | 社交感知（回应时机 + 分量控制）| ✅ |
 
 ---
 
-## 与原版 GitHub Copilot Skill 的关系
+## 与共享资源的关系
 
-本 Claude Code 版本是对原版 Skill（`src/` 目录）的完整移植与适配：
+Claude Code 入口与 `src/`、`furina_resource/`、`scripts/` 共用同一套角色资料、规则和记忆运行时：
 
-- **主命令 `furina.md`**：融合了 `src/prompt/system.md`、`src/rules/ooc_rules.md`、`src/memory/memory_format.md` 以及 `furina_resource/` 中的关键知识库；新增自动认知记忆读写机制
+- **主命令 `furina.md`**：融合了 `src/prompt/system.md`、`src/rules/ooc_rules.md`、`src/memory/memory_format.md` 以及 `furina_resource/` 中的关键知识库；包含自动认知记忆读写机制
 - **轻量运行提示 `src/prompt/runtime_lite.md`**：供 Codex Skill 普通角色扮演优先读取，减少不必要的完整系统提示加载
 - **共享记忆运行时 `scripts/furina-memory.mjs`**：提供 `init`、`heart`、`inject`、`remember`、`recall`、`compress`，让 Codex 与 Claude Code 使用一致的记忆体验
-- **保存命令 `furina-save.md`**：新增，解决原版需要手动复制粘贴存档的问题
+- **保存命令 `furina-save.md`**：用于显式保存用户要求保留的长期记忆
 - **反思命令 `furina-reflect.md`**：对应 `src/prompt/reflection.md`，保留为高级用法
 - **压缩命令 `furina-compress.md`**：对应 `src/memory/compression.md`，用于清理重复记忆并保留核心条目
 - **记忆格式**：与 `src/memory/memory_format.md` 兼容，存档可在两个平台间互通

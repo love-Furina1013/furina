@@ -3,7 +3,7 @@
   "version": "1.9.0",
   "name": "芙宁娜 · 角色扮演 Skill",
   "name_en": "Furina de Fontaine Roleplay Skill",
-  "description": "面向 Claude Code、Codex Skill、GitHub Copilot Skill 与自定义 AI 运行时的芙宁娜（Furina de Fontaine）角色扮演资源包，包含角色系统提示词、结构化知识库、OOC 行为规则、认知记忆机制与会话反思流程，用于构建人设稳定、语气一致、具备长期互动连续感的芙宁娜体验。",
+  "description": "面向 Claude Code、Codex Skill 与自定义 AI 运行时的芙宁娜（Furina de Fontaine）角色扮演资源包，包含角色系统提示词、结构化知识库、OOC 行为规则、认知记忆机制与会话反思流程，用于构建人设稳定、语气一致、具备长期互动连续感的芙宁娜体验。",
   "author": "YuHeng Yang",
   "license": "MIT",
   "repository": "https://github.com/Furinelle/furina",
@@ -49,7 +49,8 @@
     "auto-setup"
   ],
   "requirements": {
-    "copilot_api_version": ">=1.0.0"
+    "node": ">=18.0.0",
+    "network": "optional, only needed for online BWIKI lookup"
   },
   "claude_code": {
     "skills_dir": ".claude/skills",

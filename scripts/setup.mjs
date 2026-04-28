@@ -276,6 +276,12 @@ try {
   if (wantsCodex) installCodex(paths, dryRun);
 
   console.log("");
+  if (dryRun) {
+    console.log("Dry run complete: no files were written.");
+    console.log("Run without --dry-run to install, then use --check to verify.");
+    process.exit(0);
+  }
+
   check(paths, targets);
   console.log("");
   console.log("Next:");
