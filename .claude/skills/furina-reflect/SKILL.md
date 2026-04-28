@@ -3,6 +3,7 @@ name: furina-reflect
 description: Extract structured Furina memory JSON from a pasted conversation transcript for later merging into the shared memory file. Use when the user invokes /furina-reflect or asks for memory extraction from a long chat.
 argument-hint: [conversation transcript]
 disable-model-invocation: true
+allowed-tools: Read
 ---
 
 # Furina Memory Reflection

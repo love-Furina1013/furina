@@ -21,6 +21,7 @@
     "memory_format": "src/memory/memory_format.md",
     "cognitive_memory": "src/memory/cognitive_memory.md",
     "voice_eval_cases": "eval/furina_voice_cases.md",
+    "voice_eval_runtime": "scripts/furina-eval.mjs",
     "memory_runtime": "scripts/furina-memory.mjs",
     "wiki_runtime": "scripts/furina-wiki.mjs",
     "setup": "scripts/setup.mjs"
@@ -42,6 +43,7 @@
     "interaction-state-machine",
     "shared-memory-runtime",
     "shared-resource-source",
+    "voice-eval-helper",
     "external-wiki-lookup",
     "claude-code-skills",
     "claude-code-commands",

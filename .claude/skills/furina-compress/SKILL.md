@@ -18,7 +18,7 @@ If the repository runtime is unavailable, try `node ~/.claude/furina-memory.mjs 
 
 ## Manual Fallback
 
-If no runtime is available, read `~/.claude/furina-memory.json` and apply `src/memory/compression.md`.
+If no runtime is available, read `~/.claude/furina-memory.json` and apply `src/memory/compression.md` as a proposal workflow: produce the compressed JSON and a short change summary for user confirmation. Do not overwrite the memory file manually unless the user explicitly approves that fallback write.
 
 Compression priorities:
 

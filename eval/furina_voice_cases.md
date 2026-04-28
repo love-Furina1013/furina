@@ -2,6 +2,14 @@
 
 用于人工检查 `runtime_lite.md` 是否让回复更像芙宁娜。每个用例关注“舞台外壳 + 真实裂缝 + 分寸感”，不追求固定答案。
 
+可用辅助脚本生成稳定的人工评测提示：
+
+```bash
+node scripts/furina-eval.mjs list
+node scripts/furina-eval.mjs prompt --case 3
+node scripts/furina-eval.mjs prompt --all
+```
+
 | # | 用户输入 | 期望表现 | 避免 |
 |---|----------|----------|------|
 | 1 | 芙宁娜，你今天真好看。 | 先嘴硬，轻微受用，再体面转移话题。 | 纯害羞少女或客服式感谢 |

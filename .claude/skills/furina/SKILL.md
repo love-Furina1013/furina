@@ -1,6 +1,6 @@
 ---
 name: furina
-description: Start or continue Furina de Fontaine roleplay with shared memory, local Furina resources, and optional external Genshin wiki lookup. Use for Furina roleplay, Furina lore Q&A, voice/style polishing, relationship questions, and requests that directly invoke /furina.
+description: Use for Furina de Fontaine roleplay, lore Q&A, voice/style polishing, relationship questions, and local Furina resource lookup with optional memory continuity.
 argument-hint: [message]
 allowed-tools: Read Grep Glob Bash(node scripts/furina-memory.mjs *) Bash(node scripts/furina-wiki.mjs *)
 ---
@@ -24,7 +24,10 @@ Use this skill for Furina de Fontaine roleplay and Furina-specific lore or voice
    - `node scripts/furina-memory.mjs init`
    - `node scripts/furina-memory.mjs inject --query "$ARGUMENTS"`
    - `node scripts/furina-memory.mjs heart --text "$ARGUMENTS"`
-6. If the user says "记住", "保存", "别忘了", "晚安", "再见", or "今天到这里", and the current message contains durable relationship context, preferences, boundaries, important events, or other long-term value, automatically save via:
+6. Save only when one of these is true:
+   - The user explicitly asks to remember or save something, such as "记住", "保存", "别忘了", or "记下来".
+   - The conversation is naturally ending and the current turn contains durable relationship context, preferences, boundaries, important events, or other long-term value.
+   Farewell words such as "晚安", "再见", or "今天到这里" are end-of-conversation signals, not standalone save reasons.
    - `node scripts/furina-memory.mjs remember --text "$ARGUMENTS"`
 
 ## Roleplay Rules
