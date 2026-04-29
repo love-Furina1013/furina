@@ -10,11 +10,14 @@ const INTERACTION_STATES = new Set(["not_present", "summoned", "getting_familiar
 const SETTINGS = loadSettings();
 const MEMORY_SETTINGS = SETTINGS.memory || {};
 const ACTIVE_RECALL_SETTINGS = MEMORY_SETTINGS.active_recall || {};
+const PROACTIVE_RECALL_SETTINGS = MEMORY_SETTINGS.proactive_recall || {};
 const SLEEP_SETTINGS = MEMORY_SETTINGS.sleep_consolidation || {};
 const MAX_MEMORIES = numberSetting(SLEEP_SETTINGS.hard_max_memories, numberSetting(MEMORY_SETTINGS.max_memories, 24));
 const MAX_NOTES = numberSetting(MEMORY_SETTINGS.max_notes, 12);
 const DEFAULT_RECALL_TOP_K = numberSetting(ACTIVE_RECALL_SETTINGS.top_k, 5);
 const DEFAULT_MIN_RELEVANCE = numberSetting(ACTIVE_RECALL_SETTINGS.min_relevance, 0.35);
+const PROACTIVE_RECALL_ENABLED = PROACTIVE_RECALL_SETTINGS.enabled !== false;
+const PROACTIVE_RECALL_MIN_INTIMACY = numberSetting(PROACTIVE_RECALL_SETTINGS.min_intimacy, 6);
 const CONSOLIDATION_TRIGGER = numberSetting(SLEEP_SETTINGS.trigger_pending_count, 8);
 
 const DEFAULT_STORE = {
@@ -58,6 +61,12 @@ function today() {
 function clamp(n, min, max) {
   const value = Number.isFinite(Number(n)) ? Number(n) : min;
   return Math.max(min, Math.min(max, value));
+}
+
+function normalizeSoulState(value) {
+  if (SOUL_STATES.has(value)) return value;
+  if (Number.isInteger(value)) return ["low", "calm", "active", "excited"][clamp(value, 0, 3)];
+  return "calm";
 }
 
 function defaultPath() {
@@ -114,7 +123,7 @@ function normalizeStore(input = {}) {
   store.intimacy = clamp(store.intimacy, 0, 10);
   store.last_chat = typeof store.last_chat === "string" ? store.last_chat : "";
   store.interaction_state = INTERACTION_STATES.has(store.interaction_state) ? store.interaction_state : "not_present";
-  store.soul_state = SOUL_STATES.has(store.soul_state) ? store.soul_state : "calm";
+  store.soul_state = normalizeSoulState(store.soul_state);
   store.soul_energy = { ...DEFAULT_STORE.soul_energy, ...(store.soul_energy || {}) };
   for (const key of Object.keys(DEFAULT_STORE.soul_energy)) {
     store.soul_energy[key] = clamp(store.soul_energy[key], 0, 100);
@@ -344,10 +353,7 @@ function applyEnergyDelta(store, delta = {}) {
 function applyReflection(store, reflection) {
   const now = today();
   store.intimacy = clamp(store.intimacy + (Number(reflection.intimacy_delta) || 0), 0, 10);
-  if (SOUL_STATES.has(reflection.soul_state)) store.soul_state = reflection.soul_state;
-  if (Number.isInteger(reflection.soul_state)) {
-    store.soul_state = ["low", "calm", "active", "excited"][clamp(reflection.soul_state, 0, 3)];
-  }
+  store.soul_state = normalizeSoulState(reflection.soul_state ?? store.soul_state);
   if (INTERACTION_STATES.has(reflection.interaction_state)) store.interaction_state = reflection.interaction_state;
   applyEnergyDelta(store, reflection.soul_energy_delta || {});
   store.last_chat = now;
@@ -452,10 +458,20 @@ function heart(text, store) {
   const farewell = /再见|拜拜|晚安|下次见|我走了|回头见|bye/i.test(message);
   const save = /记住|保存|别忘|不要忘|记下来|存档|remember|save/i.test(message);
   const recallHint = /上次|以前|记得|还记得|我喜欢|我的/.test(message);
+  const heavyOrBoundary = /难过|低落|崩溃|危险|不要|别|白淞镇|预言|五百年|仆人/.test(message);
+  const proactiveRecall = PROACTIVE_RECALL_ENABLED
+    && store.intimacy >= PROACTIVE_RECALL_MIN_INTIMACY
+    && !recallHint
+    && !save
+    && !farewell
+    && !heavyOrBoundary
+    && !isCasualGreeting(message)
+    && (direct || question);
   return {
     should_reply: direct || question,
     should_save: save || farewell,
-    should_recall: recallHint && !isCasualGreeting(message),
+    should_recall: (recallHint && !isCasualGreeting(message)) || proactiveRecall,
+    recall_mode: recallHint && !isCasualGreeting(message) ? "explicit" : proactiveRecall ? "proactive" : "none",
     next_interaction_state: direct || question ? "summoned" : "observation",
     reason: save ? "user_requested_save" : farewell ? "farewell" : recallHint ? "recall_hint" : "normal",
     current_intimacy: store.intimacy,

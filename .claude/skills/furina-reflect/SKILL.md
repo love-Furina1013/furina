@@ -19,6 +19,8 @@ Use the schema from `src/prompt/reflection.md` and `src/memory/memory_format.md`
 - Prefer long-term value over one-off details.
 - Include `obsolete_ids` when correcting stale memories.
 - Do not save sensitive medical, financial, identity, or location data unless the user explicitly asks.
+- Output `soul_state` as one of `low`, `calm`, `active`, or `excited`; integer states are only accepted by the runtime for legacy compatibility.
+- Mark `type=boundary` memories as `priority=3`.
 
 After generating JSON, the user can merge it with:
 

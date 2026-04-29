@@ -34,6 +34,12 @@
       "min_relevance": 0.35,
       "avoid_for_casual_greeting": true
     },
+    "proactive_recall": {
+      "enabled": true,
+      "min_intimacy": 6,
+      "cooldown_turns": 8,
+      "max_per_reply": 1
+    },
     "sleep_consolidation": {
       "enabled": true,
       "trigger_pending_count": 8,

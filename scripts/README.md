@@ -36,7 +36,7 @@ node scripts/furina-wiki.mjs search "芙宁娜"
 - 让 Codex 和 Claude Code 都使用同一份 `version: "2.0"` 认知记忆 JSON。
 - 让 Codex、Claude Code 和自定义运行时共用根目录 `furina_resource/`，避免在 skill 里维护知识库镜像。
 - 在需要补查外部原神资料时，通过本地 wiki 检索返回少量片段，而不是把整套 wiki 塞进上下文。
-- 提供 Angel Memory / Angel Heart 风格的基本能力：主动回忆、记忆写入、睡眠巩固、弱记忆衰减、交互状态判断。
+- 提供 Angel Memory / Angel Heart 风格的基本能力：主动回忆、克制的主动投喂、记忆写入、睡眠巩固、弱记忆衰减、交互状态判断。
 - 避免每次对话都把完整记忆塞进上下文，只注入与当前话题相关的 3-5 条。
 
 ## 默认路径
@@ -73,7 +73,7 @@ node scripts/furina-memory.mjs compress
 ## 推荐流程
 
 1. 对话开始前：`inject --query "<用户消息>"`，把输出的 `[认知存档]` 放进上下文。
-2. 回复前：`heart --text "<用户消息>"` 判断是否需要主动回应、召回或保存。
+2. 回复前：`heart --text "<用户消息>"` 判断是否需要主动回应、召回或保存；高亲密度轻松场景可能返回 `recall_mode: "proactive"`，表示可顺带提 1 条旧记忆。
 3. 回复后：如果模型输出了 `[📌 记忆: ...]`，用 `remember --text "<完整回复>"` 保存。
 4. 会话结束后：用 `reflection.md` 生成 JSON，再 `remember --reflection reflection.json` 合并。
 5. 记忆变多时：`compress` 执行睡眠巩固。
@@ -92,7 +92,7 @@ node scripts/furina-memory.mjs inject --query "用户本轮消息"
 node scripts/furina-memory.mjs remember --reflection reflection.json
 ```
 
-这样 Codex 与 Claude Code 会共享同一套记忆文件和压缩规则。
+这样 Codex 与 Claude Code 会共享同一套记忆文件和压缩规则。运行时会把旧版整数 `soul_state` 规范化为字符串，并把 `type=boundary` 默认视为高优先级记忆。
 
 ## 外部 Wiki 查询
 

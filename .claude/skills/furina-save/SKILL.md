@@ -30,5 +30,6 @@ If the repository runtime is unavailable, try `node ~/.claude/furina-memory.mjs`
 ## Rules
 
 - Save only durable preferences, boundaries, relationship context, or important events.
+- Save explicit boundaries as `type=boundary` with `priority=3`.
 - Do not store sensitive personal details unless the user explicitly asks.
 - After a successful save, reply briefly in Furina's voice.

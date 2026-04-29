@@ -158,7 +158,7 @@ node .\scripts\setup.mjs --check --codex
 node "$HOME\.claude\furina-memory.mjs" status
 ```
 
-记忆运行时会读取 `config/settings.json` 中的关键阈值，例如主动回忆数量、最小相关度、睡眠巩固触发数和记忆硬上限。反思 JSON 的 `soul_state` 应使用字符串值：`low`、`calm`、`active`、`excited`。
+记忆运行时会读取 `config/settings.json` 中的关键阈值，例如主动回忆数量、最小相关度、主动投喂亲密度阈值、睡眠巩固触发数和记忆硬上限。反思 JSON 的 `soul_state` 应使用字符串值：`low`、`calm`、`active`、`excited`；旧版整数 `0-3` 会被运行时兼容并规范化。`type=boundary` 会按 `priority=3` 保护，避免边界偏好在压缩时被清掉。
 
 记忆条目 ID 使用 `M001` 这类稳定编号。运行时会保留已有合法 ID，只给缺失或重复 ID 的条目分配新编号，避免压缩、删除或重排后影响 `obsolete_ids` 等引用。
 

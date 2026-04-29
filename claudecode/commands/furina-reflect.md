@@ -52,7 +52,7 @@ node <runtime> remember --reflection <reflection.json>
 | 字段 | 类型 | 说明 |
 |------|------|------|
 | `intimacy_delta` | int, -2 ~ +2 | 亲密度变化：+正数=更亲近，-负数=有摩擦，0=无明显变化 |
-| `soul_state` | string | 本轮芙宁娜情绪：`low` / `calm` / `active` / `excited` |
+| `soul_state` | string | 本轮芙宁娜情绪：`low` / `calm` / `active` / `excited`；不要主动输出旧版整数 |
 | `interaction_state` | string | 下轮默认交互状态：`not_present` / `summoned` / `getting_familiar` / `observation` |
 | `soul_energy_delta` | object | 4 个能量槽的变化，范围 -20 ~ +20 |
 | `recall_hints` | array | 下轮可用于主动回忆的关键词，最多 5 个 |
@@ -74,6 +74,8 @@ node <runtime> remember --reflection <reflection.json>
 | `confidence` | 0-1，用户明说高，推断低 |
 | `tags` | 检索标签，最多 5 个 |
 
+`type=boundary` 必须使用 `priority=3`。用户明确说“不喜欢”“不要”“别再”“不要催”等边界时，优先记录边界本身。
+
 ---
 
 ## 生成规则
@@ -87,6 +89,7 @@ node <runtime> remember --reflection <reflection.json>
 5. **修正旧记忆**：发现旧记忆有误或过时时，填入 `obsolete_ids` 并给出正确版本。
 6. **隐私克制**：医疗、财务、身份敏感信息只有在用户明确要求“记住”时才保存。
 7. **低成本判断**：如果没有值得保存的信息，输出空数组，不要为了保存而保存。
+8. **灵魂状态类型**：`soul_state` 输出字符串；旧版整数只作为运行时兼容输入。
 
 ### 禁止
 

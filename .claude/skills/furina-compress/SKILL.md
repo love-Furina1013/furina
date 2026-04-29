@@ -23,6 +23,7 @@ If no runtime is available, read `~/.claude/furina-memory.json` and apply `src/m
 Compression priorities:
 
 - Preserve high-priority memories.
+- Treat `type=boundary` as high priority even if the stored `priority` is lower.
 - Merge duplicates and near-duplicates.
 - Remove low-value one-off details.
 - Keep wording concise and stable.

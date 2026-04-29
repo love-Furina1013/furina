@@ -68,7 +68,7 @@ node scripts/setup.mjs --claude --project-claude
 /furina 你好，芙宁娜。
 ```
 
-芙宁娜会自动读取 `~/.claude/furina-memory.json`，并以对应的亲密度、灵魂状态和交互状态与你互动。初次使用（文件不存在）时，以陌生人（亲密度 0）的态度接待你。
+芙宁娜会自动读取 `~/.claude/furina-memory.json`，并以对应的亲密度、灵魂状态和交互状态与你互动。初次使用（文件不存在）时，以陌生人（亲密度 0）的态度接待你。高亲密度且气氛轻松时，运行时可能允许一次克制的主动回忆，让旧记忆以“顺带一提”的方式出现。
 
 ---
 
@@ -177,6 +177,8 @@ node scripts/setup.mjs --claude --project-claude
 | `reflection_queue` | 后续学习或跟进主题 |
 | `sleep` | 睡眠巩固状态 |
 
+反思输出应使用字符串 `soul_state`；运行时兼容旧版整数 `0-3` 并会规范化。`type=boundary` 记忆默认按 `priority=3` 保护，压缩时不可删除。
+
 ---
 
 ## 功能清单
@@ -190,6 +192,7 @@ node scripts/setup.mjs --claude --project-claude
 | **自动读取本地记忆文件** | ✅ |
 | **对话结束/用户要求时自动写回** | ✅ |
 | **主动回忆 + 分寸控制** | ✅ |
+| **主动投喂旧记忆（高亲密度、低频）** | ✅ |
 | **灵魂能量（回忆深度/表达欲/创造力）** | ✅ |
 | **睡眠巩固与弱记忆衰减** | ✅ |
 | **共享记忆运行时（Codex / Claude Code 共用）** | ✅ |
@@ -205,7 +208,7 @@ node scripts/setup.mjs --claude --project-claude
 Claude Code 入口与 `src/`、`furina_resource/`、`scripts/` 共用同一套角色资料、规则和记忆运行时：
 
 - **主命令 `furina.md`**：融合了 `src/prompt/system.md`、`src/rules/ooc_rules.md`、`src/memory/memory_format.md` 以及 `furina_resource/` 中的关键知识库；包含自动认知记忆读写机制
-- **轻量运行提示 `src/prompt/runtime_lite.md`**：供 Codex Skill 普通角色扮演优先读取，减少不必要的完整系统提示加载
+- **轻量运行提示 `src/prompt/runtime_lite.md`**：供 Codex Skill 普通角色扮演优先读取，包含崩坏梯度、信号触发表和灵魂状态转换规则
 - **共享记忆运行时 `scripts/furina-memory.mjs`**：提供 `init`、`heart`、`inject`、`remember`、`recall`、`compress`，让 Codex 与 Claude Code 使用一致的记忆体验
 - **保存命令 `furina-save.md`**：用于显式保存用户要求保留的长期记忆
 - **反思命令 `furina-reflect.md`**：对应 `src/prompt/reflection.md`，保留为高级用法

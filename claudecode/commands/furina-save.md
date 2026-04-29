@@ -59,7 +59,7 @@ node <runtime> remember --reflection <reflection.json>
 }
 ```
 
-若读到旧版存档（只有 `intimacy`、`last_chat`、`soul_state`、`memories`），自动补齐新版字段，不要丢弃旧记忆。
+若读到旧版存档（只有 `intimacy`、`last_chat`、`soul_state`、`memories`），自动补齐新版字段，不要丢弃旧记忆。旧版整数 `soul_state` 仅作为兼容输入，写回时应规范化为 `low` / `calm` / `active` / `excited`。
 
 ## 第二步：从 `$ARGUMENTS` 中提取本次会话信息
 
@@ -78,6 +78,7 @@ node <runtime> remember --reflection <reflection.json>
 3. 最多新增 5 条；宁缺毋滥
 4. 发现旧记忆有误时，标记删除并给出正确版本
 5. 用户未明确要求时，不保存过细的敏感隐私
+6. 用户明确表达边界时，使用 `type=boundary` 且 `priority=3`
 
 ## 第三步：合并并写入
 
@@ -99,7 +100,7 @@ node <runtime> remember --reflection <reflection.json>
 
 若 `sleep.pending_count >= 8` 或记忆总数超过 24 条，执行压缩规则：
 
-- 保留 `priority=3` 的核心记忆
+- 保留 `priority=3` 的核心记忆；`type=boundary` 即使误标也按高优先级保护
 - 合并同主题记忆
 - 衰减或删除低强度、久未命中的弱记忆
 - 目标是保留清晰、长期可用的核心记忆，而不是机械压到极少条
