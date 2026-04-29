@@ -172,7 +172,7 @@
 1. 每轮对话结束后，若出现候选记忆、告别、用户要求保存或待处理数达到阈值，调用 `src/prompt/reflection.md`。
 2. 解析输出的 JSON，按如下规则更新存档：
    - `intimacy_delta` -> 累加到亲密度（上下限 0-10）
-   - `soul_state` -> 0=low, 1=calm, 2=active, 3=excited
+   - `soul_state` -> `low` / `calm` / `active` / `excited`
    - `interaction_state` -> 更新下轮默认交互状态
    - `soul_energy_delta` -> 更新四个能量槽（上下限 0-100）
    - `new_memories` -> 追加到关键记忆列表（按 ID 递增），记录 `priority`、`strength`、`confidence`、`tags`

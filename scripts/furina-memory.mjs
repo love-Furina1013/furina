@@ -2,9 +2,20 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SOUL_STATES = new Set(["low", "calm", "active", "excited"]);
 const INTERACTION_STATES = new Set(["not_present", "summoned", "getting_familiar", "observation"]);
+const SETTINGS = loadSettings();
+const MEMORY_SETTINGS = SETTINGS.memory || {};
+const ACTIVE_RECALL_SETTINGS = MEMORY_SETTINGS.active_recall || {};
+const SLEEP_SETTINGS = MEMORY_SETTINGS.sleep_consolidation || {};
+const MAX_MEMORIES = numberSetting(SLEEP_SETTINGS.hard_max_memories, numberSetting(MEMORY_SETTINGS.max_memories, 24));
+const MAX_NOTES = numberSetting(MEMORY_SETTINGS.max_notes, 12);
+const DEFAULT_RECALL_TOP_K = numberSetting(ACTIVE_RECALL_SETTINGS.top_k, 5);
+const DEFAULT_MIN_RELEVANCE = numberSetting(ACTIVE_RECALL_SETTINGS.min_relevance, 0.35);
+const CONSOLIDATION_TRIGGER = numberSetting(SLEEP_SETTINGS.trigger_pending_count, 8);
 
 const DEFAULT_STORE = {
   version: "2.0",
@@ -54,6 +65,20 @@ function defaultPath() {
   return path.join(os.homedir(), ".claude", "furina-memory.json");
 }
 
+function numberSetting(value, fallback) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function loadSettings() {
+  const settingsPath = path.join(ROOT, "config", "settings.json");
+  try {
+    return JSON.parse(fs.readFileSync(settingsPath, "utf8"));
+  } catch {
+    return {};
+  }
+}
+
 function parseArgs(argv) {
   const args = { _: [] };
   for (let i = 0; i < argv.length; i += 1) {
@@ -97,7 +122,7 @@ function normalizeStore(input = {}) {
   store.profile = { ...DEFAULT_STORE.profile, ...(store.profile || {}) };
   store.profile.boundaries = uniqueStrings(store.profile.boundaries || []);
   store.profile.style_preferences = uniqueStrings(store.profile.style_preferences || []);
-  store.memories = Array.isArray(store.memories) ? store.memories.map(normalizeMemory).filter(Boolean) : [];
+  store.memories = Array.isArray(store.memories) ? normalizeMemories(store.memories) : [];
   store.notes = Array.isArray(store.notes) ? store.notes.map(normalizeNote).filter(Boolean) : [];
   store.reflection_queue = uniqueStrings(store.reflection_queue || []);
   store.sleep = { ...DEFAULT_STORE.sleep, ...(store.sleep || {}) };
@@ -106,12 +131,32 @@ function normalizeStore(input = {}) {
   return store;
 }
 
-function normalizeMemory(memory, index = 0) {
+function normalizeMemories(memories) {
+  const used = new Set();
+  let maxId = memories.reduce((max, memory) => Math.max(max, memoryIdNumber(memory?.id)), 0);
+  const normalized = [];
+
+  for (const raw of memories) {
+    const memory = normalizeMemory(raw);
+    if (!memory) continue;
+    if (!memory.id || used.has(memory.id)) {
+      do {
+        maxId += 1;
+        memory.id = formatMemoryId(maxId);
+      } while (used.has(memory.id));
+    }
+    used.add(memory.id);
+    normalized.push(memory);
+  }
+  return normalized;
+}
+
+function normalizeMemory(memory) {
   if (!memory || typeof memory !== "object") return null;
   const content = cleanContent(memory.content || "");
   if (!content) return null;
   const type = ["user", "event", "emotion", "boundary", "preference"].includes(memory.type) ? memory.type : inferType(content);
-  const id = /^M\d{3,}$/.test(memory.id || "") ? memory.id : `M${String(index + 1).padStart(3, "0")}`;
+  const id = /^M\d{3,}$/.test(memory.id || "") ? memory.id : "";
   return {
     id,
     type,
@@ -123,6 +168,15 @@ function normalizeMemory(memory, index = 0) {
     created_at: typeof memory.created_at === "string" ? memory.created_at : today(),
     last_accessed: typeof memory.last_accessed === "string" ? memory.last_accessed : ""
   };
+}
+
+function memoryIdNumber(id) {
+  const match = /^M(\d+)$/.exec(String(id || ""));
+  return match ? Number(match[1]) : 0;
+}
+
+function formatMemoryId(value) {
+  return `M${String(value).padStart(3, "0")}`;
 }
 
 function normalizeNote(note, index = 0) {
@@ -200,11 +254,8 @@ function saveStore(filePath, store) {
 }
 
 function nextMemoryId(store) {
-  const max = store.memories.reduce((n, item) => {
-    const match = /^M(\d+)$/.exec(item.id || "");
-    return match ? Math.max(n, Number(match[1])) : n;
-  }, 0);
-  return `M${String(max + 1).padStart(3, "0")}`;
+  const max = store.memories.reduce((n, item) => Math.max(n, memoryIdNumber(item.id)), 0);
+  return formatMemoryId(max + 1);
 }
 
 function tokenSet(text) {
@@ -235,8 +286,8 @@ function isCasualGreeting(query) {
 }
 
 function recall(store, query, options = {}) {
-  const topK = Number(options.topK || options["top-k"] || 5);
-  const minRelevance = Number(options.minRelevance || options["min-relevance"] || 0.35);
+  const topK = Number(options.topK || options["top-k"] || DEFAULT_RECALL_TOP_K);
+  const minRelevance = Number(options.minRelevance || options["min-relevance"] || DEFAULT_MIN_RELEVANCE);
   if (options.avoidCasualGreeting !== false && isCasualGreeting(query)) return [];
   const scored = store.memories.map((memory) => {
     const relevance = overlapScore(query, memory);
@@ -316,7 +367,7 @@ function applyReflection(store, reflection) {
   store.reflection_queue = uniqueStrings([...(store.reflection_queue || []), ...(reflection.research_queue || [])]);
   store.sleep.pending_count = clamp((store.sleep.pending_count || 0) + (reflection.new_memories || []).length + obsolete.size, 0, 9999);
   updateProfileFromMemories(store);
-  if (reflection.compression_needed || store.sleep.pending_count >= 8 || store.memories.length > 24) {
+  if (reflection.compression_needed || store.sleep.pending_count >= CONSOLIDATION_TRIGGER || store.memories.length > MAX_MEMORIES) {
     compressStore(store);
   }
   return store;
@@ -369,8 +420,8 @@ function compressStore(store) {
   const survivors = merged
     .filter((item) => !(item.priority === 1 && item.strength < 35 && item.last_accessed))
     .sort((a, b) => (b.priority - a.priority) || (b.strength - a.strength) || b.confidence - a.confidence);
-  store.memories = survivors.slice(0, 24).sort((a, b) => a.id.localeCompare(b.id));
-  store.notes = store.notes.slice(-12);
+  store.memories = survivors.slice(0, MAX_MEMORIES).sort((a, b) => a.id.localeCompare(b.id));
+  store.notes = store.notes.slice(-MAX_NOTES);
   store.sleep.pending_count = 0;
   store.sleep.last_consolidated = today();
   updateProfileFromMemories(store);

@@ -20,7 +20,7 @@
 ```json
 {
   "intimacy_delta": 0,
-  "soul_state": 1,
+  "soul_state": "calm",
   "interaction_state": "observation",
   "soul_energy_delta": {
     "recall_depth": 0,
@@ -51,7 +51,7 @@
 | 字段 | 类型 | 说明 |
 |------|------|------|
 | `intimacy_delta` | int, -2 ~ +2 | 亲密度变化：+正数=更亲近，-负数=有摩擦，0=无明显变化 |
-| `soul_state` | int, 0 ~ 3 | 本轮芙宁娜情绪：0=疲惫/低落, 1=平静, 2=活跃, 3=亢奋/欢乐 |
+| `soul_state` | string | 本轮芙宁娜情绪：`low` / `calm` / `active` / `excited` |
 | `interaction_state` | string | 下轮默认交互状态：`not_present` / `summoned` / `getting_familiar` / `observation` |
 | `soul_energy_delta` | object | 4 个能量槽的变化，范围 -20 ~ +20 |
 | `recall_hints` | array | 下轮可用于主动回忆的关键词，最多 5 个 |
@@ -123,7 +123,7 @@
 ```json
 {
   "intimacy_delta": 1,
-  "soul_state": 2,
+  "soul_state": "active",
   "interaction_state": "observation",
   "soul_energy_delta": {
     "recall_depth": 5,
