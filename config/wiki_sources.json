@@ -1,5 +1,6 @@
 {
-  "default_source": "bwiki-online",
+  "default_source": "genshin-story",
+  "fallback_source": "bwiki-online",
   "sources": [
     {
       "id": "bwiki-online",

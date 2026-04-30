@@ -44,13 +44,14 @@ Usage:
 Options:
   --root <dir>          Override the local wiki root for this run
   --source <id>         Source id, defaults to config/wiki_sources.json default_source
+  --no-fallback         Disable default-source fallback lookup
   --top <n>             Search result count, defaults to 5
   --max-chars <n>       Max characters returned by read, defaults to 4000
   --json                Emit machine-readable JSON
 
 Default:
-  Uses online 原神WIKI_BWIKI. Local GenshinStory is optional: pass --source genshin-story with
-  GENSHIN_STORY_ROOT set, or pass --root.
+  Uses local GenshinStory first. If the local cache is unavailable or returns too few search
+  results, it falls back to online 原神WIKI_BWIKI. Pass --source to force one source.
 `;
 }
 
@@ -170,9 +171,19 @@ function countOccurrences(text, term) {
   return count;
 }
 
-function getSource(args) {
-  const config = loadConfig();
-  const sourceId = String(args.source || config.default_source || "");
+function hasOwn(object, key) {
+  return Object.prototype.hasOwnProperty.call(object, key);
+}
+
+function explicitSource(args) {
+  return hasOwn(args, "source");
+}
+
+function fallbackEnabled(args) {
+  return !explicitSource(args) && !args["no-fallback"];
+}
+
+function getConfiguredSource(config, args, sourceId) {
   const source = (config.sources || []).find((item) => item.id === sourceId);
   if (!source) throw new Error(`Unknown wiki source: ${sourceId}`);
   if (source.enabled === false) throw new Error(`Wiki source is disabled: ${sourceId}`);
@@ -185,6 +196,19 @@ function getSource(args) {
   const root = configuredRoot ? path.resolve(expandHome(configuredRoot)) : "";
   const docsDir = root ? path.resolve(root, source.docs) : "";
   return { ...source, root, docsDir };
+}
+
+function getSource(args) {
+  const config = loadConfig();
+  return getConfiguredSource(config, args, String(args.source || config.default_source || ""));
+}
+
+function getFallbackSource(args, primarySource) {
+  if (!fallbackEnabled(args)) return null;
+  const config = loadConfig();
+  const fallbackId = String(config.fallback_source || "");
+  if (!fallbackId || fallbackId === primarySource.id) return null;
+  return getConfiguredSource(config, args, fallbackId);
 }
 
 function assertSourceReady(source) {
@@ -232,11 +256,10 @@ function makeSnippets(content, terms, maxSnippets = 3) {
   return snippets;
 }
 
-function search(args) {
+function search(args, source = getSource(args)) {
   const query = args._.join(" ").trim();
   if (!query) throw new Error("Missing search query.");
   const top = Math.max(1, Math.min(50, Number(args.top || 5)));
-  const source = getSource(args);
   assertSourceReady(source);
 
   const terms = queryTerms(query);
@@ -291,6 +314,44 @@ async function searchMediaWiki(source, args) {
   }));
 }
 
+async function searchSource(source, args) {
+  return source.type === "mediawiki_api" ? await searchMediaWiki(source, args) : search(args, source);
+}
+
+async function searchWithFallback(args) {
+  const top = Math.max(1, Math.min(50, Number(args.top || 5)));
+  const source = getSource(args);
+  let results = [];
+  let localFailed = false;
+
+  try {
+    results = await searchSource(source, args);
+  } catch (error) {
+    if (!fallbackEnabled(args)) throw error;
+    localFailed = source.type !== "mediawiki_api";
+    if (!localFailed) throw error;
+  }
+
+  if (results.length >= top || !fallbackEnabled(args)) return results.slice(0, top);
+
+  const fallbackSource = getFallbackSource(args, source);
+  if (!fallbackSource) return results.slice(0, top);
+
+  const fallbackTop = Math.max(1, top - results.length);
+  const fallbackResults = await searchSource(fallbackSource, { ...args, top: fallbackTop });
+  const seen = new Set(results.map((item) => `${item.source}:${item.path}`));
+  for (const item of fallbackResults) {
+    const key = `${item.source}:${item.path}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      results.push(item);
+    }
+    if (results.length >= top) break;
+  }
+
+  return results.slice(0, top);
+}
+
 function parseLineRanges(spec, totalLines) {
   if (!spec) return null;
   const selected = new Set();
@@ -335,6 +396,35 @@ function readDoc(args) {
     truncated,
     content
   };
+}
+
+function looksLikeMarkdownPath(value) {
+  return /\.md$/i.test(value) || /[\\/]/.test(value);
+}
+
+async function readWithFallback(args) {
+  const requested = args._.join(" ").trim();
+  if (!requested) throw new Error("Missing document path.");
+  const source = getSource(args);
+
+  if (source.type === "mediawiki_api") return readMediaWiki(source, args);
+
+  try {
+    if (looksLikeMarkdownPath(requested) || requested.startsWith(`${source.id}:`)) {
+      return readDoc(args);
+    }
+
+    const localMatches = search({ ...args, _: [requested], top: 1 }, source);
+    if (localMatches.length > 0) {
+      return readDoc({ ...args, _: [localMatches[0].path] });
+    }
+    return readDoc(args);
+  } catch (error) {
+    if (!fallbackEnabled(args)) throw error;
+    const fallbackSource = getFallbackSource(args, source);
+    if (!fallbackSource) throw error;
+    return readMediaWiki(fallbackSource, args);
+  }
 }
 
 async function readMediaWiki(source, args) {
@@ -441,12 +531,10 @@ async function main() {
   } else if (command === "sources") {
     console.log(JSON.stringify({ sources: listSources(args) }, null, 2));
   } else if (command === "search") {
-    const source = getSource(args);
-    const results = source.type === "mediawiki_api" ? await searchMediaWiki(source, args) : search(args);
+    const results = await searchWithFallback(args);
     printSearch(results, Boolean(args.json));
   } else if (command === "read") {
-    const source = getSource(args);
-    const result = source.type === "mediawiki_api" ? await readMediaWiki(source, args) : readDoc(args);
+    const result = await readWithFallback(args);
     if (args.json) {
       console.log(JSON.stringify(result, null, 2));
     } else {
@@ -456,15 +544,12 @@ async function main() {
       console.log(result.content);
     }
   } else if (command === "brief") {
-    const source = getSource(args);
-    const results = source.type === "mediawiki_api"
-      ? await searchMediaWiki(source, { ...args, top: args.top || 3 })
-      : search({ ...args, top: args.top || 3 });
+    const results = await searchWithFallback({ ...args, top: args.top || 3 });
     const enriched = [];
     for (const item of results.slice(0, Number(args.top || 3))) {
-      if (source.type === "mediawiki_api") {
+      if (item.source === "bwiki-online") {
         try {
-          const doc = await readMediaWiki(source, { ...args, _: [item.title], "max-chars": 600 });
+          const doc = await readMediaWiki(getSource({ source: item.source }), { ...args, _: [item.title], "max-chars": 600 });
           enriched.push({
             ...item,
             snippets: doc.content

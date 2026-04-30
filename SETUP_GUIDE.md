@@ -37,20 +37,20 @@ node .\scripts\setup.mjs
 
 `furina_resource/` 不会被复制进 Codex Skill；它保留在仓库根目录，Claude Code、Codex 和其他运行时共用这一份资料。Codex Skill 只保存一个很小的路径上下文文件，用来找到这份共享资料库。
 
-外部原神 wiki 默认走在线 BWIKI，无需额外配置：
+外部原神 wiki 默认先走本仓库 `vendor/GenshinStory` 本地缓存；本地结果不足时，再自动回退到在线 BWIKI：
 
 ```powershell
 node .\scripts\furina-wiki.mjs sources
 node .\scripts\furina-wiki.mjs search "芙宁娜"
 ```
 
-如果想用本地 GenshinStory 作为缓存，本仓库已默认指向 `vendor/GenshinStory`：
+如果想固定只用本地 GenshinStory，可显式指定来源：
 
 ```powershell
 node .\scripts\furina-wiki.mjs search "芙宁娜" --source genshin-story
 ```
 
-如果要改用其他 GenshinStory 路径，再设置 `GENSHIN_STORY_ROOT` 或传入 `--root` 覆盖默认路径。没有使用本地 GenshinStory 缓存时，本 skill 仍会正常使用仓库根目录的 `furina_resource/`；外部 wiki 默认在线 BWIKI 只作为补查来源。
+如果要固定只用在线 BWIKI，可传入 `--source bwiki-online`。如果要改用其他 GenshinStory 路径，再设置 `GENSHIN_STORY_ROOT` 或传入 `--root` 覆盖默认路径。没有使用外部 wiki 时，本 skill 仍会正常使用仓库根目录的 `furina_resource/`；外部 wiki 只作为补查来源。
 
 ## 3. 检查
 

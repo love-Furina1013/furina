@@ -2,7 +2,7 @@
 
 `furina-memory.mjs` 是 Codex Skill 与 Claude Code 共享的轻量本地记忆运行时，用纯 Node.js 标准库实现，不需要安装依赖。
 
-`furina-wiki.mjs` 是外部原神 wiki 查询工具，默认查询在线原神 BWIKI；本地 GenshinStory 可作为可选缓存，用于补查 `furina_resource/` 未覆盖的剧情、任务、语音和角色逸闻。
+`furina-wiki.mjs` 是外部原神 wiki 查询工具，默认先查本仓库 `vendor/GenshinStory` 本地缓存；本地结果不足时，再自动回退到在线原神 BWIKI，用于补查 `furina_resource/` 未覆盖的剧情、任务、语音和角色逸闻。
 
 `furina-eval.mjs` 是语气验收辅助脚本，用于解析 `eval/furina_voice_cases.md` 并生成稳定的人工评测提示；它不会调用模型或访问外部服务。
 
@@ -105,10 +105,10 @@ node scripts/furina-wiki.mjs brief "芙宁娜 传说任务"
 node scripts/furina-wiki.mjs read "芙宁娜" --line-range 1-80
 ```
 
-可选本地缓存：
+固定使用本地缓存：
 
 ```powershell
 node scripts/furina-wiki.mjs search "芙宁娜" --source genshin-story
 ```
 
-本仓库默认指向 `vendor/GenshinStory`；如果要改用其他 GenshinStory 路径，再设置 `GENSHIN_STORY_ROOT` 或传入 `--root` 覆盖。
+本仓库默认指向 `vendor/GenshinStory`；如果要固定使用在线 BWIKI，可传入 `--source bwiki-online`。如果要改用其他 GenshinStory 路径，再设置 `GENSHIN_STORY_ROOT` 或传入 `--root` 覆盖。

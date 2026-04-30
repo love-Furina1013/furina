@@ -71,7 +71,7 @@
     "1.5.0": "新增 Node.js 共享记忆运行时 scripts/furina-memory.mjs，为 Codex 与 Claude Code 提供一致的本地记忆初始化、心跳判断、主动召回、记忆合并和睡眠巩固流程。",
     "1.6.0": "新增一键安装器 scripts/setup.mjs，简化 Claude Code、Codex Skill、全局记忆运行时和初始记忆文件的安装与检查流程。",
     "1.7.0": "移除 Codex Skill 内置 furina_resource 镜像，改为所有平台共用仓库根目录资料库；补充 Claude Code 命令 frontmatter 与项目级 CLAUDE.md。",
-    "1.8.0": "新增 scripts/furina-wiki.mjs 与 config/wiki_sources.json，默认查询在线原神 BWIKI，也可按需使用本地 GenshinStory Markdown 缓存。",
+    "1.8.0": "新增 scripts/furina-wiki.mjs 与 config/wiki_sources.json，支持本地 GenshinStory Markdown 缓存与在线原神 BWIKI 查询。",
     "1.9.0": "新增 .claude/skills 原生 Claude Code project skills；旧式 claudecode/commands 改为显式 --legacy-commands 兼容入口。"
   }
 }

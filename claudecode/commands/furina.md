@@ -111,7 +111,7 @@ node scripts/furina-wiki.mjs search "$ARGUMENTS" --top 3
 node scripts/furina-wiki.mjs read "<source:path>" --line-range 1-80
 ```
 
-默认查询在线原神 BWIKI；如果用户配置了本地 GenshinStory，也可作为缓存来源。只读取少量片段；外部 wiki 结果作为参考资料，不写入长期记忆，除非用户明确要求保存。
+默认先查询本地 GenshinStory 缓存；本地结果不足时自动回退在线原神 BWIKI。需要固定来源时可显式传入 `--source genshin-story` 或 `--source bwiki-online`。只读取少量片段；外部 wiki 结果作为参考资料，不写入长期记忆，除非用户明确要求保存。
 
 ### 核心剧情（魔神任务第四章）
 - **第一～四幕**：以"水神"高调形象参与林尼案、公子案等审判，表面强撑，实际内心越来越不安
