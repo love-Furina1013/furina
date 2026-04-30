@@ -1,6 +1,6 @@
 {
   "id": "furina-de-fontaine-roleplay",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "name": "芙宁娜 · 角色扮演 Skill",
   "name_en": "Furina de Fontaine Roleplay Skill",
   "description": "面向 Claude Code、Codex Skill 与自定义 AI 运行时的芙宁娜（Furina de Fontaine）角色扮演资源包，包含角色系统提示词、结构化知识库、OOC 行为规则、认知记忆机制与会话反思流程，用于构建人设稳定、语气一致、具备长期互动连续感的芙宁娜体验。",
@@ -43,6 +43,8 @@
     "interaction-state-machine",
     "shared-memory-runtime",
     "shared-resource-source",
+    "local-wiki-cache",
+    "online-wiki-fallback",
     "voice-eval-helper",
     "external-wiki-lookup",
     "claude-code-skills",
@@ -52,7 +54,7 @@
   ],
   "requirements": {
     "node": ">=18.0.0",
-    "network": "optional, only needed for online BWIKI lookup"
+    "network": "optional, only needed when local wiki results are insufficient or --source bwiki-online is used"
   },
   "claude_code": {
     "skills_dir": ".claude/skills",
@@ -72,6 +74,7 @@
     "1.6.0": "新增一键安装器 scripts/setup.mjs，简化 Claude Code、Codex Skill、全局记忆运行时和初始记忆文件的安装与检查流程。",
     "1.7.0": "移除 Codex Skill 内置 furina_resource 镜像，改为所有平台共用仓库根目录资料库；补充 Claude Code 命令 frontmatter 与项目级 CLAUDE.md。",
     "1.8.0": "新增 scripts/furina-wiki.mjs 与 config/wiki_sources.json，支持本地 GenshinStory Markdown 缓存与在线原神 BWIKI 查询。",
-    "1.9.0": "新增 .claude/skills 原生 Claude Code project skills；旧式 claudecode/commands 改为显式 --legacy-commands 兼容入口。"
+    "1.9.0": "新增 .claude/skills 原生 Claude Code project skills；旧式 claudecode/commands 改为显式 --legacy-commands 兼容入口。",
+    "1.10.0": "在 codex-local-genshinstory 分支中将外部 wiki 策略同步为本地 GenshinStory 缓存优先，本地不足时回退在线 BWIKI。"
   }
 }

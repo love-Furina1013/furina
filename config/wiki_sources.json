@@ -1,6 +1,8 @@
 {
+  "strategy": "local-first-with-online-fallback",
   "default_source": "genshin-story",
   "fallback_source": "bwiki-online",
+  "fallback_when": "Use bwiki-online only when the local GenshinStory cache is unavailable or returns fewer search results than requested.",
   "sources": [
     {
       "id": "bwiki-online",

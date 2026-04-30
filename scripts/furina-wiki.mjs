@@ -504,6 +504,16 @@ function listSources(args) {
   });
 }
 
+function sourceSummary(args) {
+  const config = loadConfig();
+  return {
+    default_source: config.default_source || null,
+    fallback_source: config.fallback_source || null,
+    strategy: config.strategy || "local-first-with-online-fallback",
+    sources: listSources(args)
+  };
+}
+
 function printSearch(results, json) {
   if (json) {
     console.log(JSON.stringify({ results }, null, 2));
@@ -529,7 +539,7 @@ async function main() {
   if (!command || command === "help" || args.help || args.h) {
     console.log(help());
   } else if (command === "sources") {
-    console.log(JSON.stringify({ sources: listSources(args) }, null, 2));
+    console.log(JSON.stringify(sourceSummary(args), null, 2));
   } else if (command === "search") {
     const results = await searchWithFallback(args);
     printSearch(results, Boolean(args.json));
