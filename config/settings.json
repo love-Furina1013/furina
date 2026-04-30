@@ -22,7 +22,9 @@
     "default_source": "genshin-story",
     "fallback_source": "bwiki-online",
     "local_cache_root": "vendor/GenshinStory",
+    "local_docs_dir": "vendor/GenshinStory/web/docs-site/public/domains/gi/docs",
     "index_cache": ".cache/furina-wiki",
+    "index_cache_gitignored": true,
     "max_explore_tasks": 5,
     "explore_timeout_ms": 600000,
     "network": "optional, only needed when local results are insufficient or --source bwiki-online is used"

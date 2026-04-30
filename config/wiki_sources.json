@@ -16,9 +16,11 @@
       "id": "genshin-story",
       "type": "local_markdown",
       "description": "Local clone of kawayiYokami/GenshinStory generated Genshin Impact Markdown docs.",
+      "cache_role": "primary-local-cache",
       "env": "GENSHIN_STORY_ROOT",
       "root": "vendor/GenshinStory",
       "docs": "web/docs-site/public/domains/gi/docs",
+      "generated_docs": "vendor/GenshinStory/web/docs-site/public/domains/gi/docs",
       "enabled": true
     }
   ]

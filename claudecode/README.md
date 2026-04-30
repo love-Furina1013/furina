@@ -121,7 +121,7 @@ node scripts/furina-wiki.mjs search "芙宁娜 传说任务" --top 3 --build-ind
 node scripts/furina-wiki.mjs read "芙宁娜" --line-range 1-80
 ```
 
-本分支默认先走 `vendor/GenshinStory` 本地缓存；本地不可用或结果不足时，再回退在线原神 BWIKI。`furina-wiki-index.mjs` 会生成 `.cache/furina-wiki/` 分片索引用于加速本地搜索。需要固定来源时，可传入 `--source genshin-story` 或 `--source bwiki-online`。
+本分支默认先走 `vendor/GenshinStory` 本地缓存，实际读取 `vendor/GenshinStory/web/docs-site/public/domains/gi/docs` 下的原神 Markdown；本地不可用或结果不足时，再回退在线原神 BWIKI。`furina-wiki-index.mjs` 会生成 `.cache/furina-wiki/` 分片索引用于加速本地搜索。需要固定来源时，可传入 `--source genshin-story` 或 `--source bwiki-online`。
 
 复杂问题可拆成最多 5 个子问题并行探索：
 

@@ -53,7 +53,7 @@ node .\scripts\furina-wiki.mjs search "芙宁娜" --source genshin-story
 
 如果要固定只用在线 BWIKI，可传入 `--source bwiki-online`。如果要改用其他 GenshinStory 路径，再设置 `GENSHIN_STORY_ROOT` 或传入 `--root` 覆盖默认路径。没有使用外部 wiki 时，本 skill 仍会正常使用仓库根目录的 `furina_resource/`；外部 wiki 只作为补查来源。
 
-分片索引会写入 `.cache/furina-wiki/`，用于加速本地搜索，不需要提交。复杂剧情或关系问题可用 `node .\scripts\furina-explore.mjs --task "子问题"` 拆成最多 5 路并行探索。
+本地资料本体在 `vendor/GenshinStory`，实际读取的原神 Markdown 位于 `vendor/GenshinStory/web/docs-site/public/domains/gi/docs`。分片索引会写入 `.cache/furina-wiki/`，用于加速本地搜索，不需要提交。复杂剧情或关系问题可用 `node .\scripts\furina-explore.mjs --task "子问题"` 拆成最多 5 路并行探索。
 
 ## 3. 检查
 

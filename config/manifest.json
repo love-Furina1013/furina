@@ -1,6 +1,6 @@
 {
   "id": "furina-de-fontaine-roleplay",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "name": "芙宁娜 · 角色扮演 Skill",
   "name_en": "Furina de Fontaine Roleplay Skill",
   "description": "面向 Claude Code、Codex Skill 与自定义 AI 运行时的芙宁娜（Furina de Fontaine）角色扮演资源包，包含角色系统提示词、结构化知识库、OOC 行为规则、认知记忆机制与会话反思流程，用于构建人设稳定、语气一致、具备长期互动连续感的芙宁娜体验。",
@@ -30,7 +30,10 @@
   },
   "config": {
     "settings": "config/settings.json",
-    "wiki_sources": "config/wiki_sources.json"
+    "wiki_sources": "config/wiki_sources.json",
+    "local_wiki_cache_root": "vendor/GenshinStory",
+    "local_wiki_docs": "vendor/GenshinStory/web/docs-site/public/domains/gi/docs",
+    "local_wiki_index_cache": ".cache/furina-wiki"
   },
   "capabilities": [
     "character-roleplay",
@@ -80,6 +83,7 @@
     "1.8.0": "新增 scripts/furina-wiki.mjs 与 config/wiki_sources.json，支持本地 GenshinStory Markdown 缓存与在线原神 BWIKI 查询。",
     "1.9.0": "新增 .claude/skills 原生 Claude Code project skills；旧式 claudecode/commands 改为显式 --legacy-commands 兼容入口。",
     "1.10.0": "在 codex-local-genshinstory 分支中将外部 wiki 策略同步为本地 GenshinStory 缓存优先，本地不足时回退在线 BWIKI。",
-    "1.11.0": "新增本地 GenshinStory 分片索引与最多 5 路并行探索运行时，支持更快文档检索、行号阅读和结构化证据回传。"
+    "1.11.0": "新增本地 GenshinStory 分片索引与最多 5 路并行探索运行时，支持更快文档检索、行号阅读和结构化证据回传。",
+    "1.12.0": "同步 README 与配置文件中的 GenshinStory 快照、原神 Markdown 文档和 Furina 分片索引缓存路径。"
   }
 }

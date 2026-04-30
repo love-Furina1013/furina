@@ -6,6 +6,8 @@
 
 `furina-wiki-index.mjs` 会为本地 GenshinStory Markdown 生成 `.cache/furina-wiki/` 分片索引；`furina-explore.mjs` 在索引和 wiki 读取能力之上提供最多 5 路并行探索。
 
+缓存路径约定：GenshinStory 快照在 `vendor/GenshinStory`，原神 Markdown 在 `vendor/GenshinStory/web/docs-site/public/domains/gi/docs`，Furina 自己生成的分片索引在 `.cache/furina-wiki/`。
+
 `furina-eval.mjs` 是语气验收辅助脚本，用于解析 `eval/furina_voice_cases.md` 并生成稳定的人工评测提示；它不会调用模型或访问外部服务。
 
 `setup.mjs` 是一键安装器，用来自动安装 Claude Code 原生 skills、Codex Skill、全局记忆运行时和初始记忆文件，并为 Codex 写入指向仓库 `furina_resource/` 的轻量路径上下文。旧式 Claude commands 只会在显式传入 `--legacy-commands` 时安装。
@@ -118,7 +120,7 @@ node scripts/furina-wiki.mjs read "芙宁娜" --line-range 1-80
 node scripts/furina-wiki.mjs search "芙宁娜" --source genshin-story
 ```
 
-本仓库默认指向 `vendor/GenshinStory`；如果要固定使用在线 BWIKI，可传入 `--source bwiki-online`。如果要改用其他 GenshinStory 路径，再设置 `GENSHIN_STORY_ROOT` 或传入 `--root` 覆盖。
+本仓库默认指向 `vendor/GenshinStory`，实际读取其 `web/docs-site/public/domains/gi/docs` 下的 Markdown；如果要固定使用在线 BWIKI，可传入 `--source bwiki-online`。如果要改用其他 GenshinStory 路径，再设置 `GENSHIN_STORY_ROOT` 或传入 `--root` 覆盖。
 
 并行探索：
 
