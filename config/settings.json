@@ -15,11 +15,16 @@
   },
   "wiki_lookup": {
     "runtime": "scripts/furina-wiki.mjs",
+    "index_runtime": "scripts/furina-wiki-index.mjs",
+    "explore_runtime": "scripts/furina-explore.mjs",
     "sources_config": "config/wiki_sources.json",
     "strategy": "local-first-with-online-fallback",
     "default_source": "genshin-story",
     "fallback_source": "bwiki-online",
     "local_cache_root": "vendor/GenshinStory",
+    "index_cache": ".cache/furina-wiki",
+    "max_explore_tasks": 5,
+    "explore_timeout_ms": 600000,
     "network": "optional, only needed when local results are insufficient or --source bwiki-online is used"
   },
   "memory": {

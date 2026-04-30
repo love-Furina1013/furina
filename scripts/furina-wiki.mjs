@@ -3,6 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { buildSearchIndex, loadSearchIndex, searchIndex } from "./furina-wiki-index.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const CONFIG_PATH = path.join(ROOT, "config", "wiki_sources.json");
@@ -45,6 +46,9 @@ Options:
   --root <dir>          Override the local wiki root for this run
   --source <id>         Source id, defaults to config/wiki_sources.json default_source
   --no-fallback         Disable default-source fallback lookup
+  --build-index         Build a missing or stale local index before searching
+  --no-index            Disable local index lookup and scan Markdown files directly
+  --allow-stale-index   Permit a stale local index for this run
   --top <n>             Search result count, defaults to 5
   --max-chars <n>       Max characters returned by read, defaults to 4000
   --json                Emit machine-readable JSON
@@ -263,6 +267,9 @@ function search(args, source = getSource(args)) {
   assertSourceReady(source);
 
   const terms = queryTerms(query);
+  const indexedResults = searchLocalIndex(args, source, query, terms, top);
+  if (indexedResults) return indexedResults;
+
   const results = [];
   for (const filePath of walkMarkdown(source.docsDir)) {
     const relative = safeRelative(source.docsDir, filePath);
@@ -291,6 +298,25 @@ function search(args, source = getSource(args)) {
 
   results.sort((a, b) => b.score - a.score || a.path.localeCompare(b.path, "zh-Hans-CN"));
   return results.slice(0, top);
+}
+
+function searchLocalIndex(args, source, query, terms, top) {
+  if (args["no-index"]) return null;
+  let index = loadSearchIndex(source, { allowStale: Boolean(args["allow-stale-index"]) });
+  if (!index && args["build-index"]) {
+    index = buildSearchIndex(source, args).index;
+  }
+  if (!index) return null;
+
+  return searchIndex(index, query, { top }).map((item) => {
+    const filePath = path.join(source.docsDir, item.path);
+    let snippets = [];
+    if (fs.existsSync(filePath)) {
+      const raw = fs.readFileSync(filePath, "utf8");
+      snippets = makeSnippets(raw, terms);
+    }
+    return { ...item, source: source.id, snippets };
+  });
 }
 
 async function searchMediaWiki(source, args) {

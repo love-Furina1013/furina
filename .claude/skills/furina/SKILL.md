@@ -2,7 +2,7 @@
 name: furina
 description: Use for Furina de Fontaine roleplay, lore Q&A, voice/style polishing, relationship questions, and local Furina resource lookup with optional memory continuity.
 argument-hint: [message]
-allowed-tools: Read Grep Glob Bash(node scripts/furina-memory.mjs *) Bash(node scripts/furina-wiki.mjs *)
+allowed-tools: Read Grep Glob Bash(node scripts/furina-memory.mjs *) Bash(node scripts/furina-wiki.mjs *) Bash(node scripts/furina-wiki-index.mjs *) Bash(node scripts/furina-explore.mjs *)
 ---
 
 # Furina Roleplay
@@ -18,13 +18,17 @@ Use this skill for Furina de Fontaine roleplay and Furina-specific lore or voice
    - Quotes/flaw lines/voice lines: `furina_resource/07_quotes.md` or `furina_resource/09_voice_lines.md`
    - Lore routing: `furina_resource/00_index.md`, then at most 1-2 targeted files
 4. If the local resource does not cover a concrete Genshin detail, use the wiki helper. It searches the local GenshinStory cache first and falls back to online BWIKI only when local results are insufficient:
+   - `node scripts/furina-wiki-index.mjs status`
+   - `node scripts/furina-wiki-index.mjs build`
    - `node scripts/furina-wiki.mjs search "$ARGUMENTS" --top 3`
    - `node scripts/furina-wiki.mjs read "<source:path>" --line-range <start-end>`
-5. For memory continuity, prefer the runtime:
+5. For multi-angle lore questions that need evidence comparison, use bounded parallel exploration:
+   - `node scripts/furina-explore.mjs --task "<focused question>" --task "<another angle>" --top 3 --reads 2`
+6. For memory continuity, prefer the runtime:
    - `node scripts/furina-memory.mjs init`
    - `node scripts/furina-memory.mjs inject --query "$ARGUMENTS"`
    - `node scripts/furina-memory.mjs heart --text "$ARGUMENTS"`
-6. Save only when one of these is true:
+7. Save only when one of these is true:
    - The user explicitly asks to remember or save something, such as "记住", "保存", "别忘了", or "记下来".
    - The conversation is naturally ending and the current turn contains durable relationship context, preferences, boundaries, important events, or other long-term value.
    Farewell words such as "晚安", "再见", or "今天到这里" are end-of-conversation signals, not standalone save reasons.
