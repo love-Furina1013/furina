@@ -12,6 +12,7 @@
 
 import asyncio
 import json
+import sys
 from pathlib import Path
 
 # 使用相对导入，因为此脚本旨在作为模块运行。
@@ -123,7 +124,9 @@ async def run_all_parsers_incremental():
             skipped_entries = 0
 
             # --- 6. 定义要处理的ID列表 ---
-            allowed_ids = {5, 6, 13, 20, 21, 25, 43, 49, 54, 55, 68, 211, 218, 227, 251, 255, 261}
+            default_allowed_ids = {5, 6, 13, 20, 21, 25, 43, 49, 54, 55, 68, 211, 218, 227, 251, 255, 261}
+            requested_ids = {int(arg) for arg in sys.argv[1:] if arg.isdigit()}
+            allowed_ids = requested_ids or default_allowed_ids
 
             # --- 7. 处理每个链接文件 ---
             for link_file_path in link_files:

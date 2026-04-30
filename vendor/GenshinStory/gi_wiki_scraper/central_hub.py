@@ -5,6 +5,7 @@
 
 import asyncio
 import importlib
+import os
 from pathlib import Path
 from typing import Dict, Type, Any
 
@@ -16,6 +17,18 @@ from .preprocessor import preprocess_html
 
 # 定义相对于此文件的 parsers 目录路径。
 PARSERS_DIR = Path(__file__).parent / "parsers"
+SAVE_DEBUG_HTML = os.environ.get("GENSHINSTORY_SAVE_DEBUG_HTML") == "1"
+
+
+def save_debug_html(entry_id: str, suffix: str, content: str) -> None:
+    if not SAVE_DEBUG_HTML:
+        return
+    debug_dir = Path(__file__).parent / "output" / "debug"
+    debug_dir.mkdir(exist_ok=True)
+    debug_file_path = debug_dir / f"{entry_id}_{suffix}.html"
+    with open(debug_file_path, "w", encoding="utf-8") as f:
+        f.write(content)
+    print(f"调试用 HTML 已保存至: {debug_file_path}")
 
 
 class WikiPageCoordinator:
@@ -180,14 +193,8 @@ class WikiPageCoordinator:
                 cleaned_soup = preprocess_html(html_content)
 
                 if cleaned_soup:
-                    # 保存清理后的 HTML 用于调试
-                    debug_dir = Path(__file__).parent / "output" / "debug"
-                    debug_dir.mkdir(exist_ok=True)
                     entry_id = url.split('/')[-2] if '/' in url else "unknown_id"
-                    debug_file_path = debug_dir / f"{entry_id}_preprocessed.html"
-                    with open(debug_file_path, "w", encoding="utf-8") as f:
-                        f.write(cleaned_soup.prettify())
-                    print(f"调试用（预处理后）的 HTML 已保存至: {debug_file_path}")
+                    save_debug_html(entry_id, "preprocessed", cleaned_soup.prettify())
 
                     # 将清理后的 HTML 传递给解析器
                     parser_instance = parser_class()
@@ -203,13 +210,8 @@ class WikiPageCoordinator:
                     json_data = {"error": "在页面中未能找到主要内容。"}
                     
                     # --- 当预处理失败时，保存原始 HTML 用于调试 ---
-                    debug_dir = Path(__file__).parent / "output" / "debug"
-                    debug_dir.mkdir(exist_ok=True)
                     entry_id = url.split('/')[-2] if '/' in url else "unknown_id"
-                    debug_file_path = debug_dir / f"{entry_id}_raw.html"
-                    with open(debug_file_path, "w", encoding="utf-8") as f:
-                        f.write(html_content)
-                    print(f"已保存原始 HTML 以供检查: {debug_file_path}")
+                    save_debug_html(entry_id, "raw", html_content)
                     # --- 结束原始 HTML 保存 ---
                 # --- 结束预处理和调试步骤 ---
 
@@ -297,14 +299,8 @@ class WikiPageCoordinator:
                     cleaned_soup = preprocess_html(html_content)
 
                     if cleaned_soup:
-                        # 保存清理后的 HTML 用于调试
-                        debug_dir = Path(__file__).parent / "output" / "debug"
-                        debug_dir.mkdir(exist_ok=True)
                         entry_id = url.split('/')[-2] if '/' in url else "unknown_id"
-                        debug_file_path = debug_dir / f"{entry_id}_preprocessed.html"
-                        with open(debug_file_path, "w", encoding="utf-8") as f:
-                            f.write(cleaned_soup.prettify())
-                        print(f"调试用（预处理后）的 HTML 已保存至: {debug_file_path}")
+                        save_debug_html(entry_id, "preprocessed", cleaned_soup.prettify())
 
                         # 将清理后的 HTML 传递给解析器
                         parser_instance = parser_class()
@@ -320,13 +316,8 @@ class WikiPageCoordinator:
                         json_data = {"error": "在页面中未能找到主要内容。"}
                         
                         # --- 当预处理失败时，保存原始 HTML 用于调试 ---
-                        debug_dir = Path(__file__).parent / "output" / "debug"
-                        debug_dir.mkdir(exist_ok=True)
                         entry_id = url.split('/')[-2] if '/' in url else "unknown_id"
-                        debug_file_path = debug_dir / f"{entry_id}_raw.html"
-                        with open(debug_file_path, "w", encoding="utf-8") as f:
-                            f.write(html_content)
-                        print(f"已保存原始 HTML 以供检查: {debug_file_path}")
+                        save_debug_html(entry_id, "raw", html_content)
                         # --- 结束原始 HTML 保存 ---
                     # --- 结束预处理和调试步骤 ---
 

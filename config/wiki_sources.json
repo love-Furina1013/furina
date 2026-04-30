@@ -14,7 +14,7 @@
       "type": "local_markdown",
       "description": "Local clone of kawayiYokami/GenshinStory generated Genshin Impact Markdown docs.",
       "env": "GENSHIN_STORY_ROOT",
-      "root": "",
+      "root": "vendor/GenshinStory",
       "docs": "web/docs-site/public/domains/gi/docs",
       "enabled": true
     }

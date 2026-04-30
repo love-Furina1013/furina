@@ -44,14 +44,13 @@ node .\scripts\furina-wiki.mjs sources
 node .\scripts\furina-wiki.mjs search "芙宁娜"
 ```
 
-如果想用本地 GenshinStory 作为缓存，再设置路径：
+如果想用本地 GenshinStory 作为缓存，本仓库已默认指向 `vendor/GenshinStory`：
 
 ```powershell
-$env:GENSHIN_STORY_ROOT="D:\GenshinStory"
 node .\scripts\furina-wiki.mjs search "芙宁娜" --source genshin-story
 ```
 
-没有设置本地 GenshinStory 缓存时，本 skill 仍会正常使用仓库根目录的 `furina_resource/`；外部 wiki 默认在线 BWIKI 只作为补查来源。
+如果要改用其他 GenshinStory 路径，再设置 `GENSHIN_STORY_ROOT` 或传入 `--root` 覆盖默认路径。没有使用本地 GenshinStory 缓存时，本 skill 仍会正常使用仓库根目录的 `furina_resource/`；外部 wiki 默认在线 BWIKI 只作为补查来源。
 
 ## 3. 检查
 

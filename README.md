@@ -113,7 +113,7 @@ node .\scripts\furina-memory.mjs compress
 
 ## 外部原神 Wiki
 
-`scripts/furina-wiki.mjs` 用于按需查询外部原神资料。默认查询在线原神 BWIKI；如果本机有 [GenshinStory](https://github.com/kawayiYokami/GenshinStory) 且已生成 Markdown，也可以把它作为本地缓存来源。
+`scripts/furina-wiki.mjs` 用于按需查询外部原神资料。默认查询在线原神 BWIKI；本仓库的 `vendor/GenshinStory` 已带有本地生成的原神 Markdown，也可以把它作为本地缓存来源。
 
 直接查询：
 
@@ -127,9 +127,10 @@ node .\scripts\furina-wiki.mjs read "芙宁娜" --line-range 1-80
 可选本地缓存：
 
 ```powershell
-$env:GENSHIN_STORY_ROOT="D:\GenshinStory"
 node .\scripts\furina-wiki.mjs search "芙宁娜 那维莱特" --source genshin-story
 ```
+
+如果要改用其他 GenshinStory 路径，再设置 `GENSHIN_STORY_ROOT` 或传入 `--root` 覆盖默认路径。
 
 AI 使用时应先查 `furina_resource/`，不足时再调用外部 wiki；每次只读取少量命中片段。
 

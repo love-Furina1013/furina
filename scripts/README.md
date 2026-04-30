@@ -108,6 +108,7 @@ node scripts/furina-wiki.mjs read "芙宁娜" --line-range 1-80
 可选本地缓存：
 
 ```powershell
-$env:GENSHIN_STORY_ROOT="D:\GenshinStory"
 node scripts/furina-wiki.mjs search "芙宁娜" --source genshin-story
 ```
+
+本仓库默认指向 `vendor/GenshinStory`；如果要改用其他 GenshinStory 路径，再设置 `GENSHIN_STORY_ROOT` 或传入 `--root` 覆盖。
