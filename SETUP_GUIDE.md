@@ -2,6 +2,20 @@
 
 这份手册只处理安装、检查和排障。项目介绍请看 [README.md](README.md)。
 
+## 0. 分支定位
+
+本手册针对 `codex-local-genshinstory` 分支。它和 `main` 的区别在于：本分支把 `vendor/GenshinStory` 作为默认外部原神资料缓存，Furina 补查背景资料时会先读本地 Markdown 和本地分片索引，本地不足时才回退在线 BWIKI。
+
+| 项目 | `main` 分支 | 本分支 |
+|------|-------------|--------|
+| 默认 wiki 策略 | 在线 BWIKI 优先，本地 GenshinStory 为可选缓存 | `local-first-with-online-fallback` |
+| 默认本地来源 | 不要求提交 GenshinStory 快照 | `vendor/GenshinStory` |
+| 原神 Markdown 文档 | 可按需另行准备 | `vendor/GenshinStory/web/docs-site/public/domains/gi/docs` |
+| 搜索索引 | 非必需 | `.cache/furina-wiki/`，本地生成且不提交 |
+| 适合场景 | 轻量安装、主线默认使用 | 本地资料检索、离线优先、背景资料增强验证 |
+
+因此，本分支的安装检查除了 Claude/Codex skill 和记忆运行时，也应额外验证本地 GenshinStory 缓存、索引和 fallback 行为。
+
 ## 1. 准备
 
 你只需要准备 Node.js 18 或更高版本：
@@ -55,6 +69,15 @@ node .\scripts\furina-wiki.mjs search "芙宁娜" --source genshin-story
 
 本地资料本体在 `vendor/GenshinStory`，实际读取的原神 Markdown 位于 `vendor/GenshinStory/web/docs-site/public/domains/gi/docs`。分片索引会写入 `.cache/furina-wiki/`，用于加速本地搜索，不需要提交。复杂剧情或关系问题可用 `node .\scripts\furina-explore.mjs --task "子问题"` 拆成最多 5 路并行探索。
 
+本分支的预期配置可以用下面两条确认：
+
+```powershell
+node .\scripts\furina-wiki.mjs sources
+node .\scripts\furina-wiki-index.mjs status
+```
+
+`sources` 应显示默认来源为 `genshin-story`，回退来源为 `bwiki-online`；索引状态在构建后应显示本地文档数量和 `fresh: true`。
+
 ## 3. 检查
 
 ```powershell
@@ -69,6 +92,22 @@ node .\scripts\setup.mjs --check
 node .\scripts\setup.mjs --check --claude
 node .\scripts\setup.mjs --check --codex
 ```
+
+继续验证本分支特有的本地资料能力：
+
+```powershell
+Test-Path .\vendor\GenshinStory\web\docs-site\public\domains\gi\docs
+node .\scripts\furina-wiki-index.mjs status
+node .\scripts\furina-wiki.mjs search "芙宁娜 传说任务" --top 3 --json
+node .\scripts\furina-wiki.mjs read "芙宁娜" --line-range 1-12 --json
+```
+
+期望结果：
+
+- `Test-Path` 返回 `True`。
+- `furina-wiki-index` 构建后显示 `fresh: true`。
+- 搜索和读取结果的 `source` 为 `genshin-story`。
+- 搜索结果包含 `indexed: true` 时，说明正在使用 `.cache/furina-wiki/` 本地索引。
 
 ## 4. 交给 Claude Code / Codex 做
 
@@ -145,6 +184,14 @@ node .\scripts\setup.mjs --check --claude
 ```powershell
 node .\scripts\setup.mjs --check --codex
 ```
+
+要验证 Codex/Furina 能走本分支的 GenshinStory 缓存，可以让 Codex 执行：
+
+```text
+使用 furina-roleplay skill。请查询本地 GenshinStory 缓存中“芙宁娜 传说任务”，返回前三条结果的 source、path、是否 indexed；如果调用了在线 BWIKI，请明确说明 fallback。
+```
+
+正常情况下应优先返回 `source: genshin-story`，只有本地结果不足或显式指定 `--source bwiki-online` 时才使用在线 BWIKI。
 
 ## 8. 记忆文件
 
