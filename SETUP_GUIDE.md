@@ -4,17 +4,17 @@
 
 ## 0. 分支定位
 
-本手册针对 `codex-local-genshinstory` 分支。它和 `main` 的区别在于：本分支把 `vendor/GenshinStory` 作为默认外部原神资料缓存，Furina 补查背景资料时会先读本地 Markdown 和本地分片索引，本地不足时才回退在线 BWIKI。
+本手册针对 `main` 分支。当前 `main` 把 `vendor/GenshinStory` 作为默认外部原神资料缓存，Furina 补查背景资料时会先读本地 Markdown 和本地分片索引，本地不足时才回退在线 BWIKI。原来不提交本地 GenshinStory 缓存的轻量版本保留在 `lightweight` 分支。
 
-| 项目 | `main` 分支 | 本分支 |
-|------|-------------|--------|
-| 默认 wiki 策略 | 在线 BWIKI 优先，本地 GenshinStory 为可选缓存 | `local-first-with-online-fallback` |
-| 默认本地来源 | 不要求提交 GenshinStory 快照 | `vendor/GenshinStory` |
-| 原神 Markdown 文档 | 可按需另行准备 | `vendor/GenshinStory/web/docs-site/public/domains/gi/docs` |
-| 搜索索引 | 非必需 | `.cache/furina-wiki/`，本地生成且不提交 |
-| 适合场景 | 轻量安装、主线默认使用 | 本地资料检索、离线优先、背景资料增强验证 |
+| 项目 | `main` 分支 | `lightweight` 分支 |
+|------|-------------|--------------------|
+| 默认 wiki 策略 | `local-first-with-online-fallback` | 在线 BWIKI 优先，本地 GenshinStory 为可选缓存 |
+| 默认本地来源 | `vendor/GenshinStory` | 不要求提交 GenshinStory 快照 |
+| 原神 Markdown 文档 | `vendor/GenshinStory/web/docs-site/public/domains/gi/docs` | 可按需另行准备 |
+| 搜索索引 | `.cache/furina-wiki/`，本地生成且不提交 | 非必需 |
+| 适合场景 | 本地资料检索、离线优先、背景资料增强验证 | 轻量安装、在线补查、低体积使用 |
 
-因此，本分支的安装检查除了 Claude/Codex skill 和记忆运行时，也应额外验证本地 GenshinStory 缓存、索引和 fallback 行为。
+因此，`main` 的安装检查除了 Claude/Codex skill 和记忆运行时，也应额外验证本地 GenshinStory 缓存、索引和 fallback 行为。需要轻量路径时，先切换到 `lightweight` 再按该分支手册安装。
 
 ## 1. 准备
 

@@ -8,17 +8,17 @@
 
 ## 当前分支说明
 
-本说明针对 `codex-local-genshinstory` 分支。这个分支不是 `main` 的轻量默认配置，而是面向本地资料增强的实验/工作分支。
+本说明针对 `main` 分支。当前 `main` 是带本地 GenshinStory 缓存的主线；原来不提交本地 GenshinStory 缓存的轻量版本保留在 `lightweight` 分支。
 
-| 项目 | `main` 分支 | `codex-local-genshinstory` 分支 |
-|------|-------------|----------------------------------|
-| 外部原神资料 | 以在线 BWIKI 为主要补查来源，本地 GenshinStory 只是可选缓存 | 默认优先读取仓库内 `vendor/GenshinStory` 本地缓存，不足时再回退在线 BWIKI |
-| 本地资料体积 | 轻量，不包含完整 GenshinStory 快照 | 包含 GenshinStory 快照和已生成的原神 Markdown 文档，仓库体积明显更大 |
-| 查询性能 | 依赖在线请求或普通本地扫描 | 支持 `.cache/furina-wiki/` 分片索引，适合日常毫秒级本地检索 |
-| 深度探索 | 常规 wiki 查询 | 支持 `scripts/furina-explore.mjs` 最多 5 路并行探索，默认 10 分钟任务窗口 |
-| 适用场景 | 安装简单、默认在线补查、适合主线发布 | 离线/半离线资料读取、本地缓存验证、Furina 背景资料增强 |
+| 项目 | `main` 分支 | `lightweight` 分支 |
+|------|-------------|--------------------|
+| 外部原神资料 | 默认优先读取仓库内 `vendor/GenshinStory` 本地缓存，不足时再回退在线 BWIKI | 以在线 BWIKI 为主要补查来源，本地 GenshinStory 只是可选缓存 |
+| 本地资料体积 | 包含 GenshinStory 快照和已生成的原神 Markdown 文档，仓库体积明显更大 | 轻量，不包含完整 GenshinStory 快照 |
+| 查询性能 | 支持 `.cache/furina-wiki/` 分片索引，适合日常毫秒级本地检索 | 依赖在线请求或用户自行准备的本地缓存 |
+| 深度探索 | 支持 `scripts/furina-explore.mjs` 最多 5 路并行探索，默认 10 分钟任务窗口 | 常规 wiki 查询 |
+| 适用场景 | 离线/半离线资料读取、本地缓存验证、Furina 背景资料增强 | 安装简单、默认在线补查、轻量使用 |
 
-如果你只想使用稳定、轻量的默认安装，请使用 `main`。如果你希望 Furina 在需要背景资料时先查本地 GenshinStory，再视情况查在线 wiki，请使用本分支。
+如果你希望 Furina 在需要背景资料时先查本地 GenshinStory，再视情况查在线 wiki，请使用 `main`。如果你只想保留轻量安装和在线补查路径，请切换到 `lightweight`。
 
 ## 你可以用它做什么
 
