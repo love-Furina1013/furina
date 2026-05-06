@@ -11,23 +11,23 @@
   "context_window": {
     "max_history_turns": 20,
     "furina_resource_note": "furina_resource/ 包含结构化知识库，AI 按需参照 00_index.md 检索对应文件。",
-    "external_wiki_note": "外部原神 wiki 由 scripts/furina-wiki.mjs 按需补查，默认先走 vendor/GenshinStory 本地缓存，本地不足时再回退在线 BWIKI。"
+    "external_wiki_note": "外部原神 wiki 由 scripts/furina-wiki.mjs 按需补查，默认查询在线 BWIKI；本地 GenshinStory 只作为可选外部缓存。"
   },
   "wiki_lookup": {
     "runtime": "scripts/furina-wiki.mjs",
     "index_runtime": "scripts/furina-wiki-index.mjs",
     "explore_runtime": "scripts/furina-explore.mjs",
     "sources_config": "config/wiki_sources.json",
-    "strategy": "local-first-with-online-fallback",
-    "default_source": "genshin-story",
-    "fallback_source": "bwiki-online",
-    "local_cache_root": "vendor/GenshinStory",
-    "local_docs_dir": "vendor/GenshinStory/web/docs-site/public/domains/gi/docs",
+    "strategy": "online-first-with-optional-local-cache",
+    "default_source": "bwiki-online",
+    "fallback_source": null,
+    "local_cache_root": "../genshinstory-cache",
+    "local_docs_dir": "../genshinstory-cache/web/docs-site/public/domains/gi/docs",
     "index_cache": ".cache/furina-wiki",
     "index_cache_gitignored": true,
     "max_explore_tasks": 5,
     "explore_timeout_ms": 600000,
-    "network": "optional, only needed when local results are insufficient or --source bwiki-online is used"
+    "network": "required for the default bwiki-online source; optional only when --source genshin-story points at a local cache"
   },
   "memory": {
     "enabled": true,

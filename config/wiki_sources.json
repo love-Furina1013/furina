@@ -1,8 +1,8 @@
 {
-  "strategy": "local-first-with-online-fallback",
-  "default_source": "genshin-story",
-  "fallback_source": "bwiki-online",
-  "fallback_when": "Use bwiki-online only when the local GenshinStory cache is unavailable or returns fewer search results than requested.",
+  "strategy": "online-first-with-optional-local-cache",
+  "default_source": "bwiki-online",
+  "fallback_source": null,
+  "fallback_when": "No automatic fallback by default. Use --source genshin-story with GENSHIN_STORY_ROOT, --root, or a sibling genshinstory-cache checkout for local cache lookup.",
   "sources": [
     {
       "id": "bwiki-online",
@@ -16,11 +16,11 @@
       "id": "genshin-story",
       "type": "local_markdown",
       "description": "Local clone of kawayiYokami/GenshinStory generated Genshin Impact Markdown docs.",
-      "cache_role": "primary-local-cache",
+      "cache_role": "optional-local-cache",
       "env": "GENSHIN_STORY_ROOT",
-      "root": "vendor/GenshinStory",
+      "root": "../genshinstory-cache",
       "docs": "web/docs-site/public/domains/gi/docs",
-      "generated_docs": "vendor/GenshinStory/web/docs-site/public/domains/gi/docs",
+      "generated_docs": "../genshinstory-cache/web/docs-site/public/domains/gi/docs",
       "enabled": true
     }
   ]

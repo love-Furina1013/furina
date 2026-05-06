@@ -48,7 +48,7 @@ function help() {
 
 Usage:
   node scripts/furina-wiki-index.mjs status [--source genshin-story]
-  node scripts/furina-wiki-index.mjs build [--source genshin-story] [--root vendor/GenshinStory]
+  node scripts/furina-wiki-index.mjs build [--source genshin-story] [--root ../genshinstory-cache]
   node scripts/furina-wiki-index.mjs search "芙宁娜 传说任务" [--top 5]
 
 The generated index lives in .cache/furina-wiki/ and is not committed.
@@ -62,19 +62,25 @@ function expandHome(value) {
   return text;
 }
 
+function resolveRoot(value) {
+  const expanded = expandHome(value);
+  if (!expanded) return "";
+  return path.isAbsolute(expanded) ? expanded : path.resolve(ROOT, expanded);
+}
+
 function loadConfig() {
   return JSON.parse(fs.readFileSync(CONFIG_PATH, "utf8"));
 }
 
 function resolveLocalSource(args = {}) {
   const config = loadConfig();
-  const sourceId = String(args.source || config.default_source || "genshin-story");
+  const sourceId = String(args.source || "genshin-story");
   const source = (config.sources || []).find((item) => item.id === sourceId);
   if (!source) throw new Error(`Unknown wiki source: ${sourceId}`);
   if (source.type !== "local_markdown") throw new Error(`Source is not local_markdown: ${sourceId}`);
 
   const configuredRoot = args.root || process.env[source.env] || source.root || "";
-  const root = configuredRoot ? path.resolve(ROOT, expandHome(configuredRoot)) : "";
+  const root = resolveRoot(configuredRoot);
   const docsDir = root ? path.resolve(root, source.docs) : "";
   return { ...source, root, docsDir };
 }

@@ -54,8 +54,8 @@ Options:
   --json                Emit machine-readable JSON
 
 Default:
-  Uses local GenshinStory first. If the local cache is unavailable or returns too few search
-  results, it falls back to online 原神WIKI_BWIKI. Pass --source to force one source.
+  Uses online 原神WIKI_BWIKI. Pass --source genshin-story with GENSHIN_STORY_ROOT,
+  --root, or a sibling genshinstory-cache checkout to force local cache lookup.
 `;
 }
 
@@ -64,6 +64,12 @@ function expandHome(value) {
   if (text === "~") return os.homedir();
   if (text.startsWith("~/") || text.startsWith("~\\")) return path.join(os.homedir(), text.slice(2));
   return text;
+}
+
+function resolveRoot(value) {
+  const expanded = expandHome(value);
+  if (!expanded) return "";
+  return path.isAbsolute(expanded) ? expanded : path.resolve(ROOT, expanded);
 }
 
 function loadConfig() {
@@ -197,7 +203,7 @@ function getConfiguredSource(config, args, sourceId) {
   }
 
   const configuredRoot = args.root || process.env[source.env] || source.root || "";
-  const root = configuredRoot ? path.resolve(expandHome(configuredRoot)) : "";
+  const root = resolveRoot(configuredRoot);
   const docsDir = root ? path.resolve(root, source.docs) : "";
   return { ...source, root, docsDir };
 }
@@ -535,7 +541,7 @@ function sourceSummary(args) {
   return {
     default_source: config.default_source || null,
     fallback_source: config.fallback_source || null,
-    strategy: config.strategy || "local-first-with-online-fallback",
+    strategy: config.strategy || "online-first-with-optional-local-cache",
     sources: listSources(args)
   };
 }

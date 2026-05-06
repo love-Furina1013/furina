@@ -31,8 +31,8 @@
   "config": {
     "settings": "config/settings.json",
     "wiki_sources": "config/wiki_sources.json",
-    "local_wiki_cache_root": "vendor/GenshinStory",
-    "local_wiki_docs": "vendor/GenshinStory/web/docs-site/public/domains/gi/docs",
+    "local_wiki_cache_root": "../genshinstory-cache",
+    "local_wiki_docs": "../genshinstory-cache/web/docs-site/public/domains/gi/docs",
     "local_wiki_index_cache": ".cache/furina-wiki"
   },
   "capabilities": [
@@ -48,10 +48,10 @@
     "interaction-state-machine",
     "shared-memory-runtime",
     "shared-resource-source",
-    "local-wiki-cache",
+    "optional-local-wiki-cache",
     "indexed-local-wiki-search",
     "parallel-wiki-exploration",
-    "online-wiki-fallback",
+    "online-wiki-default",
     "voice-eval-helper",
     "external-wiki-lookup",
     "claude-code-skills",
@@ -61,7 +61,7 @@
   ],
   "requirements": {
     "node": ">=18.0.0",
-    "network": "optional, only needed when local wiki results are insufficient or --source bwiki-online is used"
+    "network": "required for the default bwiki-online source; optional only when --source genshin-story points at a local cache"
   },
   "claude_code": {
     "skills_dir": ".claude/skills",
@@ -82,8 +82,8 @@
     "1.7.0": "移除 Codex Skill 内置 furina_resource 镜像，改为所有平台共用仓库根目录资料库；补充 Claude Code 命令 frontmatter 与项目级 CLAUDE.md。",
     "1.8.0": "新增 scripts/furina-wiki.mjs 与 config/wiki_sources.json，支持本地 GenshinStory Markdown 缓存与在线原神 BWIKI 查询。",
     "1.9.0": "新增 .claude/skills 原生 Claude Code project skills；旧式 claudecode/commands 改为显式 --legacy-commands 兼容入口。",
-    "1.10.0": "在 codex-local-genshinstory 分支中将外部 wiki 策略同步为本地 GenshinStory 缓存优先，本地不足时回退在线 BWIKI。",
+    "1.10.0": "在 codex-local-genshinstory 分支中验证本地 GenshinStory 缓存路径与在线 BWIKI 互补策略。",
     "1.11.0": "新增本地 GenshinStory 分片索引与最多 5 路并行探索运行时，支持更快文档检索、行号阅读和结构化证据回传。",
-    "1.12.0": "同步 README 与配置文件中的 GenshinStory 快照、原神 Markdown 文档和 Furina 分片索引缓存路径。"
+    "1.12.0": "同步 README 与配置文件中的 GenshinStory 外部缓存、原神 Markdown 文档和 Furina 分片索引缓存路径。"
   }
 }

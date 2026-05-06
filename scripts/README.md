@@ -2,11 +2,11 @@
 
 `furina-memory.mjs` 是 Codex Skill 与 Claude Code 共享的轻量本地记忆运行时，用纯 Node.js 标准库实现，不需要安装依赖。
 
-`furina-wiki.mjs` 是外部原神 wiki 查询工具，默认先查本仓库 `vendor/GenshinStory` 本地缓存；本地结果不足时，再自动回退到在线原神 BWIKI，用于补查 `furina_resource/` 未覆盖的剧情、任务、语音和角色逸闻。
+`furina-wiki.mjs` 是外部原神 wiki 查询工具，默认查询在线原神 BWIKI，用于补查 `furina_resource/` 未覆盖的剧情、任务、语音和角色逸闻。本地 GenshinStory 只作为可选缓存。
 
-`furina-wiki-index.mjs` 会为本地 GenshinStory Markdown 生成 `.cache/furina-wiki/` 分片索引；`furina-explore.mjs` 在索引和 wiki 读取能力之上提供最多 5 路并行探索。
+`furina-wiki-index.mjs` 会为可选本地 GenshinStory Markdown 生成 `.cache/furina-wiki/` 分片索引；`furina-explore.mjs` 在 wiki 查询和按需读取能力之上提供最多 5 路并行探索。
 
-缓存路径约定：GenshinStory 快照在 `vendor/GenshinStory`，原神 Markdown 在 `vendor/GenshinStory/web/docs-site/public/domains/gi/docs`，Furina 自己生成的分片索引在 `.cache/furina-wiki/`。
+缓存路径约定：GenshinStory 缓存默认可放在同级目录 `../genshinstory-cache`，也可由 `GENSHIN_STORY_ROOT` 或 `--root` 指定；原神 Markdown 在 `<GenshinStory>/web/docs-site/public/domains/gi/docs`，Furina 自己生成的分片索引在 `.cache/furina-wiki/`。
 
 `furina-eval.mjs` 是语气验收辅助脚本，用于解析 `eval/furina_voice_cases.md` 并生成稳定的人工评测提示；它不会调用模型或访问外部服务。
 
@@ -41,7 +41,7 @@ node scripts/furina-explore.mjs --task "芙宁娜 传说任务"
 
 - 让 Codex 和 Claude Code 都使用同一份 `version: "2.0"` 认知记忆 JSON。
 - 让 Codex、Claude Code 和自定义运行时共用根目录 `furina_resource/`，避免在 skill 里维护知识库镜像。
-- 在需要补查外部原神资料时，通过本地 wiki 索引检索返回少量片段，而不是把整套 wiki 塞进上下文。
+- 在需要补查外部原神资料时，通过在线 BWIKI 或可选本地 wiki 索引返回少量片段，而不是把整套 wiki 塞进上下文。
 - 为复杂剧情/关系问题提供受控并行探索：最多 5 个子任务，每个子任务 search/read 后回传 evidence/references。
 - 提供 Angel Memory / Angel Heart 风格的基本能力：主动回忆、克制的主动投喂、记忆写入、睡眠巩固、弱记忆衰减、交互状态判断。
 - 避免每次对话都把完整记忆塞进上下文，只注入与当前话题相关的 3-5 条。
@@ -107,9 +107,7 @@ node scripts/furina-memory.mjs remember --reflection reflection.json
 
 ```bash
 node scripts/furina-wiki.mjs sources
-node scripts/furina-wiki-index.mjs status
-node scripts/furina-wiki-index.mjs build
-node scripts/furina-wiki.mjs search "芙宁娜 那维莱特" --top 5 --build-index
+node scripts/furina-wiki.mjs search "芙宁娜 那维莱特" --top 5
 node scripts/furina-wiki.mjs brief "芙宁娜 传说任务"
 node scripts/furina-wiki.mjs read "芙宁娜" --line-range 1-80
 ```
@@ -120,7 +118,7 @@ node scripts/furina-wiki.mjs read "芙宁娜" --line-range 1-80
 node scripts/furina-wiki.mjs search "芙宁娜" --source genshin-story
 ```
 
-本仓库默认指向 `vendor/GenshinStory`，实际读取其 `web/docs-site/public/domains/gi/docs` 下的 Markdown；如果要固定使用在线 BWIKI，可传入 `--source bwiki-online`。如果要改用其他 GenshinStory 路径，再设置 `GENSHIN_STORY_ROOT` 或传入 `--root` 覆盖。
+本仓库默认查询在线 BWIKI。可选本地缓存默认指向同级 `../genshinstory-cache`，实际读取其 `web/docs-site/public/domains/gi/docs` 下的 Markdown；如果要改用其他 GenshinStory 路径，请设置 `GENSHIN_STORY_ROOT` 或传入 `--root` 覆盖。
 
 并行探索：
 
