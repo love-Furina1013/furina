@@ -18,13 +18,21 @@
 | 深度探索 | 支持 `scripts/furina-explore.mjs` 最多 5 路并行探索，默认 10 分钟任务窗口 |
 | 适用场景 | 安装简单、可选本地缓存加速、在线自动回退 |
 
-如果需要离线或半离线检索，请克隆 genshinstory-cache 到同级目录：
+如果需要离线或半离线检索，`Furinelle/furina` 可以连接到本地 [`Furinelle/genshinstory-cache`](https://github.com/Furinelle/genshinstory-cache) 仓库。推荐把两个仓库放在同一个父目录下，并将缓存克隆为 `../genshinstory-cache`：
 
 ```bash
 git clone https://github.com/Furinelle/genshinstory-cache ../genshinstory-cache
 ```
 
-也可用 `GENSHIN_STORY_ROOT` / `--root` 指向其他本地路径。本地缓存安装后，wiki 查询自动优先使用本地索引，不可用时回退在线 BWIKI。
+目录结构示例：
+
+```text
+GitHub/
+├── furina/
+└── genshinstory-cache/
+```
+
+也可用 `GENSHIN_STORY_ROOT` / `--root` 指向其他本地路径。本地缓存安装后，wiki 查询自动优先读取该仓库的 `web/docs-site/public/domains/gi/docs`，不需要启动 genshinstory-cache 的前端或后端；本地不可用时回退在线 BWIKI。
 
 ## 你可以用它做什么
 
@@ -144,10 +152,16 @@ node .\scripts\furina-memory.mjs compress
 
 ### 可选：安装本地 genshinstory-cache
 
-本地缓存可大幅加速 wiki 查询并支持离线使用。安装为可选——不装也能正常使用（自动回退在线）：
+本地缓存可大幅加速 wiki 查询并支持离线使用。安装为可选——不装也能正常使用（自动回退在线）。`furina` 可直接连接到本地 [`Furinelle/genshinstory-cache`](https://github.com/Furinelle/genshinstory-cache) 仓库，推荐与 `furina` 放在同一父目录：
 
 ```bash
 git clone https://github.com/Furinelle/genshinstory-cache ../genshinstory-cache
+```
+
+```text
+GitHub/
+├── furina/
+└── genshinstory-cache/
 ```
 
 缓存路径参考：

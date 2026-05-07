@@ -15,7 +15,7 @@
 | 搜索索引 | `.cache/furina-wiki/`，本地生成且不提交 |
 | 适合场景 | 轻量安装、可选本地缓存加速、在线自动回退 |
 
-因此，`main` 的安装检查只要求 Claude/Codex skill 和记忆运行时正常；本地 GenshinStory 缓存和索引属于可选增强。
+因此，`main` 的安装检查只要求 Claude/Codex skill 和记忆运行时正常；本地 GenshinStory 缓存和索引属于可选增强。需要本地资料时，`Furinelle/furina` 可以连接到本地 [`Furinelle/genshinstory-cache`](https://github.com/Furinelle/genshinstory-cache) 仓库。
 
 ## 1. 准备
 
@@ -68,13 +68,19 @@ node .\scripts\furina-wiki.mjs search "芙宁娜" --source bwiki-online
 
 ### 可选：安装本地 genshinstory-cache
 
-本地缓存可大幅加速 wiki 查询并支持离线使用：
+本地缓存可大幅加速 wiki 查询并支持离线使用。`furina` 可直接连接到本地 [`Furinelle/genshinstory-cache`](https://github.com/Furinelle/genshinstory-cache) 仓库；推荐两个仓库放在同一父目录：
 
 ```bash
 git clone https://github.com/Furinelle/genshinstory-cache ../genshinstory-cache
 ```
 
-安装后，wiki 查询自动优先使用本地索引。如果要改用其他 GenshinStory 路径，请设置 `GENSHIN_STORY_ROOT` 或传入 `--root` 覆盖。没有外部 wiki 时，本 skill 仍会正常使用仓库根目录的 `furina_resource/`；外部 wiki 只作为补查来源。
+```text
+GitHub/
+├── furina/
+└── genshinstory-cache/
+```
+
+安装后，wiki 查询自动优先使用本地索引。如果要改用其他 GenshinStory 路径，请设置 `GENSHIN_STORY_ROOT` 或传入 `--root` 覆盖。没有外部 wiki 时，本 skill 仍会正常使用仓库根目录的 `furina_resource/`；外部 wiki 只作为补查来源。连接本地仓库只需要读取 Markdown 文件，不需要启动 genshinstory-cache 的前端或后端服务。
 如果显式指定 `--source genshin-story` 但本地缓存缺失，`furina-wiki.mjs` 会提示克隆 `Furinelle/genshinstory-cache`、设置 `GENSHIN_STORY_ROOT` / `--root`，或改用 `--source bwiki-online`。
 
 本地 GenshinStory 缓存的实际读取路径为 `<GenshinStory>/web/docs-site/public/domains/gi/docs`。分片索引会写入 `.cache/furina-wiki/`，用于加速本地搜索，不需要提交。复杂剧情或关系问题可用 `node .\scripts\furina-explore.mjs --task "子问题"` 拆成最多 5 路并行探索。
