@@ -1,0 +1,28 @@
+{
+  "angel_heart": {
+    "persona_name": "芙宁娜",
+    "reply_policy": "use Angel Heart 4-state timing; keep direct private chat compatible"
+  },
+  "angel_memory": {
+    "conversation_scope_map": {
+      "芙宁娜": "furina"
+    },
+    "memory_behavior": {
+      "min_message_length": 5,
+      "sleep_interval": 3600
+    },
+    "enable_soul_system": {
+      "enabled": true,
+      "recall_depth_mid": 7,
+      "impression_depth_mid": 3,
+      "expression_desire_mid": 0.5,
+      "creativity_mid": 0.7
+    }
+  },
+  "livingmemory": {
+    "persona_isolation": true,
+    "session_isolation": true,
+    "proactive_tool": "recall_long_term_memory",
+    "recall_strategy": "use short keywords for memories, preferences, agreements, events, and boundaries"
+  }
+}

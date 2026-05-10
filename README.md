@@ -40,6 +40,7 @@ GitHub/
 |------|------|
 | Claude Code 角色扮演 | 项目内直接使用 `/furina 你好，芙宁娜。` |
 | Codex Skill | 让 Codex 按需读取芙宁娜设定、共享知识库、记忆规则和 OOC 规则 |
+| AstrBot 适配 | 为 AstrBot 的芙宁娜 persona 生成提示词、Angel Memory 短知识卡和插件配置示例 |
 | 资料库 / RAG | 直接使用 `furina_resource/` 中的结构化 Markdown |
 | 外部原神 wiki 查询 | 通过 `scripts/furina-wiki.mjs` 优先查询本地 GenshinStory 缓存，不可用时自动回退在线 BWIKI |
 | 自定义角色运行时 | 组合 `src/prompt/`、`src/rules/`、`src/memory/` 和 `scripts/furina-memory.mjs` |
@@ -106,6 +107,8 @@ node .\scripts\setup.mjs --check
 | `node .\scripts\furina-wiki-index.mjs build` | 为可选本地 GenshinStory 缓存构建分片搜索索引 |
 | `node .\scripts\furina-wiki.mjs search "芙宁娜"` | 检索外部原神 wiki |
 | `node .\scripts\furina-explore.mjs --task "芙宁娜 传说任务"` | 并行探索外部 wiki 证据 |
+| `node .\scripts\furina-astrbot.mjs generate --out astrbot` | 生成 AstrBot 适配包 |
+| `node .\scripts\furina-astrbot.mjs check --out astrbot` | 检查 AstrBot 适配包文件 |
 
 Claude Code 可用：
 
@@ -115,6 +118,32 @@ Claude Code 可用：
 | `/furina-save` | 手动保存关键记忆 |
 | `/furina-reflect` | 从长对话中提取记忆 JSON |
 | `/furina-compress` | 压缩重复或零散的记忆 |
+
+## AstrBot 适配
+
+仓库提供 [astrbot/](astrbot/) 适配包，面向已经安装以下插件的 AstrBot：
+
+- [astrbot_plugin_angel_heart](https://github.com/kawayiYokami/astrbot_plugin_angel_heart)
+- [astrbot_plugin_angel_memory](https://github.com/kawayiYokami/astrbot_plugin_angel_memory)
+- [astrbot_plugin_livingmemory](https://github.com/lxfight-s-Astrbot-Plugins/astrbot_plugin_livingmemory)
+
+生成或刷新适配包：
+
+```powershell
+node .\scripts\furina-astrbot.mjs generate --out astrbot
+node .\scripts\furina-astrbot.mjs check --out astrbot
+```
+
+适配包包含：
+
+| 文件 | 用途 |
+|------|------|
+| `astrbot/persona/furina-astrbot-persona.md` | 复制到 AstrBot 的“芙宁娜” persona 系统提示词 |
+| `astrbot/angel_memory/furina_notes.md` | 放入 Angel Memory 知识库的短条目卡片 |
+| `astrbot/angel_memory/furina_core_memories.json` | 可通过 Angel Memory Debug Tool 导入的核心设定记忆 |
+| `astrbot/configs/astrbot_plugins.example.json` | Angel Heart / Angel Memory / LivingMemory 配置参考 |
+
+适配边界：Angel Heart 管回复时机和上下文重写，Angel Memory 管角色核心设定和短知识卡，LivingMemory 管会话长期历史；本仓库只生成人格、边界和工具调用策略，不重复实现这些插件已有能力。
 
 ## 记忆系统
 

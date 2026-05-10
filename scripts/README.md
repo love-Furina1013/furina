@@ -10,6 +10,8 @@
 
 `furina-eval.mjs` 是语气验收辅助脚本，用于解析 `eval/furina_voice_cases.md` 并生成稳定的人工评测提示；它不会调用模型或访问外部服务。
 
+`furina-astrbot.mjs` 会生成 AstrBot 适配包：芙宁娜 persona 提示词、Angel Memory 短知识卡、核心记忆导入 JSON 和 Angel Heart / Angel Memory / LivingMemory 配置示例。
+
 `setup.mjs` 是一键安装器，用来自动安装 Claude Code 原生 skills、Codex Skill、全局记忆运行时和初始记忆文件，并为 Codex 写入指向仓库 `furina_resource/` 的轻量路径上下文。旧式 Claude commands 只会在显式传入 `--legacy-commands` 时安装。
 
 ## 一键安装
@@ -35,6 +37,8 @@ node scripts/furina-wiki.mjs sources
 node scripts/furina-wiki-index.mjs build
 node scripts/furina-wiki.mjs search "芙宁娜"
 node scripts/furina-explore.mjs --task "芙宁娜 传说任务"
+node scripts/furina-astrbot.mjs generate --out astrbot
+node scripts/furina-astrbot.mjs check --out astrbot
 ```
 
 ## 目标
@@ -43,6 +47,7 @@ node scripts/furina-explore.mjs --task "芙宁娜 传说任务"
 - 让 Codex、Claude Code 和自定义运行时共用根目录 `furina_resource/`，避免在 skill 里维护知识库镜像。
 - 在需要补查外部原神资料时，通过在线 BWIKI 或可选本地 wiki 索引返回少量片段，而不是把整套 wiki 塞进上下文。
 - 为复杂剧情/关系问题提供受控并行探索：最多 5 个子任务，每个子任务 search/read 后回传 evidence/references。
+- 为 AstrBot 生成可刷新适配包，复用 Angel Heart、Angel Memory 和 LivingMemory 的现成能力。
 - 提供 Angel Memory / Angel Heart 风格的基本能力：主动回忆、克制的主动投喂、记忆写入、睡眠巩固、弱记忆衰减、交互状态判断。
 - 避免每次对话都把完整记忆塞进上下文，只注入与当前话题相关的 3-5 条。
 
