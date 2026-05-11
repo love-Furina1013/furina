@@ -8,15 +8,17 @@
 
 ## 当前分支说明
 
-本说明针对 `main` 分支。`main` 保持轻量，不再提交仓库内置 `vendor/GenshinStory` 快照；外部原神资料优先查询本地 genshinstory-cache（可选安装），不可用时自动回退在线 BWIKI。
+> **此分支：`codex/adapt-astrbot-furina-skill`（AstrBot 适配专用）**
+>
+> 本分支专注于将芙宁娜 skill 适配到 AstrBot 平台，新增 `astrbot/` 目录、`scripts/furina-astrbot.mjs` 生成脚本和配套测试。如需通用的 Claude Code / Codex 版本，请切换到 `main` 分支。
 
-| 项目 | `main` 分支 |
-|------|-------------|
-| 外部原神资料 | 优先本地 genshinstory-cache 快速搜索；本地不可用时自动回退在线 BWIKI |
-| 本地资料体积 | 轻量，不包含完整 GenshinStory 快照 |
-| 查询性能 | 本地缓存优先，在线自动回退；本机有 GenshinStory 缓存时可生成 `.cache/furina-wiki/` 分片索引 |
-| 深度探索 | 支持 `scripts/furina-explore.mjs` 最多 5 路并行探索，默认 10 分钟任务窗口 |
-| 适用场景 | 安装简单、可选本地缓存加速、在线自动回退 |
+| 项目 | 本分支（`codex/adapt-astrbot-furina-skill`） | `main` 分支 |
+|------|------|------|
+| 核心用途 | AstrBot persona + Angel Memory 适配 | Claude Code Skill / Codex Skill |
+| 新增内容 | `astrbot/` 适配包、`scripts/furina-astrbot.mjs`、`tests/astrbot.test.mjs` | — |
+| 外部原神资料 | 优先本地 genshinstory-cache；不可用时回退在线 BWIKI | 同左 |
+| 本地资料体积 | 轻量，不含 GenshinStory 完整快照 | 同左 |
+| 适用场景 | 已安装 Angel Heart / Angel Memory / LivingMemory 的 AstrBot 实例 | 安装简单，可选本地缓存 |
 
 如果需要离线或半离线检索，`Furinelle/furina` 可以连接到本地 [`Furinelle/genshinstory-cache`](https://github.com/Furinelle/genshinstory-cache) 仓库。推荐把两个仓库放在同一个父目录下，并将缓存克隆为 `../genshinstory-cache`：
 

@@ -1,13 +1,13 @@
 {
   "id": "furina-de-fontaine-roleplay",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "name": "芙宁娜 · 角色扮演 Skill",
   "name_en": "Furina de Fontaine Roleplay Skill",
   "description": "面向 Claude Code、Codex Skill 与自定义 AI 运行时的芙宁娜（Furina de Fontaine）角色扮演资源包，包含角色系统提示词、结构化知识库、OOC 行为规则、认知记忆机制与会话反思流程，用于构建人设稳定、语气一致、具备长期互动连续感的芙宁娜体验。",
   "author": "YuHeng Yang",
   "license": "MIT",
   "repository": "https://github.com/Furinelle/furina",
-  "tags": ["roleplay", "genshin-impact", "furina", "fontaine", "character-ai", "memory", "social-awareness", "codex-skill", "claude-code"],
+  "tags": ["roleplay", "genshin-impact", "furina", "fontaine", "character-ai", "memory", "social-awareness", "codex-skill", "claude-code", "astrbot", "angel-memory", "angel-heart"],
   "category": "entertainment",
   "language": ["zh-CN", "zh-TW"],
   "avatar": "assets/IMG_1877.jpg",
@@ -26,7 +26,12 @@
     "wiki_runtime": "scripts/furina-wiki.mjs",
     "wiki_index_runtime": "scripts/furina-wiki-index.mjs",
     "wiki_explore_runtime": "scripts/furina-explore.mjs",
-    "setup": "scripts/setup.mjs"
+    "setup": "scripts/setup.mjs",
+    "astrbot_adapter": "scripts/furina-astrbot.mjs",
+    "astrbot_persona": "astrbot/persona/furina-astrbot-persona.md",
+    "astrbot_notes": "astrbot/angel_memory/furina_notes.md",
+    "astrbot_core_memories": "astrbot/angel_memory/furina_core_memories.json",
+    "astrbot_plugins_config": "astrbot/configs/astrbot_plugins.example.json"
   },
   "config": {
     "settings": "config/settings.json",
@@ -57,7 +62,11 @@
     "claude-code-skills",
     "claude-code-commands",
     "codex-skill",
-    "auto-setup"
+    "auto-setup",
+    "astrbot-adapter",
+    "angel-memory-integration",
+    "angel-heart-integration",
+    "livingmemory-integration"
   ],
   "requirements": {
     "node": ">=18.0.0",
@@ -84,6 +93,7 @@
     "1.9.0": "新增 .claude/skills 原生 Claude Code project skills；旧式 claudecode/commands 改为显式 --legacy-commands 兼容入口。",
     "1.10.0": "在 codex-local-genshinstory 分支中验证本地 GenshinStory 缓存路径与在线 BWIKI 互补策略。",
     "1.11.0": "新增本地 GenshinStory 分片索引与最多 5 路并行探索运行时，支持更快文档检索、行号阅读和结构化证据回传。",
-    "1.12.0": "同步 README 与配置文件中的 GenshinStory 外部缓存、原神 Markdown 文档和 Furina 分片索引缓存路径。"
+    "1.12.0": "同步 README 与配置文件中的 GenshinStory 外部缓存、原神 Markdown 文档和 Furina 分片索引缓存路径。",
+    "1.13.0": "新增 AstrBot 适配分支（codex/adapt-astrbot-furina-skill）：astrbot/ 适配包、scripts/furina-astrbot.mjs 生成脚本、Angel Memory / Angel Heart / LivingMemory 集成配置，以及配套 tests/astrbot.test.mjs；manifest 补充 astrbot 相关 tags、capabilities 和 entry_point。"
   }
 }
