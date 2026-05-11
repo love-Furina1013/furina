@@ -7,7 +7,7 @@
 ```
 astrbot/
 ├── main.py                              # AstrBot 插件入口（Star 子类）
-├── metadata.yaml                        # 插件元数据（display_name、astrbot_version 等）
+├── metadata.yaml                        # 插件元数据（name、version、author、repo 等）
 ├── requirements.txt                     # Python 依赖（当前为空）
 ├── _conf_schema.json                    # 可选配置 schema（persona_name、angel_memory_scope）
 ├── skills/
@@ -25,7 +25,7 @@ astrbot/
 ## 部署步骤
 
 1. 将本目录（`astrbot/`）整体复制到 AstrBot 的插件目录 `data/plugins/furina/`
-2. 重启 AstrBot，插件会被自动发现并加载（`metadata.yaml` 声明了 display_name 和版本要求）
+2. 重启 AstrBot，插件会被自动发现并加载（`metadata.yaml` 声明了 name 和 version）
 3. 在 AstrBot 管理界面创建或选择 persona 名称：`芙宁娜`
 4. 将 `persona/furina-astrbot-persona.md` 的内容粘贴为该 persona 的系统提示词
 5. 在 Angel Memory 配置里设置 `conversation_scope_map`，让 `芙宁娜` 映射到 `furina`
