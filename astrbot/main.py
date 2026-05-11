@@ -1,7 +1,8 @@
 import os
 
-from astrbot.api import logger
-from astrbot.api.star import Context, Star, filter as star_filter
+from astrbot import logger
+from astrbot.api.event import AstrMessageEvent, filter
+from astrbot.api.star import Context, Star
 
 
 class FurinaPlugin(Star):
@@ -16,8 +17,8 @@ class FurinaPlugin(Star):
         self._plugin_dir = os.path.dirname(__file__)
         logger.info("[furina] 芙宁娜插件已加载")
 
-    @star_filter.command("furina_status", desc="检查芙宁娜插件加载状态")
-    async def check_status(self, event, context):
+    @filter.command("furina_status")
+    async def check_status(self, event: AstrMessageEvent):
         """返回插件文件状态摘要。"""
         checks = {
             "人格文件": os.path.join(self._plugin_dir, "persona", "furina-astrbot-persona.md"),
@@ -26,8 +27,8 @@ class FurinaPlugin(Star):
             "插件配置参考": os.path.join(self._plugin_dir, "configs", "astrbot_plugins.example.json"),
         }
         lines = ["芙宁娜插件状态："]
-        for label, path in checks.items():
-            lines.append(f"  {'✓' if os.path.exists(path) else '✗'} {label}")
+        for label, fpath in checks.items():
+            lines.append(f"  {'✓' if os.path.exists(fpath) else '✗'} {label}")
         yield event.plain_result("\n".join(lines))
 
     async def terminate(self):

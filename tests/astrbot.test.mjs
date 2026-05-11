@@ -78,15 +78,18 @@ describe("generateAstrbotPack", () => {
 describe("native AstrBot plugin files", () => {
   it("metadata.yaml exists and contains required fields", () => {
     const content = fs.readFileSync(path.join(REPO_ROOT, "astrbot", "metadata.yaml"), "utf8");
-    assert.match(content, /display_name/);
-    assert.match(content, /short_desc/);
-    assert.match(content, /astrbot_version/);
+    assert.match(content, /name:/);
+    assert.match(content, /description:/);
+    assert.match(content, /version:/);
+    assert.match(content, /author:/);
   });
 
-  it("main.py exists and defines a Star subclass", () => {
+  it("main.py exists and defines a Star subclass with correct imports", () => {
     const content = fs.readFileSync(path.join(REPO_ROOT, "astrbot", "main.py"), "utf8");
     assert.match(content, /class \w+\(Star\)/);
     assert.match(content, /async def terminate/);
+    assert.match(content, /from astrbot\.api\.event import.*filter/);
+    assert.match(content, /from astrbot import logger/);
   });
 
   it("skills/furina/SKILL.md exists", () => {
