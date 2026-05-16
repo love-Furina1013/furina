@@ -110,6 +110,16 @@ Dashboard → 知识库 → 创建，名称 `furina resource`，上传 `furina_r
 
 ## 5. 常见问题
 
+### 在线 wiki 查询长时间没有响应
+
+`furina-wiki.mjs` 的在线 BWIKI 请求设有 10 秒超时，超时后若本地缓存可用会自动回退。频繁超时时，建议安装 genshinstory-cache 或固定使用在线来源：
+
+```powershell
+node .\scripts\furina-wiki.mjs search "芙宁娜" --source bwiki-online
+```
+
+---
+
 ### 知识库文档上传后不显示
 
 通常是 Gemini Embedding batch API Bug 导致向量化失败。修复 `gemini_embedding_source.py` 后重新上传文档。详见 [astrbot/README.md](astrbot/README.md#第二步配置-embedding-提供商)。

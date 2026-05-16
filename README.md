@@ -93,7 +93,7 @@ node .\scripts\furina-wiki.mjs search "芙宁娜 那维莱特" --top 5
 node .\scripts\furina-wiki.mjs brief "芙宁娜 传说任务"
 ```
 
-可选安装本地缓存加速：
+在线 BWIKI 请求设有 **10 秒超时**，超时后自动回退本地缓存。在线响应不稳定时，建议安装本地 genshinstory-cache：
 
 ```bash
 git clone https://github.com/Furinelle/genshinstory-cache ../genshinstory-cache
